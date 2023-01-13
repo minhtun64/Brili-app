@@ -13,11 +13,6 @@ function StackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Splash"
-        component={SplashScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
         options={{ headerShown: false }}
@@ -25,11 +20,6 @@ function StackNavigator() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignIn1"
-        component={SignInScreen1}
         options={{ headerShown: false }}
       />
       <Stack.Screen
