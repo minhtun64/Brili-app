@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomeScreen";
 import SignInScreen from "../screens/SignInScreen";
+import SignInScreen1 from "../screens/SignInScreen1";
 import SignUpScreen from "../screens/SignUpScreen";
 import SplashScreen from "../screens/SplashScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -24,6 +25,11 @@ function StackNavigator() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignIn1"
+        component={SignInScreen1}
         options={{ headerShown: false }}
       />
       <Stack.Screen
