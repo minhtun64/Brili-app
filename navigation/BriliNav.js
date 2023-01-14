@@ -9,6 +9,7 @@ import PodcastScreen from "../screens/PodcastScreen";
 import HelpScreen from "../screens/HelpScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import { Image, StyleSheet, View } from "react-native";
+import MyPodcastScreen from "../screens/MyPostcastScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -165,6 +166,11 @@ function StackNavigator() {
       <Stack.Screen
         name="HomeTabs"
         component={MyTabs}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MyPodcast"
+        component={MyPodcastScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
