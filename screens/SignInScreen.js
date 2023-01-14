@@ -90,7 +90,10 @@ export default function SignInScreen({ navigation }) {
       <TouchableOpacity>
         <Text style={styles.forgotPassLabel}>Quên mật khẩu?</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity
+        style={styles.loginBtn}
+        onPress={() => navigation.navigate("HomeTabs")}
+      >
         <Text style={styles.loginText}>Đăng nhập</Text>
       </TouchableOpacity>
       <Text style={styles.lineText}>Hoặc tiếp tục với</Text>
