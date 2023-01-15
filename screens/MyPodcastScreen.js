@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   add: {
     position: "absolute",
-    bottom: 20,
+    bottom: 92,
     right: 20,
   },
   addImage: {
