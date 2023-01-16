@@ -14,12 +14,57 @@ import Checkbox from "expo-checkbox";
 
 export default function SignUpScreen({ navigation }) {
   const [username, setUsername] = useState("");
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isSelected, setSelection] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
+    useState("");
+  const [loading, setLoading] = useState(false);
   //const [isPasswordSecure, setIsPasswordSecure] = useState(true);
 
+  formValidation = async () => {
+    setLoading(true);
+    let errorFlag = false;
+
+    // input validation
+    if (username.length == 0) {
+      errorFlag = true;
+      setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
+    }
+
+    if (password.length == 0) {
+      errorFlag = true;
+      setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
+    } else if (password.length < 8 || password.length > 20) {
+      errorFlag = true;
+      setPasswordErrorMessage(
+        "Mật khẩu phải chứa tối thiểu 8 ký tự và tối đa 20 ký tự."
+      );
+    } else if (password !== confirmPassword) {
+      errorFlag = true;
+      setConfirmPasswordErrorMessage(
+        "Mật khẩu và mật khẩu xác nhận phải trùng khớp."
+      );
+    }
+
+    if (errorFlag) {
+      // console.log("errorFlag");
+      // console.log(passwordErrorMessage);
+      //console.log(passwordErrorMessage.length);
+      //console.log(confirmPasswordErrorMessage);
+      /** Call Your API */
+    } else {
+      setLoading(false);
+
+      // console.log(passwordErrorMessage);
+      // console.log(errorFlag);
+
+      navigation.navigate("SignIn");
+    }
+  };
   return (
     <View>
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -50,11 +95,17 @@ export default function SignUpScreen({ navigation }) {
               style={styles.input}
               placeholder="Tên đăng nhập"
               value={username}
-              onChangeText={(text) => setUsername(text)}
+              onChangeText={(text) => {
+                setUsername(text);
+                setUsernameErrorMessage("");
+              }}
             ></TextInput>
           </View>
         </View>
       </View>
+      {usernameErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{usernameErrorMessage}</Text>
+      )}
 
       <View style={styles.card}>
         <View style={styles.form}>
@@ -65,34 +116,20 @@ export default function SignUpScreen({ navigation }) {
             ></Image>
             <TextInput
               style={styles.input}
-              //  secureTextEntry={isPasswordSecure}
+              secureTextEntry={true}
               placeholder="Mật khẩu"
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => {
+                setPassword(text);
+                setPasswordErrorMessage("");
+              }}
               value={password}
             ></TextInput>
-            {/* <TouchableOpacity
-              onPress={() => {
-                isPasswordSecure
-                  ? setIsPasswordSecure(false)
-                  : setIsPasswordSecure(true);
-              }}
-            >
-              {isPasswordSecure && (
-                <Image
-                  style={styles.eyeIcon}
-                  source={require("../assets/icons/eye-off.png")}
-                ></Image>
-              )}
-              {!isPasswordSecure && (
-                <Image
-                  style={styles.eyeIcon}
-                  source={require("../assets/icons/eye-on.png")}
-                ></Image>
-              )}
-            </TouchableOpacity> */}
           </View>
         </View>
       </View>
+      {passwordErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{passwordErrorMessage}</Text>
+      )}
 
       <View style={styles.card}>
         <View style={styles.form}>
@@ -103,34 +140,21 @@ export default function SignUpScreen({ navigation }) {
             ></Image>
             <TextInput
               style={styles.input}
-              // secureTextEntry={isPasswordSecure}
+              secureTextEntry={true}
               placeholder="Xác nhận mật khẩu"
-              onChangeText={(text) => setConfirmPassword(text)}
+              onChangeText={(text) => {
+                setConfirmPassword(text);
+                setConfirmPasswordErrorMessage("");
+              }}
               value={confirmPassword}
             ></TextInput>
-            {/* <TouchableOpacity
-              onPress={() => {
-                isPasswordSecure
-                  ? setIsPasswordSecure(false)
-                  : setIsPasswordSecure(true);
-              }}
-            >
-              {isPasswordSecure && (
-                <Image
-                  style={styles.eyeIcon}
-                  source={require("../assets/icons/eye-off.png")}
-                ></Image>
-              )}
-              {!isPasswordSecure && (
-                <Image
-                  style={styles.eyeIcon}
-                  source={require("../assets/icons/eye-on.png")}
-                ></Image>
-              )}
-            </TouchableOpacity> */}
           </View>
         </View>
       </View>
+
+      {confirmPasswordErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{confirmPasswordErrorMessage}</Text>
+      )}
 
       <View style={styles.card}>
         <View style={styles.form}>
@@ -161,7 +185,8 @@ export default function SignUpScreen({ navigation }) {
       {isSelected && (
         <TouchableOpacity
           style={styles.loginBtn}
-          onPress={() => navigation.navigate("SignIn")}
+          // onPress={() => navigation.navigate("SignIn")}
+          onPress={() => formValidation()}
         >
           <Text style={styles.loginText}>Đăng ký</Text>
         </TouchableOpacity>
@@ -192,7 +217,7 @@ const styles = StyleSheet.create({
   backIcon: {
     width: 40,
     height: 40,
-    marginTop: 32,
+    marginTop: 48,
   },
   eyeIcon: {
     marginTop: 8,
@@ -282,6 +307,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 12,
+    fontWeight: "600",
   },
   loginText: {
     fontSize: 20,
@@ -334,5 +360,10 @@ const styles = StyleSheet.create({
   },
   label: {
     margin: 8,
+  },
+  textDanger: {
+    color: "#dc3545",
+    marginLeft: 100,
+    marginRight: 12,
   },
 });

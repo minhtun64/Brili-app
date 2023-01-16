@@ -92,7 +92,8 @@ export default function SignInScreen({ navigation }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginBtn}
-        onPress={() => navigation.navigate("HomeTabs")}
+        // onPress={() => navigation.navigate("HomeTabs")}
+        onPress={() => navigation.navigate("FirstInfo")}
       >
         <Text style={styles.loginText}>Đăng nhập</Text>
       </TouchableOpacity>
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   backIcon: {
     width: 40,
     height: 40,
-    marginTop: 32,
+    marginTop: 48,
   },
   eyeIcon: {
     width: 24,
@@ -232,6 +233,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 12,
+    fontWeight: "600",
   },
   formControl1: {
     flex: 1,

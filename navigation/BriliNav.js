@@ -10,6 +10,7 @@ import HelpScreen from "../screens/HelpScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import { Image, StyleSheet, View } from "react-native";
 import MyPodcastScreen from "../screens/MyPodcastScreen";
+import FirstInfoScreen from "../screens/FirstInfoScreen";
 
 const Stack = createStackNavigator();
 function StackNavigator() {
@@ -28,6 +29,11 @@ function StackNavigator() {
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="FirstInfo"
+        component={FirstInfoScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
