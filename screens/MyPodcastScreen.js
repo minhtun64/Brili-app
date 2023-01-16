@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import React, { Component, useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
@@ -99,11 +100,12 @@ export default function MyPodcastScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   backIcon: {
-    height: 16,
-    marginTop: 32,
+    width: 40,
+    height: 40,
+    marginTop: 48,
   },
   title: {
-    marginTop: -16,
+    marginTop: -28,
     fontSize: 24,
     //fontWeight: "bold",
     fontFamily: "LexendExa_400Regular",
@@ -129,6 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7E3E3",
   },
   searchIcon: {
+    width: 24,
+    height: 24,
     marginTop: 8,
     marginLeft: 8,
     marginRight: 12,
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
   },
   add: {
     position: "absolute",
-    bottom: 92,
+    bottom: 120,
     right: 20,
   },
   addImage: {

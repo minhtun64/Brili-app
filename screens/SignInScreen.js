@@ -104,20 +104,35 @@ export default function SignInScreen({ navigation }) {
 
       <View style={styles.formControl2}>
         <TouchableOpacity>
-          <Image source={require("../assets/images/google-logo.png")}></Image>
+          <Image
+            style={styles.signInLogo}
+            source={require("../assets/images/google-logo.png")}
+          ></Image>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require("../assets/images/apple-logo.png")}></Image>
+          <Image
+            style={styles.signInLogo}
+            source={require("../assets/images/apple-logo.png")}
+          ></Image>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require("../assets/images/facebook-logo.png")}></Image>
+          <Image
+            style={styles.signInLogo}
+            source={require("../assets/images/facebook-logo.png")}
+          ></Image>
         </TouchableOpacity>
       </View>
 
       <View style={styles.formControl3}>
         <Text style={styles.ask}>Chưa có tài khoản?</Text>
         <TouchableOpacity>
-          <Text style={styles.signUp}> Đăng ký ngay</Text>
+          <Text
+            style={styles.signUp}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            {" "}
+            Đăng ký ngay
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -126,11 +141,18 @@ export default function SignInScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   backIcon: {
-    height: 16,
+    width: 40,
+    height: 40,
     marginTop: 32,
   },
   eyeIcon: {
+    width: 24,
+    height: 24,
     marginTop: 8,
+  },
+  icon: {
+    width: 32,
+    height: 32,
   },
   logo: {
     width: 48,
@@ -139,8 +161,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   image: {
-    width: 200,
-    height: 150,
+    width: 260,
+    height: 180,
     alignItems: "center",
     marginLeft: "auto",
     marginRight: "auto",
@@ -151,6 +173,7 @@ const styles = StyleSheet.create({
     color: "#171586",
     fontSize: 24,
     fontWeight: "bold",
+    marginTop: 8,
   },
   card: {
     backgroundColor: "White",
@@ -167,7 +190,7 @@ const styles = StyleSheet.create({
   input: {
     width: 280,
     height: 32,
-    color: "#6a4595",
+    // color: "#6a4595",
     fontSize: 16,
     paddingHorizontal: 4,
     paddingVertical: 5,
@@ -178,7 +201,7 @@ const styles = StyleSheet.create({
   input2: {
     width: 232,
     height: 32,
-    color: "#6a4595",
+    // color: "#6a4595",
     fontSize: 16,
     paddingHorizontal: 4,
     paddingVertical: 5,
@@ -197,7 +220,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 52,
     marginTop: 16,
-    marginBottom: 20,
+    marginBottom: 32,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
     marginRight: "auto",
@@ -208,7 +231,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 10,
+    marginTop: 12,
   },
   formControl1: {
     flex: 1,
@@ -225,20 +248,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#777D84",
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 32,
+  },
+  signInLogo: {
+    width: 78,
+    height: 56,
   },
   formControl2: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 20,
+    marginTop: 40,
   },
   formControl3: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 80,
+    marginTop: 120,
     //alignItems: "center",
   },
   signUp: {

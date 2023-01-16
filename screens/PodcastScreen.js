@@ -105,7 +105,7 @@ export default function PodcastScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   title: {
-    marginTop: 32,
+    marginTop: 44,
     fontSize: 24,
     //fontWeight: "bold",
     fontFamily: "LexendExa_400Regular",
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   content: {
-    height: 544,
+    height: "84%",
     //flex: 1,
     flexDirection: "column",
     justifyContent: "space-around",
