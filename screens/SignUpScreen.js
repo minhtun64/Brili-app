@@ -5,12 +5,25 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState } from "react";
 // import { CheckBox } from "react-native-elements";
 // import CheckBox from "@react-native-community/checkbox";
 // import { Checkbox } from "react-native-paper";
 import Checkbox from "expo-checkbox";
+
+const DismissKeyboardHOC = (Comp) => {
+  return ({ children, ...props }) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Comp {...props}>{children}</Comp>
+    </TouchableWithoutFeedback>
+  );
+};
+const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function SignUpScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -66,154 +79,180 @@ export default function SignUpScreen({ navigation }) {
     }
   };
   return (
-    <View>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image
-          style={styles.backIcon}
-          source={require("../assets/icons/back.png")}
-        ></Image>
-      </TouchableOpacity>
-
-      <Image
-        style={styles.logo}
-        source={require("../assets/images/logo.png")}
-      ></Image>
-      <Image
-        style={styles.image}
-        source={require("../assets/images/sign-up.png")}
-      ></Image>
-      <Text style={styles.title}>Đăng ký</Text>
-
-      <View style={styles.card}>
-        <View style={styles.form}>
-          <View style={styles.formControl}>
-            <Image
-              style={styles.icon}
-              source={require("../assets/icons/user.png")}
-            ></Image>
-            <TextInput
-              style={styles.input}
-              placeholder="Tên đăng nhập"
-              value={username}
-              onChangeText={(text) => {
-                setUsername(text);
-                setUsernameErrorMessage("");
-              }}
-            ></TextInput>
-          </View>
-        </View>
-      </View>
-      {usernameErrorMessage.length > 0 && (
-        <Text style={styles.textDanger}>{usernameErrorMessage}</Text>
-      )}
-
-      <View style={styles.card}>
-        <View style={styles.form}>
-          <View style={styles.formControl}>
-            <Image
-              style={styles.icon}
-              source={require("../assets/icons/lock.png")}
-            ></Image>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              placeholder="Mật khẩu"
-              onChangeText={(text) => {
-                setPassword(text);
-                setPasswordErrorMessage("");
-              }}
-              value={password}
-            ></TextInput>
-          </View>
-        </View>
-      </View>
-      {passwordErrorMessage.length > 0 && (
-        <Text style={styles.textDanger}>{passwordErrorMessage}</Text>
-      )}
-
-      <View style={styles.card}>
-        <View style={styles.form}>
-          <View style={styles.formControl}>
-            <Image
-              style={styles.icon}
-              source={require("../assets/icons/lock.png")}
-            ></Image>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              placeholder="Xác nhận mật khẩu"
-              onChangeText={(text) => {
-                setConfirmPassword(text);
-                setConfirmPasswordErrorMessage("");
-              }}
-              value={confirmPassword}
-            ></TextInput>
-          </View>
-        </View>
-      </View>
-
-      {confirmPasswordErrorMessage.length > 0 && (
-        <Text style={styles.textDanger}>{confirmPasswordErrorMessage}</Text>
-      )}
-
-      <View style={styles.card}>
-        <View style={styles.form}>
-          <View style={styles.formControl}>
-            <Image
-              style={styles.icon}
-              source={require("../assets/icons/email.png")}
-            ></Image>
-            <TextInput
-              style={styles.input}
-              placeholder="Địa chỉ email"
-              onChangeText={(text) => setEmail(text)}
-              value={email}
-            ></TextInput>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.checkboxContainer}>
-        <Checkbox
-          disable={false}
-          value={isSelected}
-          onValueChange={setSelection}
-          style={styles.checkbox}
-        />
-        <Text style={styles.label}>Đồng ý với chính sách của Brili?</Text>
-      </View>
-      {isSelected && (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      enabled
+      keyboardVerticalOffset={Platform.select({ ios: 20, android: 200 })}
+    >
+      <View>
         <TouchableOpacity
-          style={styles.loginBtn}
-          // onPress={() => navigation.navigate("SignIn")}
-          onPress={() => formValidation()}
+          style={styles.back}
+          onPress={() => navigation.goBack()}
         >
-          <Text style={styles.loginText}>Đăng ký</Text>
-        </TouchableOpacity>
-      )}
-      {!isSelected && (
-        <TouchableOpacity style={styles.loginBtnOff}>
-          <Text style={styles.loginText}>Đăng ký</Text>
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.formControl3}>
-        <Text style={styles.ask}>Đã có tài khoản?</Text>
-        <TouchableOpacity>
-          <Text
-            style={styles.signIn}
-            onPress={() => navigation.navigate("SignIn")}
-          >
-            {" "}
-            Đăng nhập
-          </Text>
+          <Image
+            style={styles.backIcon}
+            source={require("../assets/icons/back.png")}
+          ></Image>
         </TouchableOpacity>
       </View>
-    </View>
+      <ScrollView>
+        <DismissKeyboardView>
+          <Image
+            style={styles.logo}
+            source={require("../assets/images/logo.png")}
+          ></Image>
+          <Image
+            style={styles.image}
+            source={require("../assets/images/sign-up.png")}
+          ></Image>
+          <Text style={styles.title}>Đăng ký</Text>
+
+          <View style={styles.card}>
+            <View style={styles.form}>
+              <View style={styles.formControl}>
+                <Image
+                  style={styles.icon}
+                  source={require("../assets/icons/user.png")}
+                ></Image>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Tên đăng nhập"
+                  keyboardType="name-phone-pad"
+                  value={username}
+                  onChangeText={(text) => {
+                    setUsername(text);
+                    setUsernameErrorMessage("");
+                  }}
+                ></TextInput>
+              </View>
+            </View>
+          </View>
+          {usernameErrorMessage.length > 0 && (
+            <Text style={styles.textDanger}>{usernameErrorMessage}</Text>
+          )}
+
+          <View style={styles.card}>
+            <View style={styles.form}>
+              <View style={styles.formControl}>
+                <Image
+                  style={styles.icon}
+                  source={require("../assets/icons/lock.png")}
+                ></Image>
+                <TextInput
+                  style={styles.input}
+                  secureTextEntry={true}
+                  placeholder="Mật khẩu"
+                  onChangeText={(text) => {
+                    setPassword(text);
+                    setPasswordErrorMessage("");
+                  }}
+                  value={password}
+                ></TextInput>
+              </View>
+            </View>
+          </View>
+          {passwordErrorMessage.length > 0 && (
+            <Text style={styles.textDanger}>{passwordErrorMessage}</Text>
+          )}
+
+          <View style={styles.card}>
+            <View style={styles.form}>
+              <View style={styles.formControl}>
+                <Image
+                  style={styles.icon}
+                  source={require("../assets/icons/lock.png")}
+                ></Image>
+                <TextInput
+                  style={styles.input}
+                  secureTextEntry={true}
+                  placeholder="Xác nhận mật khẩu"
+                  onChangeText={(text) => {
+                    setConfirmPassword(text);
+                    setConfirmPasswordErrorMessage("");
+                  }}
+                  value={confirmPassword}
+                ></TextInput>
+              </View>
+            </View>
+          </View>
+
+          {confirmPasswordErrorMessage.length > 0 && (
+            <Text style={styles.textDanger}>{confirmPasswordErrorMessage}</Text>
+          )}
+
+          <View style={styles.card}>
+            <View style={styles.form}>
+              <View style={styles.formControl}>
+                <Image
+                  style={styles.icon}
+                  source={require("../assets/icons/email.png")}
+                ></Image>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Địa chỉ email"
+                  keyboardType="email-address"
+                  onChangeText={(text) => setEmail(text)}
+                  value={email}
+                ></TextInput>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.checkboxContainer}>
+            <Checkbox
+              disable={false}
+              value={isSelected}
+              onValueChange={setSelection}
+              style={styles.checkbox}
+            />
+            <Text style={styles.label}>Đồng ý với chính sách của Brili?</Text>
+          </View>
+          {isSelected && (
+            <TouchableOpacity
+              style={styles.loginBtn}
+              // onPress={() => navigation.navigate("SignIn")}
+              onPress={() => formValidation()}
+            >
+              <Text style={styles.loginText}>Đăng ký</Text>
+            </TouchableOpacity>
+          )}
+          {!isSelected && (
+            <TouchableOpacity style={styles.loginBtnOff}>
+              <Text style={styles.loginText}>Đăng ký</Text>
+            </TouchableOpacity>
+          )}
+
+          <View style={styles.formControl3}>
+            <Text style={styles.ask}>Đã có tài khoản?</Text>
+            <TouchableOpacity>
+              <Text
+                style={styles.signIn}
+                onPress={() => navigation.navigate("SignIn")}
+              >
+                {" "}
+                Đăng nhập
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </DismissKeyboardView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  // inner: {
+  //   padding: 24,
+  //   flex: 1,
+  //   // justifyContent: "space-around",
+  // },
+  back: {
+    width: 40,
+  },
   backIcon: {
     width: 40,
     height: 40,
@@ -238,6 +277,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: "auto",
     marginRight: "auto",
+    //marginTop: -32,
   },
   title: {
     marginLeft: "auto",
@@ -252,6 +292,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
+    height: 40,
   },
   form: {},
   formControl: {
@@ -354,12 +395,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: 32,
     marginTop: 32,
+    marginBottom: 12,
   },
   checkbox: {
     alignSelf: "center",
   },
   label: {
-    margin: 8,
+    margin: 4,
   },
   textDanger: {
     color: "#dc3545",

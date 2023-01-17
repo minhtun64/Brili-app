@@ -5,17 +5,59 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+
+const DismissKeyboardHOC = (Comp) => {
+  return ({ children, ...props }) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Comp {...props}>{children}</Comp>
+    </TouchableWithoutFeedback>
+  );
+};
+const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function SignInScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    isFocused;
+  }, [isFocused]);
+
+  formValidation = async () => {
+    setLoading(true);
+    let errorFlag = false;
+
+    // input validation
+    if (username.length == 0) {
+      errorFlag = true;
+      setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
+    }
+
+    if (password.length == 0) {
+      errorFlag = true;
+      setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
+    }
+
+    if (errorFlag) {
+      // console.log("errorFlag");
+    } else {
+      setLoading(false);
+      navigation.navigate("FirstInfo");
+    }
+  };
   return (
-    <View>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+    <DismissKeyboardView>
+      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <Image
           style={styles.backIcon}
           source={require("../assets/icons/back.png")}
@@ -42,12 +84,19 @@ export default function SignInScreen({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="Tên đăng nhập"
+              keyboardType="name-phone-pad"
               value={username}
-              onChangeText={(text) => setUsername(text)}
+              onChangeText={(text) => {
+                setUsernameErrorMessage("");
+                setUsername(text);
+              }}
             ></TextInput>
           </View>
         </View>
       </View>
+      {usernameErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{usernameErrorMessage}</Text>
+      )}
 
       <View style={styles.card}>
         <View style={styles.form}>
@@ -60,7 +109,10 @@ export default function SignInScreen({ navigation }) {
               style={styles.input2}
               secureTextEntry={isPasswordSecure}
               placeholder="Mật khẩu"
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => {
+                setPasswordErrorMessage("");
+                setPassword(text);
+              }}
               value={password}
             ></TextInput>
             <TouchableOpacity
@@ -86,6 +138,9 @@ export default function SignInScreen({ navigation }) {
           </View>
         </View>
       </View>
+      {passwordErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{passwordErrorMessage}</Text>
+      )}
 
       <TouchableOpacity>
         <Text style={styles.forgotPassLabel}>Quên mật khẩu?</Text>
@@ -93,7 +148,7 @@ export default function SignInScreen({ navigation }) {
       <TouchableOpacity
         style={styles.loginBtn}
         // onPress={() => navigation.navigate("HomeTabs")}
-        onPress={() => navigation.navigate("FirstInfo")}
+        onPress={() => formValidation()}
       >
         <Text style={styles.loginText}>Đăng nhập</Text>
       </TouchableOpacity>
@@ -136,11 +191,14 @@ export default function SignInScreen({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </DismissKeyboardView>
   );
 }
 
 const styles = StyleSheet.create({
+  back: {
+    width: 40,
+  },
   backIcon: {
     width: 40,
     height: 40,
@@ -200,7 +258,7 @@ const styles = StyleSheet.create({
   },
 
   input2: {
-    width: 232,
+    width: 228,
     height: 32,
     // color: "#6a4595",
     fontSize: 16,
@@ -272,5 +330,10 @@ const styles = StyleSheet.create({
   },
   signUp: {
     color: "#1868DF",
+  },
+  textDanger: {
+    color: "#dc3545",
+    marginLeft: 100,
+    marginRight: 12,
   },
 });

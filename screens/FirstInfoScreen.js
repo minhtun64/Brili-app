@@ -5,29 +5,63 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { useIsFocused } from "@react-navigation/native";
+
+const DismissKeyboardHOC = (Comp) => {
+  return ({ children, ...props }) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Comp {...props}>{children}</Comp>
+    </TouchableWithoutFeedback>
+  );
+};
+const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function SignInScreen({ navigation }) {
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
-  const [selected, setSelected] = useState(undefined);
-  //   const data = [
-  //     { label: "Tiếng Việt", value: "1" },
-  //     { label: "Tiếng Anh", value: "2" },
-  //     { label: "Tiếng Trung", value: "3" },
-  //     { label: "Tiếng Nhật", value: "4" },
-  //     { label: "Tiếng Hàn", value: "5" },
-  //   ];
+  const [language, setLanguage] = useState(0);
+  const [lastnameErrorMessage, setLastnameErrorMessage] = useState("");
+  const [firstnameErrorMessage, setFirstnameErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const languages = ["Tiếng Việt", "Tiếng Anh", "Tiếng Trung", "Tiếng Hàn"];
+  const languages = ["Tiếng Việt", "Tiếng Anh", "Tiếng Trung", "Tiếng Nhật"];
 
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    isFocused;
+  }, [isFocused]);
+
+  formValidation = async () => {
+    setLoading(true);
+    let errorFlag = false;
+
+    // input validation
+    if (lastname.length == 0) {
+      errorFlag = true;
+      setLastnameErrorMessage("Bắt buộc nhập họ.");
+    }
+
+    if (firstname.length == 0) {
+      errorFlag = true;
+      setFirstnameErrorMessage("Bắt buộc nhập tên.");
+    }
+
+    if (errorFlag) {
+      // console.log("errorFlag");
+    } else {
+      setLoading(false);
+      navigation.navigate("HomeTabs");
+    }
+  };
   return (
-    <View>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+    <DismissKeyboardView>
+      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <Image
           style={styles.backIcon}
           source={require("../assets/icons/back.png")}
@@ -48,9 +82,16 @@ export default function SignInScreen({ navigation }) {
             style={styles.input}
             value={lastname}
             placeholder="ABC"
-            onChangeText={(text) => setLastname(text)}
+            autoFocus
+            onChangeText={(text) => {
+              setLastnameErrorMessage("");
+              setLastname(text);
+            }}
           ></TextInput>
         </View>
+        {lastnameErrorMessage.length > 0 && (
+          <Text style={styles.textDanger}>{lastnameErrorMessage}</Text>
+        )}
         <View style={styles.line}></View>
         <View style={styles.row}>
           <Text style={styles.prop}>Tên</Text>
@@ -58,9 +99,15 @@ export default function SignInScreen({ navigation }) {
             style={styles.input}
             value={firstname}
             placeholder="ABC"
-            onChangeText={(text) => setFirstname(text)}
+            onChangeText={(text) => {
+              setFirstnameErrorMessage("");
+              setFirstname(text);
+            }}
           ></TextInput>
         </View>
+        {firstnameErrorMessage.length > 0 && (
+          <Text style={styles.textDanger}>{firstnameErrorMessage}</Text>
+        )}
         <View style={styles.line}></View>
         <View style={styles.row}>
           <Text style={styles.prop}>Ngôn ngữ chính</Text>
@@ -77,11 +124,16 @@ export default function SignInScreen({ navigation }) {
             }}
             dropdownIconPosition={"right"}
             onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
+              // console.log(selectedItem, index);
+              setLanguage(index);
             }}
             defaultValueByIndex={0}
-            buttonStyle={styles.dropdown}
+            buttonStyle={styles.dropdownBtn}
             buttonTextStyle={styles.dropdownText}
+            rowTextStyle={styles.dropdownText}
+            dropdownStyle={styles.dropdown}
+            selectedRowStyle={styles.dropdownSelectedRow}
+            selectedRowTextStyle={styles.dropdownSelectedText}
             buttonTextAfterSelection={(selectedItem, index) => {
               // text represented after item is selected
               // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -95,17 +147,17 @@ export default function SignInScreen({ navigation }) {
           />
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.saveBtn}
-        onPress={() => navigation.navigate("HomeTabs")}
-      >
+      <TouchableOpacity style={styles.saveBtn} onPress={() => formValidation()}>
         <Text style={styles.saveText}>Lưu thông tin</Text>
       </TouchableOpacity>
-    </View>
+    </DismissKeyboardView>
   );
 }
 
 const styles = StyleSheet.create({
+  back: {
+    width: 40,
+  },
   backIcon: {
     width: 40,
     height: 40,
@@ -156,6 +208,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#777D84",
   },
   dropdown: {
+    borderRadius: 8,
+  },
+  dropdownBtn: {
     width: 152,
     marginTop: -10,
     height: 40,
@@ -163,6 +218,12 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     fontWeight: "600",
+  },
+  dropdownSelectedRow: {
+    backgroundColor: "#1868DF",
+  },
+  dropdownSelectedText: {
+    color: "#ffffff",
   },
   saveBtn: {
     width: 320,
@@ -180,5 +241,10 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 12,
     fontWeight: "600",
+  },
+  textDanger: {
+    color: "#dc3545",
+    marginLeft: 144,
+    marginRight: 12,
   },
 });

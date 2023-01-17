@@ -6,7 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import React, { Component, useCallback, useEffect } from "react";
+import React, { Component, useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -45,6 +45,10 @@ export default function PodcastScreen({ navigation }) {
   //       await SplashScreen.hideAsync();
   //     }
   //   }, [fontsLoaded]);
+
+  const [loaded1, setLoaded1] = useState(false);
+  const [loaded2, setLoaded2] = useState(false);
+
   if (!fontsLoaded) {
     return null;
   } else {
@@ -53,11 +57,19 @@ export default function PodcastScreen({ navigation }) {
         <Text style={styles.title}>Podcasts</Text>
         <View style={styles.line}></View>
         <View style={styles.content}>
+          {loaded1 && loaded2 ? null : (
+            <Image
+              source={require("../assets/images/loading1.gif")}
+              style={styles.loading}
+            ></Image>
+          )}
           <View>
             <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
               <ImageBackground
                 source={require("../assets/images/listen-podcast.png")}
+                onLoad={() => setLoaded1(true)}
                 style={styles.backgroundImage}
+                //  style={loaded ? styles.backgroundImage : { display: "none" }}
               >
                 <View
                   style={{
@@ -80,6 +92,8 @@ export default function PodcastScreen({ navigation }) {
               <ImageBackground
                 source={require("../assets/images/post-podcast.png")}
                 style={styles.backgroundImage}
+                onLoad={() => setLoaded2(true)}
+                // style={loaded ? styles.backgroundImage : { display: "none" }}
               >
                 <View
                   style={{
@@ -143,6 +157,15 @@ const styles = StyleSheet.create({
     fontFamily: "LexendExa_700Bold",
     color: "#ffffff",
     letterSpacing: -1.5,
+  },
+
+  loading: {
+    marginTop: "132%",
+    width: 60,
+    height: 30,
+    marginBottom: "280%",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
 

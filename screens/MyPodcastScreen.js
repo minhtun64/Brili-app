@@ -8,6 +8,8 @@ import {
   TextInput,
   ScrollView,
   Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { Component, useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
@@ -23,6 +25,15 @@ import {
   LexendExa_800ExtraBold,
   LexendExa_900Black,
 } from "@expo-google-fonts/lexend-exa";
+
+const DismissKeyboardHOC = (Comp) => {
+  return ({ children, ...props }) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Comp {...props}>{children}</Comp>
+    </TouchableWithoutFeedback>
+  );
+};
+const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function MyPodcastScreen({ navigation }) {
   const [search, setSearch] = useState("");
@@ -54,7 +65,7 @@ export default function MyPodcastScreen({ navigation }) {
     return null;
   } else {
     return (
-      <View>
+      <DismissKeyboardView>
         <ScrollView style={{ height: "100%" }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
@@ -93,7 +104,7 @@ export default function MyPodcastScreen({ navigation }) {
             source={require("../assets/icons/adding-podcast.png")}
           ></Image>
         </TouchableOpacity>
-      </View>
+      </DismissKeyboardView>
     );
   }
 }
