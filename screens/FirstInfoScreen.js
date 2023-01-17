@@ -7,8 +7,10 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
@@ -36,6 +38,8 @@ export default function SignInScreen({ navigation }) {
   useEffect(() => {
     isFocused;
   }, [isFocused]);
+
+  const ref_input2 = useRef();
 
   formValidation = async () => {
     setLoading(true);
@@ -82,6 +86,8 @@ export default function SignInScreen({ navigation }) {
             style={styles.input}
             value={lastname}
             placeholder="ABC"
+            returnKeyType="next"
+            onSubmitEditing={() => ref_input2.current.focus()}
             autoFocus
             onChangeText={(text) => {
               setLastnameErrorMessage("");
@@ -99,6 +105,7 @@ export default function SignInScreen({ navigation }) {
             style={styles.input}
             value={firstname}
             placeholder="ABC"
+            ref={ref_input2}
             onChangeText={(text) => {
               setFirstnameErrorMessage("");
               setFirstname(text);
@@ -147,6 +154,7 @@ export default function SignInScreen({ navigation }) {
           />
         </View>
       </View>
+
       <TouchableOpacity style={styles.saveBtn} onPress={() => formValidation()}>
         <Text style={styles.saveText}>Lưu thông tin</Text>
       </TouchableOpacity>

@@ -3,15 +3,13 @@ import {
   StyleSheet,
   View,
   Image,
-  ImageBackground,
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { Component, useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -35,7 +33,7 @@ const DismissKeyboardHOC = (Comp) => {
 };
 const DismissKeyboardView = DismissKeyboardHOC(View);
 
-export default function MyPodcastScreen({ navigation }) {
+export default function UploadPodcastScreen({ navigation }) {
   const [search, setSearch] = useState("");
 
   let [fontsLoaded] = useFonts({
@@ -56,11 +54,6 @@ export default function MyPodcastScreen({ navigation }) {
     prepare();
   }, []);
 
-  //   const onLayoutRootView = useCallback(async () => {
-  //     if (fontsLoaded) {
-  //       await SplashScreen.hideAsync();
-  //     }
-  //   }, [fontsLoaded]);
   if (!fontsLoaded) {
     return null;
   } else {
@@ -75,46 +68,21 @@ export default function MyPodcastScreen({ navigation }) {
             source={require("../assets/icons/back.png")}
           ></Image>
         </TouchableOpacity>
-        <Text style={styles.title}>Podcast của tôi</Text>
-        <View style={styles.line}></View>
-
-        <View style={styles.searchBox}>
-          <Image
-            style={styles.searchIcon}
-            source={require("../assets/icons/search.png")}
-          ></Image>
-          <TextInput
-            style={styles.input}
-            placeholder="Tìm kiếm"
-            returnKeyType="search"
-            value={search}
-            onChangeText={(text) => setSearch(text)}
-          ></TextInput>
-        </View>
-        <View style={styles.label}>
-          <Text style={styles.allText}>Tất cả các tập</Text>
-          <TouchableOpacity style={styles.sort}>
-            <Text style={styles.sortText}>Sắp xếp</Text>
-          </TouchableOpacity>
-        </View>
-
+        <Text style={styles.title}>Thêm mới</Text>
         <ScrollView
           style={{ height: "100%" }}
           keyboardShouldPersistTaps="handled"
         >
-          <View>
-            <Text style={styles.emptyText}>Trống</Text>
+          <View style={styles.content}>
+            <View style={styles.imageBox}>
+              <Image
+                style={styles.imageIcon}
+                source={require("../assets/icons/image.png")}
+              ></Image>
+              <Text style={styles.imageText}>Thêm ảnh chủ đề</Text>
+            </View>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("UploadPodcast")}
-          style={styles.add}
-        >
-          <Image
-            style={styles.addImage}
-            source={require("../assets/icons/adding-podcast.png")}
-          ></Image>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -130,14 +98,13 @@ const styles = StyleSheet.create({
     marginTop: 48,
   },
   title: {
-    marginTop: -28,
-    fontSize: 24,
-    //fontWeight: "bold",
-    fontFamily: "LexendExa_400Regular",
+    marginTop: -32,
+    fontSize: 20,
+    fontWeight: "500",
     color: "#000000",
-    marginLeft: "auto",
-    marginRight: "auto",
-    letterSpacing: -2,
+    marginLeft: 40,
+
+    marginBottom: 8,
   },
   line: {
     width: 280,
@@ -147,20 +114,27 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 4,
   },
-  searchBox: {
-    margin: 20,
-    height: 40,
+  imageBox: {
+    marginTop: 40,
+    width: 300,
+    height: 300,
+    marginLeft: "auto",
+    marginRight: "auto",
     borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "flex-start",
     backgroundColor: "#E7E3E3",
   },
-  searchIcon: {
-    width: 24,
-    height: 24,
-    marginTop: 8,
-    marginLeft: 8,
-    marginRight: 12,
+  imageIcon: {
+    width: 30,
+    height: 30,
+    marginTop: 120,
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  imageText: {
+    marginTop: 16,
+    marginLeft: "auto",
+    marginRight: "auto",
+    color: "#A0A0A0",
   },
   input: {
     width: "100%",
@@ -194,7 +168,7 @@ const styles = StyleSheet.create({
   },
   add: {
     position: "absolute",
-    bottom: "30%",
+    bottom: 120,
     right: 20,
   },
   addImage: {
@@ -205,16 +179,16 @@ const styles = StyleSheet.create({
 });
 
 /*
-  export default class PodcastScreen extends Component {
-    render() {
-      return (
-        <View>
-          <Text style={styles.title}>Podcast</Text>
-          <View style={styles.formControl1}>
-            <View style={styles.line}></View>
+    export default class PodcastScreen extends Component {
+      render() {
+        return (
+          <View>
+            <Text style={styles.title}>Podcast</Text>
+            <View style={styles.formControl1}>
+              <View style={styles.line}></View>
+            </View>
           </View>
-        </View>
-      );
+        );
+      }
     }
-  }
-  */
+    */

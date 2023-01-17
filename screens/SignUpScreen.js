@@ -10,7 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 // import { CheckBox } from "react-native-elements";
 // import CheckBox from "@react-native-community/checkbox";
 // import { Checkbox } from "react-native-paper";
@@ -37,6 +37,10 @@ export default function SignUpScreen({ navigation }) {
     useState("");
   const [loading, setLoading] = useState(false);
   //const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+
+  const ref_input2 = useRef();
+  const ref_input3 = useRef();
+  const ref_input4 = useRef();
 
   formValidation = async () => {
     setLoading(true);
@@ -118,8 +122,9 @@ export default function SignUpScreen({ navigation }) {
                 <TextInput
                   style={styles.input}
                   placeholder="Tên đăng nhập"
-                  keyboardType="name-phone-pad"
                   value={username}
+                  returnKeyType="next"
+                  onSubmitEditing={() => ref_input2.current.focus()}
                   onChangeText={(text) => {
                     setUsername(text);
                     setUsernameErrorMessage("");
@@ -143,6 +148,9 @@ export default function SignUpScreen({ navigation }) {
                   style={styles.input}
                   secureTextEntry={true}
                   placeholder="Mật khẩu"
+                  returnKeyType="next"
+                  onSubmitEditing={() => ref_input3.current.focus()}
+                  ref={ref_input2}
                   onChangeText={(text) => {
                     setPassword(text);
                     setPasswordErrorMessage("");
@@ -167,6 +175,9 @@ export default function SignUpScreen({ navigation }) {
                   style={styles.input}
                   secureTextEntry={true}
                   placeholder="Xác nhận mật khẩu"
+                  returnKeyType="next"
+                  onSubmitEditing={() => ref_input4.current.focus()}
+                  ref={ref_input3}
                   onChangeText={(text) => {
                     setConfirmPassword(text);
                     setConfirmPasswordErrorMessage("");
@@ -192,6 +203,7 @@ export default function SignUpScreen({ navigation }) {
                   style={styles.input}
                   placeholder="Địa chỉ email"
                   keyboardType="email-address"
+                  ref={ref_input4}
                   onChangeText={(text) => setEmail(text)}
                   value={email}
                 ></TextInput>
@@ -303,7 +315,6 @@ const styles = StyleSheet.create({
   input: {
     width: 280,
     height: 32,
-    color: "#6a4595",
     fontSize: 16,
     paddingHorizontal: 4,
     paddingVertical: 5,

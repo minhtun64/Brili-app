@@ -11,6 +11,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import { Image, StyleSheet, View } from "react-native";
 import MyPodcastScreen from "../screens/MyPodcastScreen";
 import FirstInfoScreen from "../screens/FirstInfoScreen";
+import UploadPodcastScreen from "../screens/UploadPodcastScreen";
 
 const Stack = createStackNavigator();
 function StackNavigator() {
@@ -78,6 +79,11 @@ function PodcastStackNavigator() {
       <PodcastStack.Screen
         name="MyPodcast"
         component={MyPodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="UploadPodcast"
+        component={UploadPodcastScreen}
         options={{ headerShown: false }}
       />
     </PodcastStack.Navigator>

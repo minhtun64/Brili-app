@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 
 const DismissKeyboardHOC = (Comp) => {
@@ -32,6 +32,8 @@ export default function SignInScreen({ navigation }) {
   useEffect(() => {
     isFocused;
   }, [isFocused]);
+
+  const ref_input2 = useRef();
 
   formValidation = async () => {
     setLoading(true);
@@ -84,7 +86,8 @@ export default function SignInScreen({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="Tên đăng nhập"
-              keyboardType="name-phone-pad"
+              returnKeyType="next"
+              onSubmitEditing={() => ref_input2.current.focus()}
               value={username}
               onChangeText={(text) => {
                 setUsernameErrorMessage("");
@@ -109,6 +112,7 @@ export default function SignInScreen({ navigation }) {
               style={styles.input2}
               secureTextEntry={isPasswordSecure}
               placeholder="Mật khẩu"
+              ref={ref_input2}
               onChangeText={(text) => {
                 setPasswordErrorMessage("");
                 setPassword(text);
