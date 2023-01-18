@@ -333,17 +333,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
 
-  forgotPassLabel: {
-    fontSize: 12,
-    color: "#1868DF",
-    textAlign: "right",
-    marginTop: 8,
-    marginRight: 32,
-  },
   loginBtn: {
     width: 200,
     height: 52,
-    marginTop: 12,
+    marginTop: 20,
     marginBottom: 16,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
@@ -383,20 +376,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#777D84",
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 24,
   },
   formControl2: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 20,
+    marginTop: 32,
   },
   formControl3: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 32,
+    marginTop: 48,
     //alignItems: "center",
   },
   signIn: {
