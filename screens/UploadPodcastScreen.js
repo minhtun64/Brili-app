@@ -24,6 +24,8 @@ import {
   LexendExa_900Black,
 } from "@expo-google-fonts/lexend-exa";
 
+import { useSwipe } from "../hooks/useSwipe";
+
 const DismissKeyboardHOC = (Comp) => {
   return ({ children, ...props }) => (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -35,6 +37,17 @@ const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function UploadPodcastScreen({ navigation }) {
   const [search, setSearch] = useState("");
+
+  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+
+  function onSwipeLeft() {
+    //navigation.goBack();
+  }
+
+  function onSwipeRight() {
+    // console.log("SWIPE_RIGHT");
+    navigation.goBack();
+  }
 
   let [fontsLoaded] = useFonts({
     LexendExa_100Thin,
@@ -72,6 +85,8 @@ export default function UploadPodcastScreen({ navigation }) {
         <ScrollView
           style={{ height: "100%" }}
           keyboardShouldPersistTaps="handled"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <View style={styles.content}>
             <View style={styles.imageBox}>

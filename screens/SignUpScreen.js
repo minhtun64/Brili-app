@@ -15,6 +15,7 @@ import React, { useRef, useState } from "react";
 // import CheckBox from "@react-native-community/checkbox";
 // import { Checkbox } from "react-native-paper";
 import Checkbox from "expo-checkbox";
+import { useSwipe } from "../hooks/useSwipe";
 
 const DismissKeyboardHOC = (Comp) => {
   return ({ children, ...props }) => (
@@ -41,6 +42,17 @@ export default function SignUpScreen({ navigation }) {
   const ref_input2 = useRef();
   const ref_input3 = useRef();
   const ref_input4 = useRef();
+
+  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+
+  function onSwipeLeft() {
+    //navigation.goBack();
+  }
+
+  function onSwipeRight() {
+    // console.log("SWIPE_RIGHT");
+    navigation.goBack();
+  }
 
   formValidation = async () => {
     setLoading(true);
@@ -100,7 +112,7 @@ export default function SignUpScreen({ navigation }) {
           ></Image>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <DismissKeyboardView>
           <Image
             style={styles.logo}

@@ -164,8 +164,8 @@ export default function SignInScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.loginBtn}
-          // onPress={() => navigation.navigate("HomeTabs")}
-          onPress={() => formValidation()}
+          onPress={() => navigation.navigate("FirstInfo")}
+          // onPress={() => formValidation()}
         >
           <Text style={styles.loginText}>Đăng nhập</Text>
         </TouchableOpacity>
