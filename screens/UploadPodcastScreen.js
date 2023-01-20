@@ -29,7 +29,6 @@ import { useSwipe } from "../hooks/useSwipe";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Modal from "react-native-modal";
-import { Button } from "react-native-elements";
 
 const DismissKeyboardHOC = (Comp) => {
   return ({ children, ...props }) => (
@@ -41,10 +40,16 @@ const DismissKeyboardHOC = (Comp) => {
 const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function UploadPodcastScreen({ navigation }) {
+  // const [image, setImage] = useState("");
+  // const [audio, setAudio] = useState("");
   const [title, setTitle] = useState("");
   const [topic, setTopic] = useState("");
   const [des, setDes] = useState("");
   const [height, setHeight] = useState("");
+  // const [audioErrorMessage, setAudioErrorMessage] = useState("");
+  const [titleErrorMessage, setTitleErrorMessage] = useState("");
+  const [topicErrorMessage, setTopicErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
 
@@ -61,6 +66,33 @@ export default function UploadPodcastScreen({ navigation }) {
     navigation.goBack();
   }
 
+  formValidation = async () => {
+    setLoading(true);
+    let errorFlag = false;
+
+    // if (audio.length == 0) {
+    //   errorFlag = true;
+    //   setAudioErrorMessage("Chưa tải tệp âm thanh.");
+    // }
+
+    if (title.length == 0) {
+      errorFlag = true;
+      setTitleErrorMessage("Tên tập không được để trống.");
+    }
+
+    if (topic.length == 0) {
+      errorFlag = true;
+      setTopicErrorMessage("Chưa chọn chủ đề.");
+    }
+
+    if (errorFlag) {
+      // console.log("errorFlag");
+    } else {
+      setLoading(false);
+      navigation.navigate("MyPodcast1");
+    }
+  };
+
   let [fontsLoaded] = useFonts({
     LexendExa_100Thin,
     LexendExa_200ExtraLight,
@@ -72,17 +104,22 @@ export default function UploadPodcastScreen({ navigation }) {
     LexendExa_800ExtraBold,
     LexendExa_900Black,
   });
-  useEffect(() => {
-    async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
-    }
-    prepare();
-  }, []);
+  // useEffect(() => {
+  //   async function prepare() {
+  //     await SplashScreen.preventAutoHideAsync();
+  //   }
+  //   prepare();
+  // }, []);
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible2, setModalVisible2] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  const toggleModal2 = () => {
+    setModalVisible2(!isModalVisible2);
   };
 
   if (!fontsLoaded) {
@@ -112,25 +149,61 @@ export default function UploadPodcastScreen({ navigation }) {
           onTouchEnd={onTouchEnd}
         >
           <View style={styles.content}>
-            <TouchableOpacity style={styles.imageBox}>
+            <TouchableOpacity onPress={toggleModal} style={styles.imageBox}>
               <Image
                 style={styles.imageIcon}
                 source={require("../assets/icons/image.png")}
               ></Image>
               <Text style={styles.imageText}>Thêm ảnh chủ đề</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={toggleModal} style={styles.audioBox}>
+            <Modal isVisible={isModalVisible}>
+              <View style={styles.popup}>
+                <TouchableOpacity onPress={toggleModal}>
+                  <Text style={styles.closeText}>Đóng</Text>
+                </TouchableOpacity>
+                <View>
+                  <TouchableOpacity style={styles.micBox}>
+                    <Image
+                      style={styles.micIcon}
+                      source={require("../assets/icons/cam.png")}
+                    ></Image>
+                    <Text style={styles.micText}>Chụp ảnh trực tiếp</Text>
+                  </TouchableOpacity>
+                  <View style={styles.line2}></View>
+                  <TouchableOpacity style={styles.upBox}>
+                    <Text style={styles.upText}>Tải lên từ thiết bị</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            <TouchableOpacity onPress={toggleModal2} style={styles.audioBox}>
               <Image
                 style={styles.audioIcon}
                 source={require("../assets/icons/audio-add.png")}
               ></Image>
               <Text style={styles.audioText}>Thêm audio</Text>
             </TouchableOpacity>
-            <Modal isVisible={isModalVisible}>
-              <View style={{ flex: 1 }}>
-                <Text>Hello!</Text>
-
-                <Button title="Đóng" onPress={toggleModal} />
+            {/* {audioErrorMessage.length > 0 && (
+          <Text style={styles.textDanger}>{audioErrorMessage}</Text>
+        )} */}
+            <Modal isVisible={isModalVisible2}>
+              <View style={styles.popup}>
+                <TouchableOpacity onPress={toggleModal2}>
+                  <Text style={styles.closeText}>Đóng</Text>
+                </TouchableOpacity>
+                <View>
+                  <TouchableOpacity style={styles.micBox}>
+                    <Image
+                      style={styles.micIcon}
+                      source={require("../assets/icons/mic.png")}
+                    ></Image>
+                    <Text style={styles.micText}>Ghi âm trực tiếp</Text>
+                  </TouchableOpacity>
+                  <View style={styles.line2}></View>
+                  <TouchableOpacity style={styles.upBox}>
+                    <Text style={styles.upText}>Tải lên từ thiết bị</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </Modal>
             <View style={styles.line}></View>
@@ -139,12 +212,18 @@ export default function UploadPodcastScreen({ navigation }) {
                 <Text style={styles.prop}>Tên tập</Text>
                 <TextInput
                   style={styles.input1}
-                  onChangeText={(text) => setTitle(text)}
+                  onChangeText={(text) => {
+                    setTitleErrorMessage("");
+                    setTitle(text);
+                  }}
                   value={title}
                   returnKeyType="next"
                   onSubmitEditing={() => ref_input2.current.focus()}
                 ></TextInput>
               </View>
+              {titleErrorMessage.length > 0 && (
+                <Text style={styles.textDanger}>{titleErrorMessage}</Text>
+              )}
               <View style={styles.formControl}>
                 <Text style={styles.prop}>Chủ đề</Text>
                 <SelectDropdown
@@ -161,6 +240,7 @@ export default function UploadPodcastScreen({ navigation }) {
                   dropdownIconPosition={"right"}
                   onSelect={(selectedItem, index) => {
                     // console.log(selectedItem, index);
+                    setTopicErrorMessage("");
                     setTopic(index);
                   }}
                   defaultButtonText="Chọn chủ đề"
@@ -182,6 +262,9 @@ export default function UploadPodcastScreen({ navigation }) {
                   }}
                 />
               </View>
+              {topicErrorMessage.length > 0 && (
+                <Text style={styles.textDanger}>{topicErrorMessage}</Text>
+              )}
               <View style={styles.formControl}>
                 <Text style={styles.prop}>Mô tả</Text>
                 <TextInput
@@ -201,7 +284,7 @@ export default function UploadPodcastScreen({ navigation }) {
         </ScrollView>
         <TouchableOpacity
           style={styles.postBtn}
-          //onPress={() => navigation.goBack()}
+          onPress={() => formValidation()}
         >
           <Text style={styles.postText}>Đăng</Text>
         </TouchableOpacity>
@@ -267,6 +350,8 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     color: "#A0A0A0",
+    fontFamily: "LexendExa_400Regular",
+    letterSpacing: -2,
   },
   audioBox: {
     marginTop: 20,
@@ -296,6 +381,8 @@ const styles = StyleSheet.create({
     // marginLeft: "auto",
     // marginRight: "auto",
     color: "#ffffff",
+    fontFamily: "LexendExa_400Regular",
+    letterSpacing: -2,
   },
   prop: {
     fontFamily: "LexendExa_400Regular",
@@ -395,6 +482,83 @@ const styles = StyleSheet.create({
     letterSpacing: -2,
     // borderWidth: 1,
     // borderColor: "#ffffff",
+  },
+  popup: {
+    width: 360,
+    height: 292,
+    backgroundColor: "#ffffff",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 20,
+    padding: 20,
+  },
+  closeText: {
+    color: "#1868DF",
+    marginLeft: "auto",
+    //marginRight: "auto",
+    //fontSize: 12,
+    fontFamily: "LexendExa_400Regular",
+    letterSpacing: -2,
+    textDecorationLine: "underline",
+  },
+  micBox: {
+    marginTop: 20,
+    width: 300,
+    height: 142,
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 12,
+    backgroundColor: "#1868DF",
+  },
+  micIcon: {
+    width: 60,
+    height: 60,
+    marginTop: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  micText: {
+    marginTop: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
+    color: "#ffffff",
+    fontSize: 20,
+    fontFamily: "LexendExa_400Regular",
+    letterSpacing: -2,
+  },
+  upBox: {
+    // marginTop: 20,
+    width: 300,
+    height: 40,
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 12,
+    backgroundColor: "#CBC9C9",
+  },
+  upText: {
+    marginTop: 12,
+    marginLeft: "auto",
+    marginRight: "auto",
+    fontFamily: "LexendExa_400Regular",
+    letterSpacing: -2,
+    // color: "#ffffff",
+    // fontSize: 20,
+  },
+  line2: {
+    width: 300,
+    height: 1,
+    backgroundColor: "#A0A0A0",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 12,
+    marginBottom: 12,
+  },
+  textDanger: {
+    color: "#dc3545",
+    marginLeft: 132,
+    marginRight: 12,
+    marginTop: -20,
+    marginBottom: 12,
   },
   content: {},
 });
