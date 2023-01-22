@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   loginBtn: {
     width: 200,
     height: 52,
-    marginTop: 20,
+    marginTop: 12,
     marginBottom: 16,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
