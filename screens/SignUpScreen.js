@@ -230,7 +230,13 @@ export default function SignUpScreen({ navigation }) {
               onValueChange={setSelection}
               style={styles.checkbox}
             />
-            <Text style={styles.label}>Đồng ý với chính sách của Brili?</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Đồng ý với</Text>
+              <TouchableOpacity>
+                <Text style={styles.policy}>chính sách</Text>
+              </TouchableOpacity>
+              <Text style={styles.label}>của Brili?</Text>
+            </View>
           </View>
           {isSelected && (
             <TouchableOpacity
@@ -401,7 +407,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 48,
+    marginTop: 44,
     //alignItems: "center",
   },
   signIn: {
@@ -417,11 +423,24 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   label: {
-    margin: 4,
+    marginTop: 8,
+    marginLeft: 4,
+    marginBottom: 8,
   },
   textDanger: {
     color: "#dc3545",
     marginLeft: 100,
     marginRight: 12,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  policy: {
+    marginTop: 8,
+    marginLeft: 4,
+    marginBottom: 4,
+    color: "#1868DF",
   },
 });
