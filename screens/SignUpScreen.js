@@ -15,6 +15,7 @@ import React, { useRef, useState } from "react";
 // import CheckBox from "@react-native-community/checkbox";
 // import { Checkbox } from "react-native-paper";
 import Checkbox from "expo-checkbox";
+import { useSwipe } from "../hooks/useSwipe";
 
 const DismissKeyboardHOC = (Comp) => {
   return ({ children, ...props }) => (
@@ -41,6 +42,17 @@ export default function SignUpScreen({ navigation }) {
   const ref_input2 = useRef();
   const ref_input3 = useRef();
   const ref_input4 = useRef();
+
+  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+
+  function onSwipeLeft() {
+    //navigation.goBack();
+  }
+
+  function onSwipeRight() {
+    // console.log("SWIPE_RIGHT");
+    navigation.goBack();
+  }
 
   formValidation = async () => {
     setLoading(true);
@@ -100,7 +112,7 @@ export default function SignUpScreen({ navigation }) {
           ></Image>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <DismissKeyboardView>
           <Image
             style={styles.logo}
@@ -218,7 +230,13 @@ export default function SignUpScreen({ navigation }) {
               onValueChange={setSelection}
               style={styles.checkbox}
             />
-            <Text style={styles.label}>Đồng ý với chính sách của Brili?</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Đồng ý với</Text>
+              <TouchableOpacity>
+                <Text style={styles.policy}>chính sách</Text>
+              </TouchableOpacity>
+              <Text style={styles.label}>của Brili?</Text>
+            </View>
           </View>
           {isSelected && (
             <TouchableOpacity
@@ -336,7 +354,7 @@ const styles = StyleSheet.create({
   loginBtn: {
     width: 200,
     height: 52,
-    marginTop: 20,
+    marginTop: 12,
     marginBottom: 16,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
@@ -389,7 +407,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 48,
+    marginTop: 44,
     //alignItems: "center",
   },
   signIn: {
@@ -405,11 +423,24 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   label: {
-    margin: 4,
+    marginTop: 8,
+    marginLeft: 4,
+    marginBottom: 8,
   },
   textDanger: {
     color: "#dc3545",
     marginLeft: 100,
     marginRight: 12,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  policy: {
+    marginTop: 8,
+    marginLeft: 4,
+    marginBottom: 4,
+    color: "#1868DF",
   },
 });
