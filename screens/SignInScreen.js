@@ -5,17 +5,61 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+
+const DismissKeyboardHOC = (Comp) => {
+  return ({ children, ...props }) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Comp {...props}>{children}</Comp>
+    </TouchableWithoutFeedback>
+  );
+};
+const DismissKeyboardView = DismissKeyboardHOC(View);
 
 export default function SignInScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    isFocused;
+  }, [isFocused]);
+
+  const ref_input2 = useRef();
+
+  formValidation = async () => {
+    setLoading(true);
+    let errorFlag = false;
+
+    // input validation
+    if (username.length == 0) {
+      errorFlag = true;
+      setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
+    }
+
+    if (password.length == 0) {
+      errorFlag = true;
+      setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
+    }
+
+    if (errorFlag) {
+      // console.log("errorFlag");
+    } else {
+      setLoading(false);
+      navigation.navigate("FirstInfo");
+    }
+  };
   return (
-    <View>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+    <DismissKeyboardView>
+      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <Image
           style={styles.backIcon}
           source={require("../assets/icons/back.png")}
@@ -42,12 +86,20 @@ export default function SignInScreen({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="Tên đăng nhập"
+              returnKeyType="next"
+              onSubmitEditing={() => ref_input2.current.focus()}
               value={username}
-              onChangeText={(text) => setUsername(text)}
+              onChangeText={(text) => {
+                setUsernameErrorMessage("");
+                setUsername(text);
+              }}
             ></TextInput>
           </View>
         </View>
       </View>
+      {usernameErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{usernameErrorMessage}</Text>
+      )}
 
       <View style={styles.card}>
         <View style={styles.form}>
@@ -60,7 +112,11 @@ export default function SignInScreen({ navigation }) {
               style={styles.input2}
               secureTextEntry={isPasswordSecure}
               placeholder="Mật khẩu"
-              onChangeText={(text) => setPassword(text)}
+              ref={ref_input2}
+              onChangeText={(text) => {
+                setPasswordErrorMessage("");
+                setPassword(text);
+              }}
               value={password}
             ></TextInput>
             <TouchableOpacity
@@ -86,13 +142,17 @@ export default function SignInScreen({ navigation }) {
           </View>
         </View>
       </View>
+      {passwordErrorMessage.length > 0 && (
+        <Text style={styles.textDanger}>{passwordErrorMessage}</Text>
+      )}
 
       <TouchableOpacity>
         <Text style={styles.forgotPassLabel}>Quên mật khẩu?</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginBtn}
-        onPress={() => navigation.navigate("HomeTabs")}
+        // onPress={() => navigation.navigate("HomeTabs")}
+        onPress={() => formValidation()}
       >
         <Text style={styles.loginText}>Đăng nhập</Text>
       </TouchableOpacity>
@@ -104,33 +164,58 @@ export default function SignInScreen({ navigation }) {
 
       <View style={styles.formControl2}>
         <TouchableOpacity>
-          <Image source={require("../assets/images/google-logo.png")}></Image>
+          <Image
+            style={styles.signInLogo}
+            source={require("../assets/images/google-logo.png")}
+          ></Image>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require("../assets/images/apple-logo.png")}></Image>
+          <Image
+            style={styles.signInLogo}
+            source={require("../assets/images/apple-logo.png")}
+          ></Image>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require("../assets/images/facebook-logo.png")}></Image>
+          <Image
+            style={styles.signInLogo}
+            source={require("../assets/images/facebook-logo.png")}
+          ></Image>
         </TouchableOpacity>
       </View>
 
       <View style={styles.formControl3}>
         <Text style={styles.ask}>Chưa có tài khoản?</Text>
         <TouchableOpacity>
-          <Text style={styles.signUp}> Đăng ký ngay</Text>
+          <Text
+            style={styles.signUp}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            {" "}
+            Đăng ký ngay
+          </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </DismissKeyboardView>
   );
 }
 
 const styles = StyleSheet.create({
+  back: {
+    width: 40,
+  },
   backIcon: {
-    height: 16,
-    marginTop: 32,
+    width: 40,
+    height: 40,
+    marginTop: 48,
   },
   eyeIcon: {
+    width: 24,
+    height: 24,
     marginTop: 8,
+  },
+  icon: {
+    width: 32,
+    height: 32,
   },
   logo: {
     width: 48,
@@ -139,8 +224,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   image: {
-    width: 200,
-    height: 150,
+    width: 260,
+    height: 180,
     alignItems: "center",
     marginLeft: "auto",
     marginRight: "auto",
@@ -151,6 +236,7 @@ const styles = StyleSheet.create({
     color: "#171586",
     fontSize: 24,
     fontWeight: "bold",
+    marginTop: 8,
   },
   card: {
     backgroundColor: "White",
@@ -167,7 +253,7 @@ const styles = StyleSheet.create({
   input: {
     width: 280,
     height: 32,
-    color: "#6a4595",
+    // color: "#6a4595",
     fontSize: 16,
     paddingHorizontal: 4,
     paddingVertical: 5,
@@ -176,9 +262,9 @@ const styles = StyleSheet.create({
   },
 
   input2: {
-    width: 232,
+    width: 228,
     height: 32,
-    color: "#6a4595",
+    // color: "#6a4595",
     fontSize: 16,
     paddingHorizontal: 4,
     paddingVertical: 5,
@@ -197,7 +283,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 52,
     marginTop: 16,
-    marginBottom: 20,
+    marginBottom: 32,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
     marginRight: "auto",
@@ -208,7 +294,8 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 10,
+    marginTop: 12,
+    fontWeight: "600",
   },
   formControl1: {
     flex: 1,
@@ -225,23 +312,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#777D84",
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 32,
+  },
+  signInLogo: {
+    width: 78,
+    height: 56,
   },
   formControl2: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 20,
+    marginTop: 40,
   },
   formControl3: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 80,
+    marginTop: 120,
     //alignItems: "center",
   },
   signUp: {
     color: "#1868DF",
+  },
+  textDanger: {
+    color: "#dc3545",
+    marginLeft: 100,
+    marginRight: 12,
   },
 });

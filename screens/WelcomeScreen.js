@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 48,
     height: 48,
-    marginTop: 48,
+    marginTop: 60,
     marginLeft: 20,
   },
   image: {
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 32,
+    marginTop: 60,
+    marginBottom: 32,
   },
   ask: {
     marginLeft: "auto",

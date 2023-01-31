@@ -9,9 +9,114 @@ import PodcastScreen from "../screens/PodcastScreen";
 import HelpScreen from "../screens/HelpScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import { Image, StyleSheet, View } from "react-native";
+import MyPodcastScreen from "../screens/MyPodcastScreen";
+import FirstInfoScreen from "../screens/FirstInfoScreen";
+import UploadPodcastScreen from "../screens/UploadPodcastScreen";
+
+const Stack = createStackNavigator();
+function StackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="FirstInfo"
+        component={FirstInfoScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HomeTabs"
+        component={MyTabs}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+const MainNavigator = () => {
+  return (
+    <NavigationContainer>
+      <StackNavigator></StackNavigator>
+    </NavigationContainer>
+  );
+};
+
+const RecruitmentStack = createStackNavigator();
+function RecruitmentStackNavigator() {
+  return (
+    <RecruitmentStack.Navigator>
+      <RecruitmentStack.Screen
+        name="Recruitment"
+        component={RecruitmentScreen}
+        options={{ headerShown: false }}
+      />
+    </RecruitmentStack.Navigator>
+  );
+}
+
+const PodcastStack = createStackNavigator();
+function PodcastStackNavigator() {
+  return (
+    <PodcastStack.Navigator>
+      <PodcastStack.Screen
+        name="Podcast"
+        component={PodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="MyPodcast"
+        component={MyPodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="UploadPodcast"
+        component={UploadPodcastScreen}
+        options={{ headerShown: false }}
+      />
+    </PodcastStack.Navigator>
+  );
+}
+
+const HelpStack = createStackNavigator();
+function HelpStackNavigator() {
+  return (
+    <HelpStack.Navigator>
+      <HelpStack.Screen
+        name="Help"
+        component={HelpScreen}
+        options={{ headerShown: false }}
+      />
+    </HelpStack.Navigator>
+  );
+}
+
+const SettingsStack = createStackNavigator();
+function SettingsStackNavigator() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ headerShown: false }}
+      />
+    </SettingsStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator();
-
 function MyTabs() {
   return (
     <Tab.Navigator
@@ -20,10 +125,10 @@ function MyTabs() {
         tabBarLabelStyle: [
           {
             fontSize: 12,
-            marginBottom: 4,
+            // marginBottom: 4,
           },
         ],
-
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarStyle: [
           {
@@ -35,7 +140,7 @@ function MyTabs() {
             elevation: 0,
             backgroundColor: "#ffffff",
             borderRadius: 0,
-            height: 70,
+            height: 100,
             ...styles.shadow,
           },
           null,
@@ -43,9 +148,10 @@ function MyTabs() {
       }}
     >
       <Tab.Screen
-        name="Tuyển dụng"
-        component={RecruitmentScreen}
+        name="RecruitmentStack"
+        component={RecruitmentStackNavigator}
         options={{
+          tabBarLabel: "Tuyển dụng",
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
               {focused && (
@@ -67,9 +173,10 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Podcast"
-        component={PodcastScreen}
+        name="PodcastStack"
+        component={PodcastStackNavigator}
         options={{
+          tabBarLabel: "Podcast",
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
               {focused && (
@@ -91,9 +198,10 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Trợ giúp"
-        component={HelpScreen}
+        name="HelpStack"
+        component={HelpStackNavigator}
         options={{
+          tabBarLabel: "Trợ giúp",
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
               {focused && (
@@ -115,9 +223,10 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Cài đặt"
-        component={SettingsScreen}
+        name="SettingsStack"
+        component={SettingsStackNavigator}
         options={{
+          tabBarLabel: "Cài đặt",
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
               {focused && (
@@ -141,43 +250,6 @@ function MyTabs() {
     </Tab.Navigator>
   );
 }
-
-const Stack = createStackNavigator();
-
-function StackNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignIn"
-        component={SignInScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="HomeTabs"
-        component={MyTabs}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-const MainNavigator = () => {
-  return (
-    <NavigationContainer>
-      <StackNavigator></StackNavigator>
-    </NavigationContainer>
-  );
-};
 
 export default MainNavigator;
 

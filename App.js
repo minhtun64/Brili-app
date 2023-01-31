@@ -1,9 +1,37 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import MainNavigator from "./navigation/BriliNav";
+// import { Assets } from "@react-navigation/elements";
 
 export default function App() {
+  loadResourcesAsync;
   return <MainNavigator></MainNavigator>;
+}
+
+async function loadResourcesAsync() {
+  await Promise.all([
+    Assets.loadAsync([
+      require("./assets/images/listen-podcast.png"),
+      require("./assets/images/post-podcast.png"),
+    ]),
+    /*
+    Font.loadAsync({
+      // This is the font that we are using for our tab bar
+      ...Ionicons.font,
+      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
+      // remove this if you are not using it in your app
+      'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+      'open-sans-extrabold': require('./assets/fonts/OpenSans-ExtraBold.ttf'),
+    }),
+    */
+  ]);
 }
 
 const styles = StyleSheet.create({});
