@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -13,14 +14,25 @@ import MyPodcastScreen from "../screens/MyPodcastScreen";
 import FirstInfoScreen from "../screens/FirstInfoScreen";
 import UploadPodcastScreen from "../screens/UploadPodcastScreen";
 import MyPodcastScreen1 from "../screens/MyPodcastScreen1";
+import S_WelcomeScreen from "../screens/S_WelcomeScreen";
 
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="Choice"
+        component={ChoiceScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="S_Welcome"
+        component={S_WelcomeScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
