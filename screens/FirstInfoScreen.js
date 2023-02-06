@@ -158,7 +158,7 @@ export default function SignInScreen({ navigation }) {
       <TouchableOpacity
         style={styles.saveBtn}
         onPress={() => navigation.navigate("HomeTabs")}
-        // onPress={() => formValidation()}
+        //onPress={() => formValidation()}
       >
         <Text style={styles.saveText}>Lưu thông tin</Text>
       </TouchableOpacity>

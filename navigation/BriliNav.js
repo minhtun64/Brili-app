@@ -15,6 +15,8 @@ import FirstInfoScreen from "../screens/FirstInfoScreen";
 import UploadPodcastScreen from "../screens/UploadPodcastScreen";
 import MyPodcastScreen1 from "../screens/MyPodcastScreen1";
 import S_WelcomeScreen from "../screens/S_WelcomeScreen";
+import HelpSearch1Screen from "../screens/HelpSearch1Screen";
+import HelpSearch2Screen from "../screens/HelpSearch2Screen";
 
 const Stack = createStackNavigator();
 function StackNavigator() {
@@ -53,6 +55,17 @@ function StackNavigator() {
       <Stack.Screen
         name="HomeTabs"
         component={MyTabs}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HelpSearch1"
+        component={HelpSearch1Screen}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="HelpSearch2"
+        component={HelpSearch2Screen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
