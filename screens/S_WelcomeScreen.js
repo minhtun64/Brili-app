@@ -7,11 +7,15 @@ import {
   Image,
 } from "react-native";
 import React, { Component } from "react";
+import { Audio } from "expo-av";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSwipe } from "../hooks/useSwipe";
 
-export default function WelcomeScreen({ navigation }) {
+export default function S_WelcomeScreen({ navigation }) {
+  const [sound, setSound] = React.useState();
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+  const [backCount, setBackCount] = React.useState(0);
+  const [playing, setPlaying] = React.useState(false);
 
   function onSwipeLeft() {
     //navigation.goBack();
@@ -22,9 +26,52 @@ export default function WelcomeScreen({ navigation }) {
     navigation.goBack();
   }
 
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound2.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 7000);
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   return (
     <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <TouchableOpacity style={styles.view}>
+      <TouchableOpacity
+        onLongPress={() => {
+          sound.unloadAsync();
+          setTimeout(() => {
+            setBackCount(0);
+          }, 500);
+          navigation.navigate("SignIn");
+        }}
+        onPress={() => {
+          setBackCount(backCount + 1);
+          if (backCount == 1) {
+            sound.unloadAsync();
+            navigation.navigate("SignIn");
+          } else {
+            setTimeout(() => {
+              setBackCount(0);
+            }, 500);
+            playSound();
+          }
+        }}
+      >
         <Image
           style={styles.logo}
           source={require("../assets/images/logo.png")}
@@ -32,23 +79,36 @@ export default function WelcomeScreen({ navigation }) {
         <Image
           style={styles.image}
           source={require("../assets/images/welcome.png")}
+          onLoad={playSound}
         ></Image>
         <Text style={styles.ask}>Bạn là ... ?</Text>
 
         <View>
-          <TouchableOpacity
+          <View
             style={styles.btn}
             onPress={() => navigation.navigate("SignIn")}
+            //onPress={playSound}
           >
             <Text style={styles.opt}>Người gặp khó khăn về thị lực</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </View>
+          <View
             style={styles.btn}
             onPress={() => navigation.navigate("SignIn")}
           >
             <Text style={styles.opt}>Tình nguyện viên</Text>
-          </TouchableOpacity>
+          </View>
         </View>
+        {playing ? (
+          <Image
+            style={styles.icon}
+            source={require("../assets/images/voice.gif")}
+          ></Image>
+        ) : (
+          <Image
+            style={styles.icon}
+            source={require("../assets/images/voice-stop.png")}
+          ></Image>
+        )}
       </TouchableOpacity>
     </ScrollView>
   );
@@ -96,5 +156,13 @@ const styles = StyleSheet.create({
   },
   view: {
     height: "100%",
+  },
+  icon: {
+    height: 60,
+    width: 60,
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: "100%",
+    marginTop: 32,
   },
 });

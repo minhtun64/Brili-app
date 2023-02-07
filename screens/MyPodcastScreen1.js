@@ -36,7 +36,7 @@ const DismissKeyboardHOC = (Comp) => {
 };
 const DismissKeyboardView = DismissKeyboardHOC(View);
 
-export default function MyPodcastScreen({ navigation }) {
+export default function MyPodcastScreen1({ navigation }) {
   const [search, setSearch] = useState("");
 
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
@@ -47,7 +47,7 @@ export default function MyPodcastScreen({ navigation }) {
 
   function onSwipeRight() {
     // console.log("SWIPE_RIGHT");
-    navigation.goBack();
+    navigation.navigate("Podcast");
   }
 
   let [fontsLoaded] = useFonts({
@@ -116,8 +116,48 @@ export default function MyPodcastScreen({ navigation }) {
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
-          <View>
-            <Text style={styles.emptyText}>Trống</Text>
+          <View style={styles.podcast}>
+            <TouchableOpacity>
+              <View style={styles.row}>
+                <Image
+                  style={styles.podcastImage}
+                  source={require("../assets/images/podcast-image.png")}
+                ></Image>
+                <Text style={styles.podcastTitle}>
+                  #1. Làm thế nào để vượt qua cảm giác trống rỗng
+                </Text>
+              </View>
+              <Text style={styles.podcastDes}>
+                Chặng đời nào trên hành trình trưởng thành, ta cũng từng gặp
+                phải trạng thái trống rỗng. Trống rỗng vì lạc lối, trống rỗng vì
+                đánh mất bản thể của bản thân, trống rỗng vì không biết điểm
+                mạnh và tài năng của mình là...{" "}
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.row}>
+              <View style={styles.row2}>
+                <Text style={styles.podcastInfo}> 20 thg 1</Text>
+                <Text style={styles.point}> . </Text>
+                <Text style={styles.podcastInfo}> 24 phút </Text>
+                <Text style={styles.point}> . </Text>
+                <Text style={styles.podcastInfo}> 0 lượt nghe </Text>
+                <View style={styles.status}>
+                  <Image
+                    style={styles.statusImage}
+                    source={require("../assets/icons/status-1.png")}
+                  ></Image>
+                  <Text style={styles.statusText}>Đang chờ xử lý</Text>
+                </View>
+              </View>
+              <View>
+                <TouchableOpacity style={styles.share}>
+                  <Image
+                    style={styles.shareImage}
+                    source={require("../assets/icons/share.png")}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </ScrollView>
         <TouchableOpacity
@@ -184,6 +224,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 12,
   },
   allText: {
     fontSize: 20,
@@ -215,20 +256,71 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
   },
+  podcast: {
+    padding: 12,
+  },
+  row: {
+    // marginLeft: 16,
+    // marginRight: 16,
+    width: "100%",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  row2: {
+    // marginLeft: 16,
+    // marginRight: 16,
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  podcastImage: {
+    width: 60,
+    height: 60,
+  },
+  podcastTitle: {
+    width: 320,
+    fontSize: 17,
+    fontFamily: "LexendExa_600SemiBold",
+    letterSpacing: -2,
+  },
+  podcastDes: {
+    fontSize: 14,
+    marginTop: 8,
+    marginBottom: 8,
+    fontFamily: "LexendExa_300Light",
+    letterSpacing: -2,
+  },
+  status: {
+    //marginLeft: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
+    backgroundColor: "#FB9D11",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderRadius: 12,
+  },
+  statusImage: {
+    height: 16,
+    width: 16,
+  },
+  statusText: {
+    color: "#ffffff",
+    marginLeft: 4,
+  },
+  podcastInfo: {
+    fontWeight: "600",
+  },
+  shareImage: {
+    // marginLeft: 12,
+    // marginRight: 8,
+    height: 20,
+    width: 15,
+    marginTop: -2,
+  },
+  point: {
+    fontWeight: "700",
+    marginTop: -4,
+  },
   content: {},
 });
-
-/*
-  export default class PodcastScreen extends Component {
-    render() {
-      return (
-        <View>
-          <Text style={styles.title}>Podcast</Text>
-          <View style={styles.formControl1}>
-            <View style={styles.line}></View>
-          </View>
-        </View>
-      );
-    }
-  }
-  */

@@ -7,6 +7,18 @@ import {
   TextInput,
 } from "react-native";
 import React, { Component } from "react";
+import {
+  useFonts,
+  LexendExa_100Thin,
+  LexendExa_200ExtraLight,
+  LexendExa_300Light,
+  LexendExa_400Regular,
+  LexendExa_500Medium,
+  LexendExa_600SemiBold,
+  LexendExa_700Bold,
+  LexendExa_800ExtraBold,
+  LexendExa_900Black,
+} from "@expo-google-fonts/lexend-exa";
 
 export default class SignInScreen extends Component {
   state = {
@@ -177,6 +189,8 @@ const styles = StyleSheet.create({
     color: "#171586",
     fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "LexendExa_400Regular",
+    letterSpacing: -2,
   },
   card: {
     backgroundColor: "White",

@@ -65,12 +65,12 @@ export default function SignInScreen({ navigation }) {
   };
   return (
     <DismissKeyboardView>
-      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
+      {/* <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <Image
           style={styles.backIcon}
           source={require("../assets/icons/back.png")}
         ></Image>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Image
         style={styles.logo}
@@ -155,7 +155,11 @@ export default function SignInScreen({ navigation }) {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.saveBtn} onPress={() => formValidation()}>
+      <TouchableOpacity
+        style={styles.saveBtn}
+        onPress={() => navigation.navigate("HomeTabs")}
+        //onPress={() => formValidation()}
+      >
         <Text style={styles.saveText}>Lưu thông tin</Text>
       </TouchableOpacity>
     </DismissKeyboardView>
@@ -174,7 +178,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 48,
     height: 48,
-    marginTop: 12,
+    // marginTop: 12,
+    marginTop: 62,
     marginLeft: 20,
   },
   title: {
