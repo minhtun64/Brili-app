@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RecruitmentScreen from "../screens/RecruitmentScreen";
 import CurriculumVitae from "../screens/CurriculumVitae";
+import MarketingConsulting from "../screens/MarketingConsulting";
 import PodcastScreen from "../screens/PodcastScreen";
 import HelpScreen from "../screens/HelpScreen";
 import SettingsScreen from "../screens/SettingsScreen";
@@ -40,8 +41,9 @@ const RecruitmentStack = createStackNavigator();
 function RecruitmentStackNavigator() {
     return (
         <RecruitmentStack.Navigator>
-            <RecruitmentStack.Screen name="CurriculumVitae" component={CurriculumVitae} options={{ headerShown: false }} />
             <RecruitmentStack.Screen name="Recruitment" component={RecruitmentScreen} options={{ headerShown: false }} />
+            <RecruitmentStack.Screen name="CurriculumVitae" component={CurriculumVitae} options={{ headerShown: false }} />
+            <RecruitmentStack.Screen name="MarketingConsulting" component={MarketingConsulting} options={{ headerShown: false }} />
         </RecruitmentStack.Navigator>
     );
 }
