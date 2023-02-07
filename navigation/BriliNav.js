@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -13,6 +14,9 @@ import MyPodcastScreen from "../screens/MyPodcastScreen";
 import FirstInfoScreen from "../screens/FirstInfoScreen";
 import UploadPodcastScreen from "../screens/UploadPodcastScreen";
 import MyPodcastScreen1 from "../screens/MyPodcastScreen1";
+import S_WelcomeScreen from "../screens/S_WelcomeScreen";
+import HelpSearch1Screen from "../screens/HelpSearch1Screen";
+import HelpSearch2Screen from "../screens/HelpSearch2Screen";
 import PodcastTopicScreen from "../screens/PodcastTopicScreen";
 import ListenPodcastScreen from "../screens/ListenPodcastScreen";
 
@@ -21,8 +25,18 @@ function StackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="Choice"
+        component={ChoiceScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="S_Welcome"
+        component={S_WelcomeScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -43,6 +57,17 @@ function StackNavigator() {
       <Stack.Screen
         name="HomeTabs"
         component={MyTabs}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HelpSearch1"
+        component={HelpSearch1Screen}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="HelpSearch2"
+        component={HelpSearch2Screen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
