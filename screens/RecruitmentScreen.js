@@ -76,7 +76,7 @@ export default function PodcastScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("")}>
+                        <TouchableOpacity onPress={() => navigation.navigate("MyPodcast")}>
                             <ImageBackground
                                 source={require("../assets/images/getty_536615329_3428261.png")}
                                 style={styles.backgroundImage}
@@ -100,7 +100,7 @@ export default function PodcastScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("")}>
+                        <TouchableOpacity onPress={() => navigation.navigate("MyPodcast")}>
                             <ImageBackground
                                 source={require("../assets/images/How-to-Study-featured-image1.png")}
                                 style={styles.backgroundImage}
@@ -152,13 +152,13 @@ const styles = StyleSheet.create({
         //flex: 1,
         flexDirection: "column",
         justifyContent: "space-around",
-        paddingTop: 48,
-        paddingBottom: 48,
+        paddingTop: 24,
+        paddingBottom: 24,
         //backgroundColor: "black",
     },
     backgroundImage: {
-        width: 350,
-        height: 150,
+        width: 344,
+        height: 172,
         borderRadius: 12,
         overflow: "hidden",
         marginLeft: "auto",

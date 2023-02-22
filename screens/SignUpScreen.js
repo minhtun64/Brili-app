@@ -142,7 +142,7 @@ export default function SignUpScreen({ navigation }) {
                                     secureTextEntry={true}
                                     placeholder="Xác nhận mật khẩu"
                                     returnKeyType="next"
-                                    onSubmitEditing={() => ref_input4.current.focus()}
+                                    // onSubmitEditing={() => ref_input4.current.focus()}
                                     ref={ref_input3}
                                     onChangeText={(text) => {
                                         setConfirmPassword(text);
@@ -156,7 +156,7 @@ export default function SignUpScreen({ navigation }) {
 
                     {confirmPasswordErrorMessage.length > 0 && <Text style={styles.textDanger}>{confirmPasswordErrorMessage}</Text>}
 
-                    <View style={styles.card}>
+                    {/* <View style={styles.card}>
                         <View style={styles.form}>
                             <View style={styles.formControl}>
                                 <Image style={styles.icon} source={require("../assets/icons/email.png")}></Image>
@@ -170,9 +170,9 @@ export default function SignUpScreen({ navigation }) {
                                 ></TextInput>
                             </View>
                         </View>
-                    </View>
+                    </View> */}
 
-                    <View style={styles.checkboxContainer}>
+                    {/* <View style={styles.checkboxContainer}>
                         <Checkbox disable={false} value={isSelected} onValueChange={setSelection} style={styles.checkbox} />
                         <View style={styles.row}>
                             <Text style={styles.label}>Đồng ý với</Text>
@@ -181,8 +181,8 @@ export default function SignUpScreen({ navigation }) {
                             </TouchableOpacity>
                             <Text style={styles.label}>của Brili?</Text>
                         </View>
-                    </View>
-                    {isSelected && (
+                    </View> */}
+                    {/* {isSelected && ( */}
                         <TouchableOpacity
                             style={styles.loginBtn}
                             // onPress={() => navigation.navigate("SignIn")}
@@ -190,12 +190,12 @@ export default function SignUpScreen({ navigation }) {
                         >
                             <Text style={styles.loginText}>Đăng ký</Text>
                         </TouchableOpacity>
-                    )}
+                    {/* )}
                     {!isSelected && (
                         <TouchableOpacity style={styles.loginBtnOff}>
                             <Text style={styles.loginText}>Đăng ký</Text>
                         </TouchableOpacity>
-                    )}
+                    )} */}
 
                     <View style={styles.formControl3}>
                         <Text style={styles.ask}>Đã có tài khoản?</Text>
@@ -254,9 +254,10 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginRight: "auto",
         color: "#171586",
-        fontSize: 24,
+        fontSize: 34,
         fontWeight: "bold",
-        marginTop: 8,
+        marginTop: 20,
+        marginBottom: 12,
     },
     card: {
         backgroundColor: "White",
@@ -273,8 +274,8 @@ const styles = StyleSheet.create({
     },
     input: {
         width: 280,
-        height: 32,
-        fontSize: 16,
+        height: 40,
+        fontSize: 22,
         paddingHorizontal: 4,
         paddingVertical: 5,
         borderBottomColor: "#ccc",
@@ -282,10 +283,10 @@ const styles = StyleSheet.create({
     },
 
     input2: {
-        width: 232,
-        height: 32,
+        width: 280,
+        height: 40,
         color: "#6a4595",
-        fontSize: 16,
+        fontSize: 22,
         paddingHorizontal: 4,
         paddingVertical: 5,
         borderBottomColor: "#ccc",
@@ -293,14 +294,14 @@ const styles = StyleSheet.create({
     },
 
     loginBtn: {
-        width: 200,
-        height: 52,
-        marginTop: 12,
-        marginBottom: 16,
+        width: "80%",
+        height: 56,
+        marginTop: 56,
+        marginBottom: 32,
         backgroundColor: "#1868DF",
         marginLeft: "auto",
         marginRight: "auto",
-        borderRadius: 12,
+        borderRadius: 16,
     },
     loginBtnOff: {
         width: 200,
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     },
     loginText: {
-        fontSize: 20,
+        fontSize: 24,
         color: "#ffffff",
         marginLeft: "auto",
         marginRight: "auto",
@@ -354,15 +355,15 @@ const styles = StyleSheet.create({
     signIn: {
         color: "#1868DF",
     },
-    checkboxContainer: {
-        flexDirection: "row",
-        marginLeft: 32,
-        marginTop: 32,
-        marginBottom: 12,
-    },
-    checkbox: {
-        alignSelf: "center",
-    },
+    // checkboxContainer: {
+    //     flexDirection: "row",
+    //     marginLeft: 32,
+    //     marginTop: 32,
+    //     marginBottom: 12,
+    // },
+    // checkbox: {
+    //     alignSelf: "center",
+    // },
     label: {
         marginTop: 8,
         marginLeft: 4,

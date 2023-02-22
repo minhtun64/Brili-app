@@ -188,13 +188,13 @@ const styles = StyleSheet.create({
     color: "#171586",
     fontSize: 32,
     fontWeight: "bold",
-    marginTop: 88,
+    marginTop: 80,
   },
   form: {
     padding: 24,
     backgroundColor: "#D8D8D8",
     margin: 40,
-    marginTop: 48,
+    marginTop: 32,
     borderRadius: 12,
   },
   row: {
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     width: 320,
     height: 60,
-    marginTop: 120,
+    marginTop: 24,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
     marginRight: "auto",

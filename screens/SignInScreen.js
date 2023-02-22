@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     color: "#171586",
     fontSize: 34,
     fontWeight: "bold",
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 12,
   },
   card: {
@@ -286,14 +286,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   loginBtn: {
-    width: 160,
-    height: 52,
-    marginTop: 28,
+    width: "80%",
+    height: 56,
+    marginTop: 36,
     marginBottom: 32,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
     marginRight: "auto",
-    borderRadius: 12,
+    borderRadius: 16,
   },
   loginText: {
     fontSize: 24,
