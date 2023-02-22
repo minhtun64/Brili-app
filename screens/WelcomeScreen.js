@@ -27,7 +27,7 @@ export default function WelcomeScreen({ navigation }) {
                         <Text style={styles.opt}>Người gặp khó khăn về thị lực</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("SignInVolunteer")}>
-                        <Text style={styles.opt}>Nhà tuyển dụng, tình nguyện viên</Text>
+                        <Text style={styles.opt}>Nhà tuyển dụng hoặc Tình nguyện viên</Text>
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
@@ -70,10 +70,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     opt: {
-        fontSize: 22,
+        fontSize: 24,
         color: "#ffffff",
         textAlign: "center",
-        marginTop: 20,
+        justifyContent: "center",
+        marginTop: 8,
+        marginLeft: 40,
+        marginRight: 40,
     },
     view: {
         height: "100%",

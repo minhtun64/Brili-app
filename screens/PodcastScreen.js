@@ -64,7 +64,7 @@ export default function PodcastScreen({ navigation }) {
             ></Image>
           )}
           <View>
-            <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+            <TouchableOpacity onPress={() => navigation.navigate("PodcastTopic")}>
               <ImageBackground
                 source={require("../assets/images/listen-podcast.png")}
                 onLoad={() => setLoaded1(true)}

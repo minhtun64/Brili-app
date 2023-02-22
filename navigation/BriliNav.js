@@ -19,6 +19,8 @@ import MyPodcastScreen1 from "../screens/MyPodcastScreen1";
 import S_WelcomeScreen from "../screens/S_WelcomeScreen";
 import HelpSearch1Screen from "../screens/HelpSearch1Screen";
 import HelpSearch2Screen from "../screens/HelpSearch2Screen";
+import PodcastTopicScreen from "../screens/PodcastTopicScreen";
+import ListenPodcastScreen from "../screens/ListenPodcastScreen";
 
 import SignIn_Volunteer from "../screens/SignIn_Volunteer";
 import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
@@ -71,6 +73,8 @@ function PodcastStackNavigator() {
             <PodcastStack.Screen name="MyPodcast" component={MyPodcastScreen} options={{ headerShown: false }} />
             <PodcastStack.Screen name="UploadPodcast" component={UploadPodcastScreen} options={{ headerShown: false }} />
             <PodcastStack.Screen name="MyPodcast1" component={MyPodcastScreen1} options={{ headerShown: false }} />
+            <PodcastStack.Screen name="PodcastTopic" component={PodcastTopicScreen} options={{ headerShown: false }} />
+            <PodcastStack.Screen name="ListenPodcast" component={ListenPodcastScreen} options={{ headerShown: false }} />
         </PodcastStack.Navigator>
     );
 }

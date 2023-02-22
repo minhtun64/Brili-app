@@ -115,7 +115,7 @@ export default function SignInScreen({ navigation }) {
         {firstnameErrorMessage.length > 0 && (
           <Text style={styles.textDanger}>{firstnameErrorMessage}</Text>
         )}
-        <View style={styles.line}></View>
+        {/* <View style={styles.line}></View>
         <View style={styles.row}>
           <Text style={styles.prop}>Ngôn ngữ chính</Text>
           <SelectDropdown
@@ -152,7 +152,7 @@ export default function SignInScreen({ navigation }) {
               return item;
             }}
           />
-        </View>
+        </View> */}
       </View>
 
       <TouchableOpacity
@@ -186,15 +186,15 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     color: "#171586",
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
-    marginTop: 32,
+    marginTop: 88,
   },
   form: {
-    padding: 20,
+    padding: 24,
     backgroundColor: "#D8D8D8",
     margin: 40,
-    marginTop: 80,
+    marginTop: 48,
     borderRadius: 12,
   },
   row: {
@@ -204,56 +204,56 @@ const styles = StyleSheet.create({
     // backgroundColor: "black",
   },
   prop: {
-    fontSize: 18,
+    fontSize: 22,
   },
   input: {
     width: 150,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
   },
   line: {
-    marginTop: 8,
-    marginBottom: 32,
+    marginTop: 16,
+    marginBottom: 20,
     width: 300,
-    height: 1,
+    height: 2,
     marginLeft: "auto",
     marginRight: "auto",
     backgroundColor: "#777D84",
   },
-  dropdown: {
-    borderRadius: 8,
-  },
-  dropdownBtn: {
-    width: 152,
-    marginTop: -10,
-    height: 40,
-    borderRadius: 8,
-  },
-  dropdownText: {
-    fontWeight: "600",
-  },
-  dropdownSelectedRow: {
-    backgroundColor: "#1868DF",
-  },
-  dropdownSelectedText: {
-    color: "#ffffff",
-  },
+  // dropdown: {
+  //   borderRadius: 8,
+  // },
+  // dropdownBtn: {
+  //   width: 152,
+  //   marginTop: -10,
+  //   height: 40,
+  //   borderRadius: 8,
+  // },
+  // dropdownText: {
+  //   fontWeight: "600",
+  // },
+  // dropdownSelectedRow: {
+  //   backgroundColor: "#1868DF",
+  // },
+  // dropdownSelectedText: {
+  //   color: "#ffffff",
+  // },
   saveBtn: {
     width: 320,
-    height: 52,
-    marginTop: 180,
+    height: 60,
+    marginTop: 120,
     backgroundColor: "#1868DF",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 12,
   },
   saveText: {
-    fontSize: 20,
+    fontSize: 24,
     color: "#ffffff",
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 12,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   textDanger: {
     color: "#dc3545",
