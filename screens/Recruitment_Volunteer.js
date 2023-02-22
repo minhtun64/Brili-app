@@ -75,32 +75,9 @@ export default function PodcastScreen({ navigation }) {
                             </ImageBackground>
                         </TouchableOpacity>
                     </View>
+
                     <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("")}>
-                            <ImageBackground
-                                source={require("../assets/images/getty_536615329_3428261.png")}
-                                style={styles.backgroundImage}
-                                onLoad={() => setLoaded2(true)}
-                                // style={loaded ? styles.backgroundImage : { display: "none" }}
-                            >
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text style={styles.label}>Lao động phổ thông</Text>
-                                </View>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("")}>
+                        <TouchableOpacity onPress={() => navigation.navigate("MyPodcast")}>
                             <ImageBackground
                                 source={require("../assets/images/How-to-Study-featured-image1.png")}
                                 style={styles.backgroundImage}
