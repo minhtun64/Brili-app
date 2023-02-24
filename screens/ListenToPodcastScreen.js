@@ -115,12 +115,15 @@ export default class ListenToPodcastScreen extends PureComponent {
   }
 
   onSwipeRight(gestureState) {
-    this.setState({ myText: "You swiped right!" });
+    //this.setState({ myText: "You swiped right!" });
   }
 
   onArrowRight() {
+    console.log("Next Screen - Using ArrowRight");
+    this.state.dotOffset.setValue({ x: 0, y: 0 });
+    this.soundObject.setPositionAsync(0);
     this.props.navigation.navigate("ListenToPodcast2");
-    this.soundObject.unloadAsync();
+    this.pause();
     this.state.dotOffset.removeAllListeners();
   }
 
@@ -165,22 +168,14 @@ export default class ListenToPodcastScreen extends PureComponent {
     if (!this.state.playing) {
       return;
     }
-    // Animation-duration is over (reset Animation and Audio):
-    // await sleep(200); // In case animation has finished, but audio has not
-    // this.setState({ playing: false });
-    // await this.soundObject.pauseAsync();
-
     console.log("Next Screen");
     await sleep(200);
     await this.state.dotOffset.setValue({ x: 0, y: 0 });
-    //this.state.dotOffset.setValue(0);
     await this.soundObject.setPositionAsync(0);
 
     this.props.navigation.navigate("ListenToPodcast2");
-    //this.soundObject.unloadAsync();
     this.pause();
     this.state.dotOffset.removeAllListeners();
-    //return;
   };
 
   measureTrack = (event) => {
@@ -240,7 +235,6 @@ export default class ListenToPodcastScreen extends PureComponent {
 
   async componentWillUnmount() {
     await this.soundObject.playAsync();
-    // this.state.dotOffset.removeAllListeners();
     this.focusSubscription();
   }
 
@@ -304,36 +298,33 @@ export default class ListenToPodcastScreen extends PureComponent {
         <Text style={styles.title}>Brili - Life</Text>
         <View style={styles.line}></View>
 
-        <GestureRecognizer
-          //style={{ height: "30%" }}
-          keyboardShouldPersistTaps="handled"
-          onSwipeLeft={(state) => this.onSwipeLeft(state)}
-          onSwipeRight={(state) => this.onSwipeRight(state)}
-          config={config}
-        >
-          <View style={styles.podcast}>
-            <View style={styles.row}>
-              <TouchableOpacity
-              //onPress={this.}
-              >
-                <Image
-                  style={styles.arrowLeft}
-                  source={require("../assets/icons/arrow-left.png")}
-                ></Image>
-              </TouchableOpacity>
+        <View style={styles.podcast}>
+          <View style={styles.row}>
+            <TouchableOpacity>
+              <Image
+                style={styles.arrowLeft}
+                source={require("../assets/icons/arrow-left.png")}
+              ></Image>
+            </TouchableOpacity>
+            <GestureRecognizer
+              keyboardShouldPersistTaps="handled"
+              onSwipeLeft={(state) => this.onSwipeLeft(state)}
+              onSwipeRight={(state) => this.onSwipeRight(state)}
+              config={config}
+            >
               <Image
                 style={styles.podcastImage}
                 source={require("../assets/images/podcast-image-1.png")}
               ></Image>
-              <TouchableOpacity onPress={() => this.onArrowRight()}>
-                <Image
-                  style={styles.arrowRight}
-                  source={require("../assets/icons/arrow-right.png")}
-                ></Image>
-              </TouchableOpacity>
-            </View>
+            </GestureRecognizer>
+            <TouchableOpacity onPress={() => this.onArrowRight()}>
+              <Image
+                style={styles.arrowRight}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </TouchableOpacity>
           </View>
-        </GestureRecognizer>
+        </View>
         {/* <View style={styles.line}></View>
           <View style={styles.label}>
             <Text style={styles.allText}>0:01</Text>
