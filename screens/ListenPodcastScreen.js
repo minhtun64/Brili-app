@@ -8,21 +8,20 @@ import {
 } from "react-native";
 import { useSwipe } from "../hooks/useSwipe";
 import {
-    useFonts,
-    LexendExa_100Thin,
-    LexendExa_200ExtraLight,
-    LexendExa_300Light,
-    LexendExa_400Regular,
-    LexendExa_500Medium,
-    LexendExa_600SemiBold,
-    LexendExa_700Bold,
-    LexendExa_800ExtraBold,
-    LexendExa_900Black,
-  } from "@expo-google-fonts/lexend-exa";
+  useFonts,
+  LexendExa_100Thin,
+  LexendExa_200ExtraLight,
+  LexendExa_300Light,
+  LexendExa_400Regular,
+  LexendExa_500Medium,
+  LexendExa_600SemiBold,
+  LexendExa_700Bold,
+  LexendExa_800ExtraBold,
+  LexendExa_900Black,
+} from "@expo-google-fonts/lexend-exa";
+import Slider from "@react-native-community/slider";
 
-
-export default function ListenPodcastScreen({ navigation}) {
-
+export default function ListenPodcastScreen({ navigation }) {
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
 
   function onSwipeLeft() {
@@ -31,7 +30,7 @@ export default function ListenPodcastScreen({ navigation}) {
 
   function onSwipeRight() {
     // console.log("SWIPE_RIGHT");
-    navigation.navigate("Podcast");
+    //navigation.navigate("Podcast");
   }
 
   let [fontsLoaded] = useFonts({
@@ -45,7 +44,6 @@ export default function ListenPodcastScreen({ navigation}) {
     LexendExa_800ExtraBold,
     LexendExa_900Black,
   });
-
 
   if (!fontsLoaded) {
     return null;
@@ -63,80 +61,81 @@ export default function ListenPodcastScreen({ navigation}) {
         </TouchableOpacity>
         <Text style={styles.title}>Brili - Life</Text>
         <View style={styles.line}></View>
-        
+
         <ScrollView
           style={{ height: "100%" }}
           keyboardShouldPersistTaps="handled"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
-            <View style={styles.podcast}>
-              <View style={styles.row}>
-                <TouchableOpacity>
-                  <Image
-                    style={styles.arrowLeft}
-                    source={require("../assets/icons/arrow-left.png")}
-                  ></Image>
-                </TouchableOpacity> 
+          <View style={styles.podcast}>
+            <View style={styles.row}>
+              <TouchableOpacity>
                 <Image
-                  style={styles.podcastImage}
-                  source={require("../assets/images/podcast-image-1.png")}
-                ></Image>  
-                <TouchableOpacity>
-                  <Image
-                    style={styles.arrowRight}
-                    source={require("../assets/icons/arrow-right.png")}
-                  ></Image>  
-                </TouchableOpacity>        
-              </View>                      
-            </View>
-            
-            <View style={styles.line}></View>
-            <View style={styles.label}>
-              <Text style={styles.allText}>0:01</Text>
-              <Text style={styles.sortText}>-24:36</Text>
-            </View>
-
-
-            <View style={styles.controlSpeed}>
-              <TouchableOpacity>
-                  <Image
-                    style={styles.backwardIcon}
-                    source={require("../assets/icons/backward-15-seconds.png")}
-                  ></Image>
+                  style={styles.arrowLeft}
+                  source={require("../assets/icons/arrow-left.png")}
+                ></Image>
               </TouchableOpacity>
+              <Image
+                style={styles.podcastImage}
+                source={require("../assets/images/podcast-image-1.png")}
+              ></Image>
               <TouchableOpacity>
-                  <Image
-                    style={styles.pauseIcon}
-                    source={require("../assets/icons/pause-podcast.png")}
-                  ></Image>
+                <Image
+                  style={styles.arrowRight}
+                  source={require("../assets/icons/arrow-right.png")}
+                ></Image>
               </TouchableOpacity>
-              <TouchableOpacity>
-                  <Image
-                    style={styles.forwardIcon}
-                    source={require("../assets/icons/forward-15-seconds.png")}
-                  ></Image>
-              </TouchableOpacity>              
-            </View>            
-
-
-            <Text style={styles.podcastTitle}>
-              #1. Làm thế nào để vượt qua cảm giác trống rỗng
-            </Text>    
-            <Text style={styles.podcastDes}>
-              Trên hình trình trưởng thành, chúng ta đã trải qua bao nhiêu
-              lần xin lỗi? Có lời xin lỗi nào mà chúng ta 
-              mang nặng đến tận bây giờ dành cho quá khứ chúng ta từng 
-              bỏ quên hay không? Hãy cùng theo dõi lá thư ngày hôm nay 
-              và chia sẻ câu chuyện của ... Xem thêm{" "}
-            </Text>
-
-            <View style={styles.containerAuthor}>
-              <Text style={styles.podcastAuthor}>
-                Đặng Minh Tuấn
-              </Text> 
-              <View style={styles.lineEnd}></View>
             </View>
+          </View>
+
+          {/* <View style={styles.line}></View>
+          <View style={styles.label}>
+            <Text style={styles.allText}>0:01</Text>
+            <Text style={styles.sortText}>-24:36</Text>
+          </View> */}
+
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#000000"
+            maximunTrackTintColor="#000000"
+          />
+
+          <View style={styles.controlSpeed}>
+            <TouchableOpacity>
+              <Image
+                style={styles.backwardIcon}
+                source={require("../assets/icons/backward-15-seconds.png")}
+              ></Image>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                style={styles.pauseIcon}
+                source={require("../assets/icons/pause-podcast.png")}
+              ></Image>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                style={styles.forwardIcon}
+                source={require("../assets/icons/forward-15-seconds.png")}
+              ></Image>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.podcastTitle}>#4. Lời xin lỗi muộn màng</Text>
+          <Text style={styles.podcastDes}>
+            Trên hình trình trưởng thành, chúng ta đã trải qua bao nhiêu lần xin
+            lỗi? Có lời xin lỗi nào mà chúng ta mang nặng đến tận bây giờ dành
+            cho quá khứ chúng ta từng bỏ quên hay không? Hãy cùng theo dõi lá
+            thư ngày hôm nay và chia sẻ câu chuyện của ... Xem thêm{" "}
+          </Text>
+
+          <View style={styles.containerAuthor}>
+            <Text style={styles.podcastAuthor}>Đặng Minh Tuấn</Text>
+            <View style={styles.lineEnd}></View>
+          </View>
         </ScrollView>
       </View>
     );
@@ -170,6 +169,14 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 4,
   },
+  slider: {
+    width: 280,
+    height: 1,
+    //backgroundColor: "#000000",
+    marginLeft: "auto",
+    marginRight: "auto",
+    //marginTop: 4,
+  },
   label: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -199,11 +206,15 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     marginBottom: "auto",
     padding: 18,
+    width: 30,
+    height: 30,
   },
   arrowRight: {
     marginTop: "auto",
     marginBottom: "auto",
     padding: 18,
+    width: 30,
+    height: 30,
   },
   podcastImage: {
     width: 256,
@@ -239,7 +250,7 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 20,
   },
-  podcastAuthor : {
+  podcastAuthor: {
     fontSize: 15,
     color: "#757671",
     fontFamily: "LexendExa_500Medium",
@@ -252,7 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#757671",
     marginTop: 6,
   },
-  controlSpeed : {
+  controlSpeed: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: 220,
@@ -265,11 +276,19 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     marginBottom: "auto",
     padding: 18,
+    width: 30,
+    height: 30,
   },
   forwardIcon: {
     justifyContent: "center",
     marginTop: "auto",
     marginBottom: "auto",
     padding: 18,
+    width: 30,
+    height: 30,
+  },
+  pauseIcon: {
+    width: 70,
+    height: 70,
   },
 });

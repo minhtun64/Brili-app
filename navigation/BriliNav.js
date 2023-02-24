@@ -22,6 +22,8 @@ import HelpSearch1Screen from "../screens/HelpSearch1Screen";
 import HelpSearch2Screen from "../screens/HelpSearch2Screen";
 import PodcastTopicScreen from "../screens/PodcastTopicScreen";
 import ListenPodcastScreen from "../screens/ListenPodcastScreen";
+import ListenToPodcastScreen from "../screens/ListenToPodcastScreen";
+import ListenToPodcast2Screen from "../screens/ListenToPodcast2Screen";
 
 import SignIn_Volunteer from "../screens/SignIn_Volunteer";
 import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
@@ -74,16 +76,50 @@ function RecruitmentStackNavigator() {
 
 const PodcastStack = createStackNavigator();
 function PodcastStackNavigator() {
-    return (
-        <PodcastStack.Navigator>
-            <PodcastStack.Screen name="Podcast" component={PodcastScreen} options={{ headerShown: false }} />
-            <PodcastStack.Screen name="MyPodcast" component={MyPodcastScreen} options={{ headerShown: false }} />
-            <PodcastStack.Screen name="UploadPodcast" component={UploadPodcastScreen} options={{ headerShown: false }} />
-            <PodcastStack.Screen name="MyPodcast1" component={MyPodcastScreen1} options={{ headerShown: false }} />
-            <PodcastStack.Screen name="PodcastTopic" component={PodcastTopicScreen} options={{ headerShown: false }} />
-            <PodcastStack.Screen name="ListenPodcast" component={ListenPodcastScreen} options={{ headerShown: false }} />
-        </PodcastStack.Navigator>
-    );
+  return (
+    <PodcastStack.Navigator>
+      <PodcastStack.Screen
+        name="Podcast"
+        component={PodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="MyPodcast"
+        component={MyPodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="UploadPodcast"
+        component={UploadPodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="MyPodcast1"
+        component={MyPodcastScreen1}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="PodcastTopic"
+        component={PodcastTopicScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="ListenPodcast"
+        component={ListenPodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="ListenToPodcast"
+        component={ListenToPodcastScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
+        name="ListenToPodcast2"
+        component={ListenToPodcast2Screen}
+        options={{ headerShown: false }}
+      />
+    </PodcastStack.Navigator>
+  );
 }
 
 const HelpStack = createStackNavigator();
@@ -330,8 +366,8 @@ function MyTabsVolunteer() {
 export default MainNavigator;
 
 const styles = StyleSheet.create({
-    tabIcon: {
-        width: 40,
-        height: 40,
-    },
+  tabIcon: {
+    width: 40,
+    height: 40,
+  },
 });
