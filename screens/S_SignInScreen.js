@@ -13,6 +13,8 @@ import {
   import { Audio } from "expo-av";
   import { useIsFocused } from "@react-navigation/native";
   import { useSwipe } from "../hooks/useSwipe";
+  import { BackHandler } from 'react-native';
+
   
   const DismissKeyboardHOC = (Comp) => {
     return ({ children, ...props }) => (
@@ -41,7 +43,7 @@ import {
   
     function onSwipeRight() {
       // console.log("SWIPE_RIGHT");
-      navigation.goBack();
+      // navigation.goBack();
     }
   
     const isFocused = useIsFocused();
@@ -96,10 +98,29 @@ import {
           }
         : undefined;
     }, [sound]);
+
+    function handleBackButtonClick() {
+      navigation.push("S_Welcome");
+      return true;
+    }
+  
+    useEffect(() => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+      };
+    }, []);
     
     return (
       <View>
-        <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
+        <TouchableOpacity 
+          style={styles.back} 
+          onPress={() => {
+              navigation.navigate("S_Welcome");
+              sound.unloadAsync();
+            }
+          }
+        >
           <Image
             style={styles.backIcon}
             source={require("../assets/icons/back.png")}

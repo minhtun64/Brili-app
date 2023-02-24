@@ -6,17 +6,18 @@ import {
   View,
   Image,
 } from "react-native";
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Audio } from "expo-av";
 import { ScrollView, TapGestureHandler, State } from "react-native-gesture-handler";
 import { useSwipe } from "../hooks/useSwipe";
+import { BackHandler } from 'react-native';
 
 export default function S_WelcomeScreen({ navigation }) {
   const [sound, setSound] = React.useState();
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
   const [backCount, setBackCount] = React.useState(0);
   const [playing, setPlaying] = React.useState(false);
-  const doubleTapRef = useRef(null);
+  const doubleTapRef = useRef(null);  
 
   function onSwipeLeft() {
     //navigation.goBack();
@@ -24,8 +25,9 @@ export default function S_WelcomeScreen({ navigation }) {
 
   function onSwipeRight() {
     // console.log("SWIPE_RIGHT");
-    navigation.goBack();
+    // navigation.goBack();
   }
+
 
   async function playSound() {
     console.log("Loading Sound");
@@ -50,17 +52,33 @@ export default function S_WelcomeScreen({ navigation }) {
       : undefined;
   }, [sound]);
 
+
   const onSingleTapEvent = (event) => {
     if (event.nativeEvent.state === State.ACTIVE) {
-      navigation.navigate("S_SignIn");
+      sound.unloadAsync();
+      navigation.navigate("S_SignIn");      
     }
   };
 
   const onDoubleTapEvent = (event) => {
     if (event.nativeEvent.state === State.ACTIVE) {
+      sound.unloadAsync();
       navigation.navigate("SignInVolunteer");
     }
   };
+
+  function handleBackButtonClick() {
+    navigation.push("Choice");
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    };
+  }, []);
+
 
   return (
     <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
