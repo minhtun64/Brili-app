@@ -107,8 +107,8 @@ function MyTabs() {
                 //tabBarShowLabel: false,
                 tabBarLabelStyle: [
                     {
-                        fontSize: 14,
-                        marginBottom: 6,
+                        fontSize: 12,
+                        // marginBottom: 6,
                     },
                 ],
                 tabBarHideOnKeyboard: true,
