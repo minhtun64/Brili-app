@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
+import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -24,67 +25,28 @@ import ListenPodcastScreen from "../screens/ListenPodcastScreen";
 import ListenToPodcastScreen from "../screens/ListenToPodcastScreen";
 import ListenToPodcast2Screen from "../screens/ListenToPodcast2Screen";
 
+import SignIn_Volunteer from "../screens/SignIn_Volunteer";
+import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
 const Stack = createStackNavigator();
 function StackNavigator() {
-  // return (
-  //     <Stack.Navigator>
-  //         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-  //         <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
-  //         <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
-  //         <Stack.Screen name="FirstInfo" component={FirstInfoScreen} options={{ headerShown: false }} />
-  //         <Stack.Screen name="HomeTabs" component={MyTabs} options={{ headerShown: false }} />
-  //     </Stack.Navigator>
-  // );
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Choice"
-        component={ChoiceScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="S_Welcome"
-        component={S_WelcomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignIn"
-        component={SignInScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="FirstInfo"
-        component={FirstInfoScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="HomeTabs"
-        component={MyTabs}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="HelpSearch1"
-        component={HelpSearch1Screen}
-        options={{ headerShown: false }}
-      />
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Choice" component={ChoiceScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="S_Welcome" component={S_WelcomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="S_SignIn" component={S_SignInScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="FirstInfo" component={FirstInfoScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="HomeTabs" component={MyTabs} options={{ headerShown: false }} />
+            <Stack.Screen name="HomeTabsVolunteer" component={MyTabsVolunteer} options={{ headerShown: false }} />
+            <Stack.Screen name="HelpSearch1" component={HelpSearch1Screen} options={{ headerShown: false }} />
+            <Stack.Screen name="HelpSearch2" component={HelpSearch2Screen} options={{ headerShown: false }} />
 
-      <Stack.Screen
-        name="HelpSearch2"
-        component={HelpSearch2Screen}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
+            {/* NTD và NTV */}
+            <Stack.Screen name="SignInVolunteer" component={SignIn_Volunteer} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    );
 }
 
 const MainNavigator = () => {
@@ -325,6 +287,108 @@ function MyTabs() {
       />
     </Tab.Navigator>
   );
+}
+
+{
+    /* NTD và NTV */
+}
+const RecruitmentStack_V = createStackNavigator();
+function RecruitmentStackNavigator_V() {
+    return (
+        <RecruitmentStack_V.Navigator>
+            <RecruitmentStack_V.Screen name="RecruitmentVolunteer" component={Recruitment_Volunteer} options={{ headerShown: false }} />
+            <RecruitmentStack_V.Screen name="CurriculumVitae" component={CurriculumVitae} options={{ headerShown: false }} />
+            <RecruitmentStack_V.Screen name="MarketingConsulting" component={MarketingConsulting} options={{ headerShown: false }} />
+        </RecruitmentStack_V.Navigator>
+    );
+}
+function MyTabsVolunteer() {
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                //tabBarShowLabel: false,
+                tabBarLabelStyle: [
+                    {
+                        fontSize: 12,
+                        // marginBottom: 4,
+                    },
+                ],
+                tabBarHideOnKeyboard: true,
+                headerShown: false,
+                tabBarStyle: [
+                    {
+                        display: "flex",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        elevation: 0,
+                        backgroundColor: "#ffffff",
+                        borderRadius: 0,
+                        height: 100,
+                        ...styles.shadow,
+                    },
+                    null,
+                ],
+            }}
+        >
+            <Tab.Screen
+                name="RecruitmentStack_V"
+                component={RecruitmentStackNavigator_V}
+                options={{
+                    tabBarLabel: "Tuyển dụng",
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: "center", justifyContent: "center" }}>
+                            {focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/recruitment-active.png")}></Image>}
+                            {!focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/recruitment.png")}></Image>}
+                        </View>
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="PodcastStack"
+                component={PodcastStackNavigator}
+                options={{
+                    tabBarLabel: "Podcast",
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: "center", justifyContent: "center" }}>
+                            {focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/podcast-active.png")}></Image>}
+                            {!focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/podcast.png")}></Image>}
+                        </View>
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="HelpStack"
+                component={HelpStackNavigator}
+                options={{
+                    tabBarLabel: "Trợ giúp",
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: "center", justifyContent: "center" }}>
+                            {focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/help-active.png")}></Image>}
+                            {!focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/help.png")}></Image>}
+                        </View>
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="SettingsStack"
+                component={SettingsStackNavigator}
+                options={{
+                    tabBarLabel: "Cài đặt",
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: "center", justifyContent: "center" }}>
+                            {focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/settings-active.png")}></Image>}
+                            {!focused && <Image style={styles.tabIcon} resizeMode="contain" source={require("../assets/icons/settings.png")}></Image>}
+                        </View>
+                    ),
+                }}
+            />
+        </Tab.Navigator>
+    );
+}
+{
+    /* NTD và NTV */
 }
 
 export default MainNavigator;

@@ -77,27 +77,28 @@ export default function CurriculumVitae({ navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.formInput}>
+                    {/* <View style={styles.formInput}>
                         <Text style={styles.NameTitle}>EMAIL</Text>
                         <TextInput style={styles.Content} placeholder="Email"></TextInput>
-                    </View>
+                    </View> */}
                     <View style={styles.formInput}>
                         <Text style={styles.NameTitle}>SỐ ĐIỆN THOẠI</Text>
                         <TextInput style={styles.Content} placeholder="Số điện thoại"></TextInput>
                     </View>
                     <View style={styles.formInput}>
-                        <Text style={styles.NameTitle}>NGÀY SINH</Text>
+                        <Text style={styles.NameTitle}>SỐ TUỔI CỦA BẠN</Text>
+                        <TextInput style={styles.Content} placeholder="Số tuổi"></TextInput>
                         <View>
-                            <TouchableOpacity style={styles.buttonDate} onPress={showDatePicker}>
+                            {/* <TouchableOpacity style={styles.buttonDate} onPress={showDatePicker}>
                                 <Text style={styles.textDate}>{selectedDate}</Text>
                                 <Image style={styles.dateIcon} source={require("../assets/icons/arrow-square-down.png")}></Image>
                             </TouchableOpacity>
-                            <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={handleConfirm} onCancel={hideDatePicker} />
+                            <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={handleConfirm} onCancel={hideDatePicker} /> */}
                         </View>
                     </View>
                     <View style={styles.formInputEx}>
                         <Text style={styles.NameTitle}>KINH NGHIỆM</Text>
-                        <TextInput multiline={true} numberOfLines={4} style={styles.ContentEx} placeholder="Số điện thoại"></TextInput>
+                        <TextInput multiline={true} numberOfLines={4} style={styles.ContentEx} placeholder="Kinh nghiệm"></TextInput>
                     </View>
                     <TouchableOpacity style={styles.confirm} onPress={toggleModal}>
                         <Text style={styles.TextConfirm}>Xác Nhận</Text>

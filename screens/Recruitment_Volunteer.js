@@ -75,30 +75,7 @@ export default function PodcastScreen({ navigation }) {
                             </ImageBackground>
                         </TouchableOpacity>
                     </View>
-                    <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("MyPodcast")}>
-                            <ImageBackground
-                                source={require("../assets/images/getty_536615329_3428261.png")}
-                                style={styles.backgroundImage}
-                                onLoad={() => setLoaded2(true)}
-                                // style={loaded ? styles.backgroundImage : { display: "none" }}
-                            >
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text style={styles.label}>Lao động phổ thông</Text>
-                                </View>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    </View>
+
                     <View>
                         <TouchableOpacity onPress={() => navigation.navigate("MyPodcast")}>
                             <ImageBackground
@@ -152,13 +129,13 @@ const styles = StyleSheet.create({
         //flex: 1,
         flexDirection: "column",
         justifyContent: "space-around",
-        paddingTop: 24,
-        paddingBottom: 24,
+        paddingTop: 48,
+        paddingBottom: 48,
         //backgroundColor: "black",
     },
     backgroundImage: {
-        width: 344,
-        height: 172,
+        width: 350,
+        height: 150,
         borderRadius: 12,
         overflow: "hidden",
         marginLeft: "auto",

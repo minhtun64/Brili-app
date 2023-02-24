@@ -74,7 +74,7 @@ export default class WelcomeScreen extends Component {
                   style={styles.btn}
                   onPress={() => navigation.navigate("SignIn")}
                 >
-                  <Text style={styles.opt}>Tình nguyện viên</Text>
+                  <Text style={styles.opt}>Nhà tuyển dụng hoặc Tình nguyện viên</Text>
                 </TouchableOpacity>
               </View>
             );
@@ -123,6 +123,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#ffffff",
     textAlign: "center",
-    marginTop: 20,
+    justifyContent: "center",
+    marginTop: 8,
+    marginLeft: 40, 
+    marginRight: 40,
   },
 });
