@@ -107,21 +107,9 @@ export default class ListenToPodcastScreen extends PureComponent {
   }
 
   onSwipeLeft(gestureState) {
-    //this.props.navigation.navigate("ListenToPodcast2");
-    //this.soundObject.pauseAsync();
-    //this.setState({ playing: false });
-    //this.state.dotOffset.removeAllListeners();
-
     this.state.dotOffset.setValue({ x: 0, y: 0 });
-    //this.state.dotOffset.setValue(0);
     this.soundObject.setPositionAsync(0);
-
     this.props.navigation.navigate("ListenToPodcast2");
-    // this.soundObject.unloadAsync();
-    // this.setState({ playing: false });
-
-    //this.onPressPlayPause();
-
     this.pause();
     this.state.dotOffset.removeAllListeners();
   }
@@ -199,10 +187,6 @@ export default class ListenToPodcastScreen extends PureComponent {
     this.setState({ trackLayout: event.nativeEvent.layout }); // {x, y, width, height}
   };
 
-  //   fastForward = (e) => {
-  //     this.setState({ trackLayout.width: e.nativeEvent.layout.width + 15});
-  //   };
-
   async componentDidMount() {
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
@@ -216,9 +200,6 @@ export default class ListenToPodcastScreen extends PureComponent {
 
     // This requires measureTrack to have been called.
     this.state.dotOffset.addListener(() => {
-      //   this.soundObject = new Audio.Sound();
-      //   this.soundObject.loadAsync(require("../assets/podcasts/podcast-1.mp3"));
-
       let animatedCurrentTime = this.state.dotOffset.x
         .interpolate({
           inputRange: [0, this.state.trackLayout.width],
@@ -308,7 +289,11 @@ export default class ListenToPodcastScreen extends PureComponent {
       <View>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => this.props.navigation.navigate("PodcastTopic")}
+          onPress={() => {
+            this.props.navigation.navigate("PodcastTopic");
+            this.soundObject.unloadAsync();
+            this.state.dotOffset.removeAllListeners();
+          }}
         >
           <Image
             style={styles.backIcon}

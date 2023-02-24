@@ -229,7 +229,12 @@ export default class ListenToPodcast2Screen extends PureComponent {
       <View>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => this.props.navigation.navigate("PodcastTopic")}
+          onPress={() => {
+            //this.pause();
+            this.soundObject.unloadAsync();
+            this.state.dotOffset.removeAllListeners();
+            this.props.navigation.navigate("PodcastTopic");
+          }}
         >
           <Image
             style={styles.backIcon}
