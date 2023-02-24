@@ -108,7 +108,7 @@ function MyTabs() {
                 tabBarLabelStyle: [
                     {
                         fontSize: 14,
-                        marginBottom: 4,
+                        marginBottom: 6,
                     },
                 ],
                 tabBarHideOnKeyboard: true,
@@ -123,7 +123,7 @@ function MyTabs() {
                         elevation: 0,
                         backgroundColor: "#ffffff",
                         borderRadius: 0,
-                        height: 100,
+                        height: 80,
                         ...styles.shadow,
                     },
                     null,
