@@ -6,16 +6,18 @@ import {
   View,
   Image,
 } from "react-native";
-import React, { Component } from "react";
+import React, { useRef, useEffect } from 'react';
 import { Audio } from "expo-av";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TapGestureHandler, State } from "react-native-gesture-handler";
 import { useSwipe } from "../hooks/useSwipe";
+import { BackHandler } from 'react-native';
 
 export default function S_WelcomeScreen({ navigation }) {
   const [sound, setSound] = React.useState();
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
   const [backCount, setBackCount] = React.useState(0);
   const [playing, setPlaying] = React.useState(false);
+  const doubleTapRef = useRef(null);  
 
   function onSwipeLeft() {
     //navigation.goBack();
@@ -23,8 +25,9 @@ export default function S_WelcomeScreen({ navigation }) {
 
   function onSwipeRight() {
     // console.log("SWIPE_RIGHT");
-    navigation.goBack();
+    // navigation.goBack();
   }
+
 
   async function playSound() {
     console.log("Loading Sound");
@@ -49,67 +52,86 @@ export default function S_WelcomeScreen({ navigation }) {
       : undefined;
   }, [sound]);
 
+
+  const onSingleTapEvent = (event) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      sound.unloadAsync();
+      navigation.navigate("S_SignIn");      
+    }
+  };
+
+  const onDoubleTapEvent = (event) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      sound.unloadAsync();
+      navigation.navigate("SignInVolunteer");
+    }
+  };
+
+  function handleBackButtonClick() {
+    navigation.push("Choice");
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    };
+  }, []);
+
+
   return (
     <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <TouchableOpacity
-        onLongPress={() => {
-          sound.unloadAsync();
-          setTimeout(() => {
-            setBackCount(0);
-          }, 500);
-          navigation.navigate("SignIn");
-        }}
-        onPress={() => {
-          setBackCount(backCount + 1);
-          if (backCount == 1) {
-            sound.unloadAsync();
-            navigation.navigate("SignIn");
-          } else {
-            setTimeout(() => {
-              setBackCount(0);
-            }, 500);
-            playSound();
-          }
-        }}
+      <TapGestureHandler
+        onHandlerStateChange={onSingleTapEvent}
+        waitFor={doubleTapRef}             
       >
-        <Image
-          style={styles.logo}
-          source={require("../assets/images/logo.png")}
-        ></Image>
-        <Image
-          style={styles.image}
-          source={require("../assets/images/welcome.png")}
-          onLoad={playSound}
-        ></Image>
-        <Text style={styles.ask}>Bạn là ... ?</Text>
+        <TapGestureHandler
+          ref={doubleTapRef}
+          onHandlerStateChange={onDoubleTapEvent}
+          numberOfTaps={2}
+        >
+          <View>
+              <Image
+              style={styles.logo}
+              source={require("../assets/images/logo.png")}
+            ></Image>
+            <Image
+              style={styles.image}
+              source={require("../assets/images/welcome.png")}
+              onLoad={playSound}
+            ></Image>
+            <Text style={styles.ask}>Bạn là ... ?</Text>
 
-        <View>
-          <View
-            style={styles.btn}
-            onPress={() => navigation.navigate("SignIn")}
-            //onPress={playSound}
-          >
-            <Text style={styles.opt}>Người gặp khó khăn về thị lực</Text>
+            <View>
+              <View
+                style={styles.btn}
+                // onPress={() => navigation.navigate("S_SignIn")}
+                //onPress={playSound}
+              >
+                <Text style={styles.opt}>Người gặp khó khăn về thị lực</Text>
+              </View>
+              <View
+                style={styles.btn}
+                // onPress={() => navigation.navigate("SignInVolunteer")}
+              >
+                <Text style={styles.opt}>Nhà tuyển dụng hoặc Tình nguyện viên</Text>
+              </View>
+            </View>
+            {playing ? (
+              <Image
+                style={styles.icon}
+                source={require("../assets/images/voice.gif")}
+              ></Image>
+            ) : (
+              <Image
+                style={styles.icon}
+                source={require("../assets/images/voice-stop.png")}
+              ></Image>
+            )}
           </View>
-          <View
-            style={styles.btn}
-            onPress={() => navigation.navigate("SignIn")}
-          >
-            <Text style={styles.opt}>Nhà tuyển dụng hoặc Tình nguyện viên</Text>
-          </View>
-        </View>
-        {playing ? (
-          <Image
-            style={styles.icon}
-            source={require("../assets/images/voice.gif")}
-          ></Image>
-        ) : (
-          <Image
-            style={styles.icon}
-            source={require("../assets/images/voice-stop.png")}
-          ></Image>
-        )}
-      </TouchableOpacity>
+        </TapGestureHandler>        
+       </TapGestureHandler>
     </ScrollView>
   );
 }

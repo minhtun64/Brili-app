@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
+import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -37,6 +38,7 @@ function StackNavigator() {
             <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="S_Welcome" component={S_WelcomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="S_SignIn" component={S_SignInScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FirstInfo" component={FirstInfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="HomeTabs" component={MyTabs} options={{ headerShown: false }} />
@@ -110,8 +112,8 @@ function MyTabs() {
                 //tabBarShowLabel: false,
                 tabBarLabelStyle: [
                     {
-                        fontSize: 14,
-                        marginBottom: 6,
+                        fontSize: 12,
+                        // marginBottom: 6,
                     },
                 ],
                 tabBarHideOnKeyboard: true,

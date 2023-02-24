@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Audio } from "expo-av";
-import DoubleClick from "react-native-double-tap";
 
 export default function ChoiceScreen({ navigation }) {
   const [sound, setSound] = React.useState();
@@ -53,16 +52,15 @@ export default function ChoiceScreen({ navigation }) {
         setTimeout(() => {
           setBackCount(0);
         }, 500);
-        console.log(backCount);
         navigation.navigate("S_Welcome");
       }}
       onPress={() => {
         setBackCount(backCount + 1);
         if (backCount == 1) {
           sound.unloadAsync();
-          console.log(backCount);
           navigation.navigate("Welcome");
-        } else {
+        } 
+        else {
           setTimeout(() => {
             setBackCount(0);
           }, 500);

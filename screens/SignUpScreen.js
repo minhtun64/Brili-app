@@ -1,10 +1,11 @@
 import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // import { CheckBox } from "react-native-elements";
 // import CheckBox from "@react-native-community/checkbox";
 // import { Checkbox } from "react-native-paper";
 import Checkbox from "expo-checkbox";
 import { useSwipe } from "../hooks/useSwipe";
+import { BackHandler } from 'react-native';
 
 const DismissKeyboardHOC = (Comp) => {
     return ({ children, ...props }) => (
