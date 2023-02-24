@@ -24,6 +24,11 @@ import ListenPodcastScreen from "../screens/ListenPodcastScreen";
 
 import SignIn_Volunteer from "../screens/SignIn_Volunteer";
 import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
+import Confirm_Volunteer from "../screens/Confirm_Volunteer";
+import UploadJob from "../screens/UploadJob";
+import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
+import PodcastScreen_V from "../screens/PodcastScreen_V";
+import HelpScreenV from "../screens/HelpScreenV";
 const Stack = createStackNavigator();
 function StackNavigator() {
     return (
@@ -192,9 +197,43 @@ function RecruitmentStackNavigator_V() {
     return (
         <RecruitmentStack_V.Navigator>
             <RecruitmentStack_V.Screen name="RecruitmentVolunteer" component={Recruitment_Volunteer} options={{ headerShown: false }} />
-            <RecruitmentStack_V.Screen name="CurriculumVitae" component={CurriculumVitae} options={{ headerShown: false }} />
-            <RecruitmentStack_V.Screen name="MarketingConsulting" component={MarketingConsulting} options={{ headerShown: false }} />
+            <RecruitmentStack_V.Screen name="UploadJob" component={UploadJob} options={{ headerShown: false }} />
+            <RecruitmentStack_V.Screen name="ConfirmVolunteer" component={Confirm_Volunteer} options={{ headerShown: false }} />
+            <RecruitmentStack_V.Screen name="RecruitmentScreenV" component={RecruitmentScreen_V} options={{ headerShown: false }} />
         </RecruitmentStack_V.Navigator>
+    );
+}
+
+const SettingsStack_V = createStackNavigator();
+function SettingsStackNavigator_V() {
+    return (
+        <SettingsStack_V.Navigator>
+            <SettingsStack_V.Screen name="ConfirmVolunteer" component={Confirm_Volunteer} options={{ headerShown: false }} />
+        </SettingsStack_V.Navigator>
+    );
+}
+
+const PodcastStack_V = createStackNavigator();
+function PodcastStackNavigator_V() {
+    return (
+        <PodcastStack_V.Navigator>
+            <PodcastStack_V.Screen name="PodcastV" component={PodcastScreen_V} options={{ headerShown: false }} />
+            <PodcastStack_V.Screen name="Podcast" component={PodcastScreen} options={{ headerShown: false }} />
+            <PodcastStack_V.Screen name="MyPodcast" component={MyPodcastScreen} options={{ headerShown: false }} />
+            <PodcastStack_V.Screen name="UploadPodcast" component={UploadPodcastScreen} options={{ headerShown: false }} />
+            <PodcastStack_V.Screen name="MyPodcast1" component={MyPodcastScreen1} options={{ headerShown: false }} />
+            <PodcastStack_V.Screen name="PodcastTopic" component={PodcastTopicScreen} options={{ headerShown: false }} />
+            <PodcastStack_V.Screen name="ListenPodcast" component={ListenPodcastScreen} options={{ headerShown: false }} />
+        </PodcastStack_V.Navigator>
+    );
+}
+
+const HelpStack_V = createStackNavigator();
+function HelpStackNavigator_V() {
+    return (
+        <HelpStack_V.Navigator>
+            <HelpStack_V.Screen name="HelpV" component={HelpScreenV} options={{ headerShown: false }} />
+        </HelpStack_V.Navigator>
     );
 }
 function MyTabsVolunteer() {
@@ -241,8 +280,8 @@ function MyTabsVolunteer() {
                 }}
             />
             <Tab.Screen
-                name="PodcastStack"
-                component={PodcastStackNavigator}
+                name="PodcastStack_V"
+                component={PodcastStackNavigator_V}
                 options={{
                     tabBarLabel: "Podcast",
                     tabBarIcon: ({ focused }) => (
@@ -254,8 +293,8 @@ function MyTabsVolunteer() {
                 }}
             />
             <Tab.Screen
-                name="HelpStack"
-                component={HelpStackNavigator}
+                name="HelpStack_V"
+                component={HelpStackNavigator_V}
                 options={{
                     tabBarLabel: "Trợ giúp",
                     tabBarIcon: ({ focused }) => (
@@ -267,8 +306,8 @@ function MyTabsVolunteer() {
                 }}
             />
             <Tab.Screen
-                name="SettingsStack"
-                component={SettingsStackNavigator}
+                name="SettingsStack_V"
+                component={SettingsStackNavigator_V}
                 options={{
                     tabBarLabel: "Cài đặt",
                     tabBarIcon: ({ focused }) => (

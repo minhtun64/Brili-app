@@ -50,57 +50,23 @@ export default function PodcastScreen({ navigation }) {
                 <Text style={styles.title}>Tuyển dụng</Text>
                 <View style={styles.line}></View>
                 <View style={styles.content}>
-                    {loaded1 && loaded2 ? null : <Image source={require("../assets/images/loading1.gif")} style={styles.loading}></Image>}
-                    <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("MarketingConsulting")}>
-                            <ImageBackground
-                                source={require("../assets/images/purposeoflife1.png")}
-                                onLoad={() => setLoaded1(true)}
-                                style={styles.backgroundImage}
-                                //  style={loaded ? styles.backgroundImage : { display: "none" }}
-                            >
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text style={styles.label}>Tiếp thị</Text>
-                                </View>
-                            </ImageBackground>
-                        </TouchableOpacity>
+                    <Image   style={styles.image} source={require("../assets/images/Rectangle843.png")}></Image>
+                    <View style={styles.btn_confirm}>
+                        <Text style={styles.des_confirm}>
+                            "Hãy xác thực doanh nghiệp 
+                        </Text>
+                        <Text style={styles.des_confirm}>
+                            nếu bạn muốn tuyển dụng"
+                        </Text>
+                        
                     </View>
-
-                    <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("MyPodcast")}>
-                            <ImageBackground
-                                source={require("../assets/images/How-to-Study-featured-image1.png")}
-                                style={styles.backgroundImage}
-                                onLoad={() => setLoaded2(true)}
-                                // style={loaded ? styles.backgroundImage : { display: "none" }}
-                            >
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text style={styles.label}>Công việc khác</Text>
-                                </View>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("ConfirmVolunteer")}>
+                            <Text style={styles.des}>
+                                Xác thực
+                            </Text>
+                    </TouchableOpacity>
                 </View>
+              
             </View>
         );
     }
@@ -128,10 +94,11 @@ const styles = StyleSheet.create({
         height: "84%",
         //flex: 1,
         flexDirection: "column",
-        justifyContent: "space-around",
+        justifyContent:"center",
+       
         paddingTop: 48,
         paddingBottom: 48,
-        //backgroundColor: "black",
+        alignItems: "center",
     },
     backgroundImage: {
         width: 350,
@@ -156,19 +123,39 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginRight: "auto",
     },
+    image:{
+        width:380,
+        height:380,
+        // marginTop:-40
+    },
+    btn_confirm:{
+        marginTop:30,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    des_confirm:{
+        fontSize:21,
+        fontFamily: "LexendExa_400Regular",
+        color:"#0D7596",
+        
+    },
+    des:{
+        fontSize:28,
+        fontWeight:"700",
+        color:"#FFFFFF",
+       
+        
+    },
+    btn:{
+        marginTop:50,
+        backgroundColor:"#195ABB",
+        width:"50%",
+        height:60,
+        alignItems:"center",
+        alignContent:"center",
+        justifyContent:"center",
+        borderRadius:12
+    }
 });
 
-/*
-  export default class PodcastScreen extends Component {
-    render() {
-      return (
-        <View>
-          <Text style={styles.title}>Podcast</Text>
-          <View style={styles.formControl1}>
-            <View style={styles.line}></View>
-          </View>
-        </View>
-      );
-    }
-  }
-  */
+
