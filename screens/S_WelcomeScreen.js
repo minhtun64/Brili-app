@@ -52,19 +52,23 @@ export default function S_WelcomeScreen({ navigation }) {
   return (
     <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <TouchableOpacity
-        onLongPress={() => {
-          sound.unloadAsync();
-          setTimeout(() => {
-            setBackCount(0);
-          }, 500);
-          navigation.navigate("SignIn");
-        }}
         onPress={() => {
           setBackCount(backCount + 1);
           if (backCount == 1) {
             sound.unloadAsync();
-            navigation.navigate("SignIn");
-          } else {
+            setTimeout(() => {
+              setBackCount(0);
+            }, 500);
+            navigation.navigate("SignInVolunteer");
+          }
+          else if (backCount == 0) {
+            sound.unloadAsync();
+            setTimeout(() => {
+              setBackCount(0);
+            }, 500);
+            navigation.navigate("S_SignIn");           
+          } 
+          else {
             setTimeout(() => {
               setBackCount(0);
             }, 500);
@@ -86,14 +90,14 @@ export default function S_WelcomeScreen({ navigation }) {
         <View>
           <View
             style={styles.btn}
-            onPress={() => navigation.navigate("SignIn")}
+            // onPress={() => navigation.navigate("S_SignIn")}
             //onPress={playSound}
           >
             <Text style={styles.opt}>Người gặp khó khăn về thị lực</Text>
           </View>
           <View
             style={styles.btn}
-            onPress={() => navigation.navigate("SignIn")}
+            // onPress={() => navigation.navigate("SignInVolunteer")}
           >
             <Text style={styles.opt}>Nhà tuyển dụng hoặc Tình nguyện viên</Text>
           </View>

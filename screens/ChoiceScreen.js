@@ -62,7 +62,8 @@ export default function ChoiceScreen({ navigation }) {
           sound.unloadAsync();
           console.log(backCount);
           navigation.navigate("Welcome");
-        } else {
+        } 
+        else {
           setTimeout(() => {
             setBackCount(0);
           }, 500);
