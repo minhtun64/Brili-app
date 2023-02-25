@@ -124,7 +124,7 @@ export default class ListenToPodcast2Screen extends PureComponent {
   }
 
   onArrowRight() {
-    this.props.navigation.navigate("ListenToPodcast2");
+    this.props.navigation.navigate("ListenToPodcast");
     this.soundObject.unloadAsync();
     this.state.dotOffset.removeAllListeners();
   }
@@ -233,7 +233,8 @@ export default class ListenToPodcast2Screen extends PureComponent {
             //this.pause();
             this.soundObject.unloadAsync();
             this.state.dotOffset.removeAllListeners();
-            this.props.navigation.navigate("PodcastTopic");
+            //this.props.navigation.navigate("PodcastTopic");
+            this.props.navigation.pop(2);
           }}
         >
           <Image
@@ -245,34 +246,64 @@ export default class ListenToPodcast2Screen extends PureComponent {
         <Text style={styles.title}>Brili - Life</Text>
         <View style={styles.line}></View>
 
+        <View style={styles.podcast}>
+          <View style={styles.row}>
+            <TouchableOpacity onPress={() => this.onArrowLeft()}>
+              <Image
+                style={styles.arrowLeft}
+                source={require("../assets/icons/arrow-left.png")}
+              ></Image>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onArrowRight()}>
+              <Image
+                style={styles.arrowRight}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <GestureRecognizer
-          //style={{ height: "100%" }}
           keyboardShouldPersistTaps="handled"
           onSwipeLeft={(state) => this.onSwipeLeft(state)}
           onSwipeRight={(state) => this.onSwipeRight(state)}
           config={config}
+          style={styles.podcastImage}
         >
-          <View style={styles.podcast}>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => this.onArrowLeft()}>
-                <Image
-                  style={styles.arrowLeft}
-                  source={require("../assets/icons/arrow-left.png")}
-                ></Image>
-              </TouchableOpacity>
+          <Image
+            style={styles.image}
+            source={require("../assets/images/podcast-image-2.png")}
+          ></Image>
+        </GestureRecognizer>
+
+        {/* <View style={styles.podcast}>
+          <View style={styles.row}>
+            <TouchableOpacity>
+              <Image
+                style={styles.arrowLeft}
+                source={require("../assets/icons/arrow-left.png")}
+              ></Image>
+            </TouchableOpacity>
+            <GestureRecognizer
+              keyboardShouldPersistTaps="handled"
+              onSwipeLeft={(state) => this.onSwipeLeft(state)}
+              onSwipeRight={(state) => this.onSwipeRight(state)}
+              config={config}
+            >
               <Image
                 style={styles.podcastImage}
-                source={require("../assets/images/podcast-image-2.png")}
+                source={require("../assets/images/podcast-image-1.png")}
               ></Image>
-              <TouchableOpacity onPress={() => this.onArrowRight()}>
-                <Image
-                  style={styles.arrowRight}
-                  source={require("../assets/icons/arrow-right.png")}
-                ></Image>
-              </TouchableOpacity>
-            </View>
+            </GestureRecognizer>
+            <TouchableOpacity onPress={() => this.onArrowRight()}>
+              <Image
+                style={styles.arrowRight}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </TouchableOpacity>
           </View>
-        </GestureRecognizer>
+        </View> */}
+
         {/* <View style={styles.line}></View>
           <View style={styles.label}>
             <Text style={styles.allText}>0:01</Text>
@@ -298,7 +329,7 @@ export default class ListenToPodcast2Screen extends PureComponent {
             borderRadius: TRACK_SIZE / 2,
             backgroundColor: "black",
             width: "75%",
-            marginTop: 300,
+            marginTop: 24,
             marginLeft: "auto",
             marginRight: "auto",
           }}
@@ -475,24 +506,50 @@ const styles = StyleSheet.create({
   },
   row: {
     width: "100%",
-    flex: 3,
+    flex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  //   arrowLeft: {
+  //     marginTop: 120,
+  //     marginBottom: "auto",
+  //     padding: 18,
+  //     width: 30,
+  //     height: 30,
+  //   },
+  //   arrowRight: {
+  //     marginTop: 120,
+  //     marginBottom: "auto",
+  //     padding: 18,
+  //     width: 30,
+  //     height: 30,
+  //   },
+  //   podcastImage: {
+  //     width: 256,
+  //     height: 256,
+  //     borderRadius: 8,
+  //     overflow: "hidden",
+  //     marginLeft: "auto",
+  //     marginRight: "auto",
+  //     marginTop: 24,
+  //     marginBottom: 6,
+  //   },
+
   arrowLeft: {
-    marginTop: 120,
+    marginTop: 132,
     marginBottom: "auto",
     padding: 18,
     width: 30,
     height: 30,
   },
   arrowRight: {
-    marginTop: 120,
+    marginTop: 132,
     marginBottom: "auto",
     padding: 18,
     width: 30,
     height: 30,
   },
+
   podcastImage: {
     width: 256,
     height: 256,
@@ -500,9 +557,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 24,
+    marginTop: 18,
     marginBottom: 6,
   },
+
+  image: {
+    width: 256,
+    height: 256,
+  },
+
   podcastTitle: {
     width: 320,
     fontSize: 17,

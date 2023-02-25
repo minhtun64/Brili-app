@@ -306,6 +306,36 @@ export default class ListenToPodcastScreen extends PureComponent {
                 source={require("../assets/icons/arrow-left.png")}
               ></Image>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onArrowRight()}>
+              <Image
+                style={styles.arrowRight}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <GestureRecognizer
+          keyboardShouldPersistTaps="handled"
+          onSwipeLeft={(state) => this.onSwipeLeft(state)}
+          onSwipeRight={(state) => this.onSwipeRight(state)}
+          config={config}
+          style={styles.podcastImage}
+        >
+          <Image
+            style={styles.image}
+            source={require("../assets/images/podcast-image-1.png")}
+          ></Image>
+        </GestureRecognizer>
+
+        {/* <View style={styles.podcast}>
+          <View style={styles.row}>
+            <TouchableOpacity>
+              <Image
+                style={styles.arrowLeft}
+                source={require("../assets/icons/arrow-left.png")}
+              ></Image>
+            </TouchableOpacity>
             <GestureRecognizer
               keyboardShouldPersistTaps="handled"
               onSwipeLeft={(state) => this.onSwipeLeft(state)}
@@ -324,7 +354,8 @@ export default class ListenToPodcastScreen extends PureComponent {
               ></Image>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
+
         {/* <View style={styles.line}></View>
           <View style={styles.label}>
             <Text style={styles.allText}>0:01</Text>
@@ -351,7 +382,7 @@ export default class ListenToPodcastScreen extends PureComponent {
             backgroundColor: "black",
             width: "70%",
             //height: "-200%",
-            marginTop: 300,
+            marginTop: 24,
             marginLeft: "auto",
             marginRight: "auto",
           }}
@@ -496,14 +527,6 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 4,
   },
-  slider: {
-    width: 280,
-    height: 1,
-    //backgroundColor: "#000000",
-    marginLeft: "auto",
-    marginRight: "auto",
-    //marginTop: 4,
-  },
   label: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -525,24 +548,50 @@ const styles = StyleSheet.create({
   },
   row: {
     width: "100%",
-    flex: 3,
+    flex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  //   arrowLeft: {
+  //     marginTop: 120,
+  //     marginBottom: "auto",
+  //     padding: 18,
+  //     width: 30,
+  //     height: 30,
+  //   },
+  //   arrowRight: {
+  //     marginTop: 120,
+  //     marginBottom: "auto",
+  //     padding: 18,
+  //     width: 30,
+  //     height: 30,
+  //   },
+  //   podcastImage: {
+  //     width: 256,
+  //     height: 256,
+  //     borderRadius: 8,
+  //     overflow: "hidden",
+  //     marginLeft: "auto",
+  //     marginRight: "auto",
+  //     marginTop: 24,
+  //     marginBottom: 6,
+  //   },
+
   arrowLeft: {
-    marginTop: 120,
+    marginTop: 132,
     marginBottom: "auto",
     padding: 18,
     width: 30,
     height: 30,
   },
   arrowRight: {
-    marginTop: 120,
+    marginTop: 132,
     marginBottom: "auto",
     padding: 18,
     width: 30,
     height: 30,
   },
+
   podcastImage: {
     width: 256,
     height: 256,
@@ -550,9 +599,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 24,
+    marginTop: 18,
     marginBottom: 6,
   },
+
+  image: {
+    width: 256,
+    height: 256,
+  },
+
   podcastTitle: {
     width: 320,
     fontSize: 17,
