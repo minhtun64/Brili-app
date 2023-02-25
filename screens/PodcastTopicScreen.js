@@ -44,6 +44,7 @@ export default function PodcastTopicScreen({ navigation }) {
 
   const [loaded1, setLoaded1] = useState(false);
   const [loaded2, setLoaded2] = useState(false);
+  const [loaded3, setLoaded3] = useState(false);
 
   if (!fontsLoaded) {
     return null;
@@ -53,7 +54,7 @@ export default function PodcastTopicScreen({ navigation }) {
         <Text style={styles.title}>Chủ đề</Text>
         <View style={styles.line}></View>
         <View style={styles.content}>
-          {loaded1 && loaded2 ? null : (
+          {loaded1 && loaded2 && loaded3 ? null : (
             <Image
               source={require("../assets/images/loading1.gif")}
               style={styles.loading}
@@ -114,7 +115,7 @@ export default function PodcastTopicScreen({ navigation }) {
               <ImageBackground
                 source={require("../assets/images/brili-study.png")}
                 style={styles.backgroundImage}
-                onLoad={() => setLoaded2(true)}
+                onLoad={() => setLoaded3(true)}
               >
                 <View
                   style={{
@@ -176,10 +177,10 @@ const styles = StyleSheet.create({
   },
 
   loading: {
-    marginTop: "132%",
+    marginTop: "126%",
     width: 60,
     height: 30,
-    marginBottom: "280%",
+    marginBottom: "320%",
     marginLeft: "auto",
     marginRight: "auto",
   },

@@ -44,6 +44,7 @@ export default class ListenToPodcast2Screen extends PureComponent {
       trackLayout: {},
       dotOffset: new Animated.ValueXY(),
       xDotOffsetAtAnimationStart: 0,
+      loaded1: false,
     };
 
     this._panResponder = PanResponder.create({
@@ -104,6 +105,10 @@ export default class ListenToPodcast2Screen extends PureComponent {
       },
     });
   }
+
+  loadedImage = async () => {
+    this.setState({ loaded1: true });
+  };
 
   onSwipeLeft(gestureState) {
     this.props.navigation.navigate("ListenToPodcast");
@@ -270,9 +275,16 @@ export default class ListenToPodcast2Screen extends PureComponent {
           config={config}
           style={styles.podcastImage}
         >
+          {this.state.loaded1 ? null : (
+            <Image
+              style={styles.image}
+              source={require("../assets/images/podcast-image-2-loading.png")}
+            ></Image>
+          )}
           <Image
             style={styles.image}
             source={require("../assets/images/podcast-image-2.png")}
+            onLoad={() => this.loadedImage()}
           ></Image>
         </GestureRecognizer>
 

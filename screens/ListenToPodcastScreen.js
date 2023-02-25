@@ -45,6 +45,7 @@ export default class ListenToPodcastScreen extends PureComponent {
       trackLayout: {},
       dotOffset: new Animated.ValueXY(),
       xDotOffsetAtAnimationStart: 0,
+      loaded1: false,
     };
 
     this._panResponder = PanResponder.create({
@@ -105,6 +106,10 @@ export default class ListenToPodcastScreen extends PureComponent {
       },
     });
   }
+
+  loadedImage = async () => {
+    this.setState({ loaded1: true });
+  };
 
   onSwipeLeft(gestureState) {
     this.state.dotOffset.setValue({ x: 0, y: 0 });
@@ -322,9 +327,17 @@ export default class ListenToPodcastScreen extends PureComponent {
           config={config}
           style={styles.podcastImage}
         >
+          {this.state.loaded1 ? null : (
+            <Image
+              style={styles.image}
+              source={require("../assets/images/podcast-image-1-loading.png")}
+            ></Image>
+          )}
+
           <Image
             style={styles.image}
             source={require("../assets/images/podcast-image-1.png")}
+            onLoad={() => this.loadedImage()}
           ></Image>
         </GestureRecognizer>
 
