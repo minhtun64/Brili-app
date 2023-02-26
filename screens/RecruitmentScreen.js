@@ -49,6 +49,8 @@ export default function PodcastScreen({ navigation }) {
   const [loaded1, setLoaded1] = useState(false);
   const [loaded2, setLoaded2] = useState(false);
 
+  const [loaded3, setLoaded3] = useState(false);
+
   if (!fontsLoaded) {
     return null;
   } else {
@@ -57,7 +59,7 @@ export default function PodcastScreen({ navigation }) {
         <Text style={styles.title}>Tuyển dụng</Text>
         <View style={styles.line}></View>
         <View style={styles.content}>
-          {loaded1 && loaded2 ? null : (
+          {loaded1 && loaded2 && loaded3 ? null : (
             <Image
               source={require("../assets/images/loading1.gif")}
               style={styles.loading}
@@ -118,7 +120,7 @@ export default function PodcastScreen({ navigation }) {
               <ImageBackground
                 source={require("../assets/images/How-to-Study-featured-image1.png")}
                 style={styles.backgroundImage}
-                onLoad={() => setLoaded2(true)}
+                onLoad={() => setLoaded3(true)}
                 // style={loaded ? styles.backgroundImage : { display: "none" }}
               >
                 <View
