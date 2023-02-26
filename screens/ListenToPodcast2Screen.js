@@ -30,6 +30,7 @@ import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import sleep from "../components/sleep";
 import DigitalTimeString from "../components/DigitalTimeString";
 import { LogBox } from "react-native";
+import { StackActions } from "@react-navigation/native";
 
 const TRACK_SIZE = 4;
 const THUMB_SIZE = 20;
@@ -239,7 +240,10 @@ export default class ListenToPodcast2Screen extends PureComponent {
             this.soundObject.unloadAsync();
             this.state.dotOffset.removeAllListeners();
             //this.props.navigation.navigate("PodcastTopic");
-            this.props.navigation.pop(2);
+            //this.props.navigation.pop(2);
+            //this.props.navigation.navigate("ListenToPodcast");
+            //this.props.navigation.navigate("PodcastTopic");
+            this.props.navigation.dispatch(StackActions.pop(2));
           }}
         >
           <Image

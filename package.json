@@ -20,6 +20,7 @@
     "expo-app-loading": "^2.1.1",
     "expo-av": "^13.0.2",
     "expo-checkbox": "~2.2.2",
+    "expo-document-picker": "~11.0.1",
     "expo-font": "^11.0.1",
     "expo-splash-screen": "^0.17.5",
     "expo-status-bar": "~1.4.2",
@@ -42,8 +43,7 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-vector-icons": "^9.2.0",
     "react-native-webview": "^11.26.0",
-    "typescript": "^4.6.3",
-    "expo-document-picker": "~11.0.1"
+    "typescript": "^4.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

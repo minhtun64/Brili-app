@@ -188,6 +188,7 @@ export default class ListenToPodcastScreen extends PureComponent {
   };
 
   async componentDidMount() {
+    console.log("Start");
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
       require("../assets/podcasts/podcast-1.mp3")
@@ -195,7 +196,6 @@ export default class ListenToPodcastScreen extends PureComponent {
 
     const status = await this.soundObject.getStatusAsync();
     this.setState({ duration: status["durationMillis"] });
-
     await this.onPressPlayPause();
 
     // This requires measureTrack to have been called.

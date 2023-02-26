@@ -40,7 +40,7 @@ import { LogBox } from "react-native";
 const TRACK_SIZE = 4;
 const THUMB_SIZE = 20;
 
-export default class MarketingConsulting extends PureComponent {
+export default class MarketingConsulting2 extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -118,23 +118,26 @@ export default class MarketingConsulting extends PureComponent {
   };
 
   onSwipeLeft(gestureState) {
-    this.state.dotOffset.setValue({ x: 0, y: 0 });
-    this.soundObject.setPositionAsync(0);
-    this.props.navigation.navigate("MarketingConsulting2");
-    this.pause();
+    this.props.navigation.navigate("MarketingConsulting");
+    this.soundObject.unloadAsync();
     this.state.dotOffset.removeAllListeners();
   }
 
   onSwipeRight(gestureState) {
-    //this.setState({ myText: "You swiped right!" });
+    this.props.navigation.navigate("MarketingConsulting");
+    this.soundObject.unloadAsync();
+    this.state.dotOffset.removeAllListeners();
+  }
+
+  onArrowLeft() {
+    this.props.navigation.navigate("MarketingConsulting");
+    this.soundObject.unloadAsync();
+    this.state.dotOffset.removeAllListeners();
   }
 
   onArrowRight() {
-    console.log("Next Screen - Using ArrowRight");
-    this.state.dotOffset.setValue({ x: 0, y: 0 });
-    this.soundObject.setPositionAsync(0);
-    this.props.navigation.navigate("MarketingConsulting2");
-    this.pause();
+    this.props.navigation.navigate("MarketingConsulting");
+    this.soundObject.unloadAsync();
     this.state.dotOffset.removeAllListeners();
   }
 
@@ -184,7 +187,7 @@ export default class MarketingConsulting extends PureComponent {
     await this.state.dotOffset.setValue({ x: 0, y: 0 });
     await this.soundObject.setPositionAsync(0);
 
-    this.props.navigation.navigate("MarketingConsulting2");
+    //this.props.navigation.navigate("ListenToPodcast2");
     this.pause();
     this.state.dotOffset.removeAllListeners();
   };
@@ -196,7 +199,7 @@ export default class MarketingConsulting extends PureComponent {
   async componentDidMount() {
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
-      require("../assets/recruitments/recruitment-1.mp3")
+      require("../assets/podcasts/podcast-2.mp3")
     );
 
     const status = await this.soundObject.getStatusAsync();
@@ -221,7 +224,7 @@ export default class MarketingConsulting extends PureComponent {
       async () => {
         this.soundObject = new Audio.Sound();
         await this.soundObject.loadAsync(
-          require("../assets/recruitments/recruitment-1.mp3")
+          require("../assets/podcasts/podcast-2.mp3")
         );
         const status = await this.soundObject.getStatusAsync();
         this.setState({ duration: status["durationMillis"] });
@@ -337,7 +340,7 @@ export default class MarketingConsulting extends PureComponent {
 
         <View style={styles.job}>
           <View style={styles.row}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onArrowLeft()}>
               <Image
                 style={styles.arrowLeft}
                 source={require("../assets/icons/arrow-left.png")}
@@ -362,12 +365,12 @@ export default class MarketingConsulting extends PureComponent {
           {this.state.loaded1 ? null : (
             <Image
               style={styles.image}
-              source={require("../assets/images//job1-loading.png")}
+              source={require("../assets/images//job2-loading.png")}
             ></Image>
           )}
           <Image
             style={styles.image}
-            source={require("../assets/images/job1.png")}
+            source={require("../assets/images/job2.png")}
             onLoad={() => this.loadedImage()}
           ></Image>
         </GestureRecognizer>
