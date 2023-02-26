@@ -135,7 +135,7 @@ import {
                   setTimeout(() => {
                     setBackCount(0);
                   }, 500);  
-                  navigation.navigate("SignUp");
+                  navigation.navigate("testSTT");
             } 
             // else {
             //     setTimeout(() => {

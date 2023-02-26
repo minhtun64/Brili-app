@@ -23,6 +23,9 @@ import HelpSearch2Screen from "../screens/HelpSearch2Screen";
 import PodcastTopicScreen from "../screens/PodcastTopicScreen";
 import ListenPodcastScreen from "../screens/ListenPodcastScreen";
 
+import testSTT from "../screens/testSTT";
+
+
 import SignIn_Volunteer from "../screens/SignIn_Volunteer";
 import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
 const Stack = createStackNavigator();
@@ -40,6 +43,9 @@ function StackNavigator() {
             <Stack.Screen name="HomeTabsVolunteer" component={MyTabsVolunteer} options={{ headerShown: false }} />
             <Stack.Screen name="HelpSearch1" component={HelpSearch1Screen} options={{ headerShown: false }} />
             <Stack.Screen name="HelpSearch2" component={HelpSearch2Screen} options={{ headerShown: false }} />
+
+            <Stack.Screen name="testSTT" component={testSTT} options={{ headerShown: false }} />
+
 
             {/* NTD và NTV */}
             <Stack.Screen name="SignInVolunteer" component={SignIn_Volunteer} options={{ headerShown: false }} />
