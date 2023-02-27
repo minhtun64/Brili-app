@@ -541,7 +541,7 @@ export default class MarketingConsulting extends PureComponent {
             </View>
             <TouchableOpacity
               style={styles.confirm}
-              onPress={() => navigation.navigate("CurriculumVitae")}
+              onPress={() => this.props.navigation.navigate("CurriculumVitae")}
             >
               <Text style={styles.TextConfirm}>Ứng tuyển công việc</Text>
             </TouchableOpacity>

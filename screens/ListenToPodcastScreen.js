@@ -291,6 +291,8 @@ export default class ListenToPodcastScreen extends PureComponent {
           onPress={() => {
             this.props.navigation.navigate("PodcastTopic");
             this.soundObject.unloadAsync();
+
+            //this.soundObject.stopAsync();
             this.state.dotOffset.removeAllListeners();
           }}
         >
