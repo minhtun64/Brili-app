@@ -32,6 +32,7 @@ import UploadJob from "../screens/UploadJob";
 import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
+
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
@@ -364,11 +365,11 @@ function RecruitmentStackNavigator_V() {
         component={UploadJob}
         options={{ headerShown: false }}
       />
-      <RecruitmentStack_V.Screen
-        name="ConfirmVolunteer"
-        component={Confirm_Volunteer}
+      {/* <RecruitmentStack_V.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
       <RecruitmentStack_V.Screen
         name="RecruitmentScreenV"
         component={RecruitmentScreen_V}
@@ -383,8 +384,8 @@ function SettingsStackNavigator_V() {
   return (
     <SettingsStack_V.Navigator>
       <SettingsStack_V.Screen
-        name="ConfirmVolunteer"
-        component={Confirm_Volunteer}
+        name="SettingsScreen"
+        component={SettingsScreen}
         options={{ headerShown: false }}
       />
     </SettingsStack_V.Navigator>
