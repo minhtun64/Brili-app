@@ -53,28 +53,28 @@ import {
   
     const ref_input2 = useRef();
   
-    formValidation = async () => {
-      setLoading(true);
-      let errorFlag = false;
+    // formValidation = async () => {
+    //   setLoading(true);
+    //   let errorFlag = false;
   
-      // input validation
-      if (username.length == 0) {
-        errorFlag = true;
-        setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
-      }
+    //   // input validation
+    //   if (username.length == 0) {
+    //     errorFlag = true;
+    //     setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
+    //   }
   
-      if (password.length == 0) {
-        errorFlag = true;
-        setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
-      }
+    //   if (password.length == 0) {
+    //     errorFlag = true;
+    //     setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
+    //   }
   
-      if (errorFlag) {
-        // console.log("errorFlag");
-      } else {
-        setLoading(false);
-        navigation.navigate("FirstInfo");
-      }
-    };
+    //   if (errorFlag) {
+    //     // console.log("errorFlag");
+    //   } else {
+    //     setLoading(false);
+    //     navigation.navigate("FirstInfo");
+    //   }
+    // };
 
     async function playSound() {
       console.log("Loading Sound");
@@ -94,7 +94,7 @@ import {
       return sound
         ? () => {
             console.log("Unloading Sound");
-            sound.unloadAsync();
+            sound.stopAsync();
           }
         : undefined;
     }, [sound]);
@@ -131,12 +131,14 @@ import {
             onPress = {() => {
               setBackCount(backCount + 1);  
               if (backCount == 1) {
-                  sound.unloadAsync();
+                  sound.stopAsync();
                   setTimeout(() => {
                     setBackCount(0);
                   }, 500);  
-                  navigation.navigate("testSTT");
-            } 
+                  console.log("hello")
+
+                  navigation.navigate("TestSTT");
+            } ;
             // else {
             //     setTimeout(() => {
             //     setBackCount(0);
