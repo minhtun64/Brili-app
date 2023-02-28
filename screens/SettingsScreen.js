@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
   title1: {
     marginTop: 26,
     fontSize: 18,
-    fontFamily: "Lexend",
-    fontWeight: 400,
+    fontFamily: "LexendExa_400Regular",
+
     color: "#000000",
     marginLeft: 18,
     marginRight: "auto",
