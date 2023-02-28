@@ -9,10 +9,14 @@ import {
 } from "react-native";
 import MainNavigator from "./navigation/BriliNav";
 // import { Assets } from "@react-navigation/elements";
-
+import AudioSlider from "./screens/ListenToPodcastScreen";
 export default function App() {
   loadResourcesAsync;
-  return <MainNavigator></MainNavigator>;
+  return (
+    <MainNavigator>
+      <AudioSlider audio={"./assets/sounds/sound2.mp3"} />
+    </MainNavigator>
+  );
 }
 
 async function loadResourcesAsync() {
