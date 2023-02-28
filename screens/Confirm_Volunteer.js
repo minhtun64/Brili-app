@@ -2,7 +2,7 @@ import { Text, Keyboard, StyleSheet, View, TouchableWithoutFeedback, Image, Touc
 import React, { Component, useCallback, useEffect, useState } from "react";
 import { useSwipe } from "../hooks/useSwipe";
 import Modal from "react-native-modal";
- import DocumentPicker from 'react-native-document-picker';
+//  import DocumentPicker from 'react-native-document-picker';
 //import * as DocumentPicker from 'expo-document-picker';
 import { Button } from "react-native-elements";
 const MALE = "MALE";

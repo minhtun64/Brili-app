@@ -1,7 +1,11 @@
 import { Text, StyleSheet, View, Image, ImageBackground, TouchableOpacity, TextInput, ScrollView, Dimensions, TouchableWithoutFeedback, Keyboard } from "react-native";
 import React, { Component, useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import DocumentPicker from 'react-native-document-picker';
+// import DocumentPicker from 'react-native-document-picker';
+import * as DocumentPicker from 'expo-document-picker';
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+// import * as firebase from "firebase";
+
 import Modal from "react-native-modal";
 import {
     useFonts,
@@ -33,6 +37,7 @@ export default function UploadJob({ navigation }) {
     const [isModalVisible, setModalVisible] = useState(false);
     const [isModalVisible2, setModalVisible2] = useState(false);
     const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+    const [audio, setAudio] = useState(null);
     const toggleModal = () => {
      setModalVisible(!isModalVisible);
  };
@@ -68,8 +73,29 @@ export default function UploadJob({ navigation }) {
     }, []);
     const pickDocument = async () => {
 	    let result = await DocumentPicker.getDocumentAsync({});
-		  alert(result.uri);
-      console.log(result);
+    // Fetch the photo with it's local URI
+        const response = await fetch(result.uri);
+        console.log(result.name);
+
+        const file = await response.blob()
+  
+
+        try {
+        //Create the file reference
+        const storage = getStorage();
+        // console.log(storage);
+        const storageRef = ref(storage,result.name);
+            
+        // Upload Blob file to Firebase
+        const snapshot = await uploadBytes(storageRef, file).then((snapshot) => {
+            console.log('Uploaded a song to firebase storage!');
+        });
+
+        setAudio(result.uri);
+        } catch (error) {
+        console.log(error);
+        }
+
 	}
 
     if (!fontsLoaded) {
@@ -115,7 +141,9 @@ export default function UploadJob({ navigation }) {
                         <TextInput style={styles.Content} placeholder="Liên hệ"></TextInput>
                     </View>
                     </View>
-                  
+                    <TouchableOpacity style={styles.confirm} onPress={pickDocument}>
+                        <Text style={styles.TextConfirm}>up</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.confirm} onPress={toggleModal}>
                         <Text style={styles.TextConfirm}>Đăng Tuyển</Text>
                     </TouchableOpacity>
