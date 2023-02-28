@@ -35,7 +35,7 @@ const recordingOptions = {
   },
 };
 
-const TestSTT = () => {
+export default function ChoiceScreen({ navigation }) {
   const [recording, setRecording] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -120,6 +120,19 @@ const TestSTT = () => {
       setPlaying(false);
     }, 7000);
   }
+  async function playSound6() {
+    console.log("Loading Sound 6");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound-test-6.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 6");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 2000);
+  }
 
   React.useEffect(() => {
     return sound
@@ -192,7 +205,7 @@ const TestSTT = () => {
       str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
       str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
       str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-      str = str.replace(/./g, "");
+      //str = str.replace(/./g, "");
       str = str.replace(/đ/g, "d");
       // Some system encode vietnamese combining accent as individual utf-8 characters
       str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // Huyền sắc hỏi ngã nặng
@@ -472,7 +485,8 @@ const TestSTT = () => {
               console.log("Đăng nhập thành công");
               sound.unloadAsync();
               //navigation.navigate("Welcome");
-              //playSound6();
+              playSound6();
+              navigation.navigate("HomeTabs");
             } else {
               setTimeout(() => {
                 setBackCount(0);
@@ -493,6 +507,7 @@ const TestSTT = () => {
         <Image
           style={styles.image}
           source={require("../assets/images/sign-in.png")}
+          onLoad={playSound}
         ></Image>
         <Text style={styles.title}>Đăng nhập</Text>
 
@@ -527,6 +542,7 @@ const TestSTT = () => {
                 editable={false}
                 style={styles.input2}
                 placeholder="Mật khẩu"
+                secureTextEntry={true}
                 onChangeText={(text) => {
                   setPassword(text);
                 }}
@@ -553,7 +569,7 @@ const TestSTT = () => {
       </ScrollView>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   back: {
@@ -653,4 +669,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestSTT;
+//export default TestSTT;

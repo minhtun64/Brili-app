@@ -39,11 +39,6 @@ function StackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Test"
-        component={TEST}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
         options={{ headerShown: false }}
@@ -61,6 +56,11 @@ function StackNavigator() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Test"
+        component={TEST}
         options={{ headerShown: false }}
       />
       <Stack.Screen
