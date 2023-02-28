@@ -1,84 +1,491 @@
+import React, { useState, useEffect } from "react";
 import {
-  Text,
   StyleSheet,
+  Text,
   View,
-  Image,
   TouchableOpacity,
+  Button,
   TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
+  Image,
   ScrollView,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { useIsFocused } from "@react-navigation/native";
+import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
 import { useSwipe } from "../hooks/useSwipe";
+//const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
 
-const DismissKeyboardHOC = (Comp) => {
-  return ({ children, ...props }) => (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Comp {...props}>{children}</Comp>
-    </TouchableWithoutFeedback>
-  );
+const recordingOptions = {
+  android: {
+    extension: ".m4a",
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+    extension: ".wav",
+    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
 };
-const DismissKeyboardView = DismissKeyboardHOC(View);
 
-export default function T({ navigation }) {
+const TestSTT = () => {
+  const [recording, setRecording] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
-  const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sound, setSound] = React.useState();
+  const [playing, setPlaying] = useState(false);
+  const [backCount, setBackCount] = React.useState(0);
+  const [index, setIndex] = useState(1);
+  const [userMessage, setUserMessage] = useState("");
+  const [allow, setAllow] = useState(true);
 
-  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+  const [repeat, setRepeat] = useState(false);
 
-  function onSwipeLeft() {
-    //navigation.goBack();
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound-test-1.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 10000);
   }
 
-  function onSwipeRight() {
-    // console.log("SWIPE_RIGHT");
-    navigation.goBack();
+  async function playSound2() {
+    console.log("Loading Sound 2");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound-test-2.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 2");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 5000);
   }
 
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    isFocused;
-  }, [isFocused]);
+  async function playSound3() {
+    console.log("Loading Sound 3");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound-test-3.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 3");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 7000);
+  }
 
-  const ref_input2 = useRef();
+  async function playSound4() {
+    console.log("Loading Sound 4");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound-test-4.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 4");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 5000);
+  }
+  async function playSound5() {
+    console.log("Loading Sound 5");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound-test-5.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 5");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 7000);
+  }
 
-  formValidation = async () => {
-    setLoading(true);
-    let errorFlag = false;
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
-    // input validation
-    if (username.length == 0) {
-      errorFlag = true;
-      setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
-    }
+  //   function onSwipeLeft() {
+  //     //navigation.goBack();
+  //   }
 
-    if (password.length == 0) {
-      errorFlag = true;
-      setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
-    }
+  //   function onSwipeRight() {
+  //     // console.log("SWIPE_RIGHT");
+  //     navigation.goBack();
+  //   }
 
-    if (errorFlag) {
-      // console.log("errorFlag");
-    } else {
-      setLoading(false);
-      navigation.navigate("FirstInfo");
+  const deleteRecordingFile = async () => {
+    try {
+      const info = await FileSystem.getInfoAsync(recording.getURI());
+      await FileSystem.deleteAsync(info.uri);
+    } catch (error) {
+      console.log("There was an error deleting recording file", error);
     }
   };
+
+  const getTranscription = async () => {
+    setIsFetching(true);
+    try {
+      const info = await FileSystem.getInfoAsync(recording.getURI());
+      console.log(`FILE INFO: ${JSON.stringify(info)}`);
+      const uri = info.uri;
+
+      const base64content: string = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const body = {
+        audio: { content: base64content },
+        config: {
+          enableAutomaticPunctuation: true,
+          encoding: "LINEAR16",
+          languageCode: "vi-VN",
+          model: "default",
+          sampleRateHertz: 44100,
+        },
+      };
+
+      const transcriptResponse = await fetch(
+        "https://speech.googleapis.com/v1p1beta1/speech:recognize?key=AIzaSyATOBs4KUVhKDnk56MxhgOJtN8_Pw1Z280",
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+        }
+      );
+      const data = await transcriptResponse.json();
+      console.log(data);
+
+      console.log(data.results);
+      const message =
+        (data.results && data.results[0].alternatives[0].transcript) || "";
+      console.log(message);
+      var str = message;
+      str = str.toLowerCase();
+      str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+      str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+      str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+      str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+      str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+      str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+      str = str.replace(/./g, "");
+      str = str.replace(/đ/g, "d");
+      // Some system encode vietnamese combining accent as individual utf-8 characters
+      str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // Huyền sắc hỏi ngã nặng
+      str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // Â, Ê, Ă, Ơ, Ư
+      str = str.replace(/ /g, "");
+      console.log(str);
+      if (index == 2) {
+        if (str == "") {
+          setIsFetching(false);
+          playSound2();
+          setBackCount(0);
+          console.log("Phát lại âm thanh 2");
+          setRepeat(true);
+          //return;
+        } else {
+          setUsername(str);
+          setIndex(index + 1);
+          setIsFetching(false);
+          playSound3();
+          console.log("Xác nhận tên đăng nhập");
+          console.log(index);
+        }
+      }
+      if (index == 3) {
+        if (str == "") {
+          setIsFetching(false);
+          playSound3();
+          setBackCount(0);
+          console.log("Phát lại âm thanh 3");
+          setRepeat(true);
+          //return;
+        } else {
+          setUsername(str);
+          setIsFetching(false);
+          playSound3();
+        }
+      }
+      if (index == 4) {
+        if (str == "") {
+          setIsFetching(false);
+          playSound4();
+          setBackCount(0);
+          console.log("Phát lại âm thanh 4");
+          setRepeat(true);
+          //return;
+        } else {
+          setPassword(str);
+          setIndex(index + 1);
+          setIsFetching(false);
+          playSound5();
+          console.log("Xác nhận mật khẩu");
+          console.log(index);
+        }
+      }
+      if (index == 5) {
+        if (str == "") {
+          setIsFetching(false);
+          playSound5();
+          setBackCount(0);
+          console.log("Phát lại âm thanh 5");
+          setRepeat(true);
+          //return;
+        } else {
+          setUsername(str);
+          setIsFetching(false);
+          playSound5();
+        }
+      }
+    } catch (error) {
+      console.log("There was an error reading file", error);
+      stopRecording();
+      resetRecording();
+    }
+    setIsFetching(false);
+  };
+
+  const startRecording = async () => {
+    try {
+      await Audio.requestPermissionsAsync();
+      setIsRecording(true);
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(recordingOptions);
+      await recording.startAsync();
+      console.log("Start !!!");
+      setRecording(recording);
+    } catch (error) {
+      console.log(error);
+      stopRecording();
+    }
+  };
+
+  const stopRecording = async () => {
+    setIsRecording(false);
+    try {
+      await recording.stopAndUnloadAsync();
+    } catch (error) {
+      // Do nothing -- we are already unloaded.
+    }
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: false,
+    });
+    setAllow(false);
+  };
+
+  const resetRecording = () => {
+    deleteRecordingFile();
+    setRecording(null);
+  };
+
+  const start = () => {
+    console.log("start recording");
+    console.log(index);
+    if (allow || index == 4) {
+      startRecording();
+    }
+  };
+
+  //   await Audio.setAudioModeAsync({
+  //     allowsRecordingIOS: false,
+  //   });
+
+  const stop = () => {
+    console.log("stop recording");
+
+    stopRecording();
+    if (allow || index == 4) {
+      // stopRecording();
+      getTranscription();
+    }
+  };
+
   return (
-    <View>
-      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
-        <Image
-          style={styles.backIcon}
-          source={require("../assets/icons/back.png")}
-        ></Image>
-      </TouchableOpacity>
-      <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+    <TouchableOpacity
+      style={styles.mainForm}
+      onPressIn={() => {
+        if (index != 1) {
+          console.log(allow);
+          sound.unloadAsync();
+
+          start();
+        }
+        // setTimeout(() => {
+        //   setBackCount(0);
+        // }, 500);
+      }}
+      onPressOut={() => {
+        if (index != 1) {
+          stop();
+        }
+      }}
+      onLongPress={() => {
+        if (index == 1) {
+          sound.unloadAsync();
+          setTimeout(() => {
+            setBackCount(0);
+          }, 500);
+          // navigation.navigate("S_SignUp");
+        } else if (index == 2 && repeat) {
+          setTimeout(() => {
+            sound.unloadAsync();
+            Audio.setAudioModeAsync({
+              allowsRecordingIOS: true,
+              playsInSilentModeIOS: true,
+            });
+
+            setAllow(true);
+            setBackCount(0);
+            sound.unloadAsync();
+            console.log("đọc lại tên đăng nhập");
+            start();
+          }, 500);
+        } else if (index == 3 && repeat) {
+          setTimeout(() => {
+            sound.unloadAsync();
+            Audio.setAudioModeAsync({
+              allowsRecordingIOS: true,
+              playsInSilentModeIOS: true,
+            });
+            setAllow(true);
+            setBackCount(0);
+            sound.unloadAsync();
+            start();
+          }, 500);
+        } else if (index == 4 && repeat) {
+          setTimeout(() => {
+            sound.unloadAsync();
+            Audio.setAudioModeAsync({
+              allowsRecordingIOS: true,
+              playsInSilentModeIOS: true,
+            });
+
+            setAllow(true);
+            setBackCount(0);
+            sound.unloadAsync();
+            console.log("đọc lại mật khẩu");
+            start();
+          }, 500);
+        }
+      }}
+      onPress={() => {
+        if (!isRecording) {
+          if (index == 1) {
+            setBackCount(backCount + 1);
+            if (backCount == 1) {
+              console.log("Ready to sound 2");
+              sound.unloadAsync();
+              playSound2();
+              setBackCount(0);
+              setIndex(index + 1);
+            } else {
+              setTimeout(() => {
+                setBackCount(0);
+              }, 500);
+              console.log(backCount);
+              playSound();
+            }
+          } else if (index == 2) {
+            setBackCount(backCount + 1);
+            if (backCount == 1) {
+              console.log("Ready to sound 3");
+              sound.unloadAsync();
+              //navigation.navigate("Welcome");
+              playSound2();
+            } else {
+              setTimeout(() => {
+                setBackCount(0);
+              }, 500);
+              console.log("bk2 " + backCount);
+              playSound2();
+            }
+          } else if (index == 3) {
+            setBackCount(backCount + 1);
+            console.log(backCount);
+            if (backCount == 1) {
+              Audio.setAudioModeAsync({
+                allowsRecordingIOS: true,
+                playsInSilentModeIOS: true,
+              });
+              setAllow(true);
+              console.log("Ready to sound 4");
+              sound.unloadAsync();
+              //navigation.navigate("Welcome");
+              playSound4();
+
+              setIndex(index + 1);
+            } else {
+              setTimeout(() => {
+                setBackCount(0);
+              }, 500);
+              console.log("bk3" + backCount);
+              playSound3();
+            }
+          } else if (index == 4) {
+            setBackCount(backCount + 1);
+            if (backCount == 1) {
+              console.log("Ready to sound 5");
+              sound.unloadAsync();
+              //navigation.navigate("Welcome");
+              playSound4();
+            } else {
+              setTimeout(() => {
+                setBackCount(0);
+              }, 500);
+              console.log("bk4 " + backCount);
+              playSound4();
+            }
+          } else if (index == 5) {
+            setBackCount(backCount + 1);
+            console.log(backCount);
+            if (backCount == 1) {
+              console.log("Đăng nhập thành công");
+              sound.unloadAsync();
+              //navigation.navigate("Welcome");
+              //playSound6();
+            } else {
+              setTimeout(() => {
+                setBackCount(0);
+              }, 500);
+              console.log("bk5" + backCount);
+              playSound5();
+            }
+          }
+        }
+      }}
+    >
+      <ScrollView //onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
+      >
         <Image
           style={styles.logo}
           source={require("../assets/images/logo.png")}
@@ -97,22 +504,17 @@ export default function T({ navigation }) {
                 source={require("../assets/icons/user.png")}
               ></Image>
               <TextInput
+                editable={false}
                 style={styles.input}
                 placeholder="Tên đăng nhập"
-                returnKeyType="next"
-                onSubmitEditing={() => ref_input2.current.focus()}
                 value={username}
                 onChangeText={(text) => {
-                  setUsernameErrorMessage("");
                   setUsername(text);
                 }}
               ></TextInput>
             </View>
           </View>
         </View>
-        {usernameErrorMessage.length > 0 && (
-          <Text style={styles.textDanger}>{usernameErrorMessage}</Text>
-        )}
 
         <View style={styles.card}>
           <View style={styles.form}>
@@ -122,12 +524,10 @@ export default function T({ navigation }) {
                 source={require("../assets/icons/lock.png")}
               ></Image>
               <TextInput
+                editable={false}
                 style={styles.input2}
-                secureTextEntry={isPasswordSecure}
                 placeholder="Mật khẩu"
-                ref={ref_input2}
                 onChangeText={(text) => {
-                  setPasswordErrorMessage("");
                   setPassword(text);
                 }}
                 value={password}
@@ -136,21 +536,24 @@ export default function T({ navigation }) {
           </View>
         </View>
 
-        {passwordErrorMessage.length > 0 && (
-          <Text style={styles.textDanger}>{passwordErrorMessage}</Text>
-        )}
-
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => navigation.navigate("FirstInfo")}
-          //onPress={() => formValidation()}
-        >
+        <TouchableOpacity disabled style={styles.loginBtn}>
           <Text style={styles.loginText}>Đăng nhập</Text>
         </TouchableOpacity>
+        {playing ? (
+          <Image
+            style={styles.sound}
+            source={require("../assets/images/voice.gif")}
+          ></Image>
+        ) : (
+          <Image
+            style={styles.sound}
+            source={require("../assets/images/voice-stop.png")}
+          ></Image>
+        )}
       </ScrollView>
-    </View>
+    </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   back: {
@@ -161,11 +564,6 @@ const styles = StyleSheet.create({
     height: 40,
     marginTop: 48,
   },
-  // eyeIcon: {
-  //   width: 24,
-  //   height: 24,
-  //   marginTop: 8,
-  // },
   icon: {
     width: 32,
     height: 32,
@@ -199,7 +597,9 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     height: 36,
   },
-  form: {},
+  mainForm: {
+    marginTop: 60,
+  },
   formControl: {
     flex: 1,
     flexDirection: "row",
@@ -243,47 +643,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: "600",
   },
-  // formControl1: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  //   justifyContent: "space-around",
-  //   marginTop: -8,
-  // },
-  // line: {
-  //   width: 60,
-  //   height: 1,
-  //   backgroundColor: "#777D84",
-  // },
-  // lineText: {
-  //   fontSize: 12,
-  //   color: "#777D84",
-  //   textAlign: "center",
-  //   marginTop: 32,
-  // },
-  // signInLogo: {
-  //   width: 78,
-  //   height: 56,
-  // },
-  // formControl2: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  //   justifyContent: "space-around",
-  //   marginTop: 40,
-  // },
-  // formControl3: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  //   flexWrap: "wrap",
-  //   justifyContent: "center",
-  //   marginTop: 60,
-  //   //alignItems: "center",
-  // },
-  // signUp: {
-  //   color: "#1868DF",
-  // },
-  // textDanger: {
-  //   color: "#dc3545",
-  //   marginLeft: 100,
-  //   marginRight: 12,
-  // },
+  sound: {
+    height: 60,
+    width: 60,
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: "100%",
+    marginTop: 32,
+  },
 });
+
+export default TestSTT;
