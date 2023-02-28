@@ -1,11 +1,9 @@
 import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
-// import { CheckBox } from "react-native-elements";
-// import CheckBox from "@react-native-community/checkbox";
-// import { Checkbox } from "react-native-paper";
-import Checkbox from "expo-checkbox";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {app} from "../components/FirebaseConfig";
 import { useSwipe } from "../hooks/useSwipe";
-import { BackHandler } from 'react-native';
+
 
 const DismissKeyboardHOC = (Comp) => {
     return ({ children, ...props }) => (
@@ -43,6 +41,8 @@ export default function SignUpScreen({ navigation }) {
         navigation.goBack();
     }
 
+
+    
     formValidation = async () => {
         setLoading(true);
         let errorFlag = false;
@@ -72,15 +72,33 @@ export default function SignUpScreen({ navigation }) {
             /** Call Your API */
         } else {
             setLoading(false);
-
-            // console.log(passwordErrorMessage);
-            // console.log(errorFlag);
-
-            navigation.navigate("SignIn");
+             signUp();
         }
     };
+
+    function signUp  (){
+        const auth = getAuth(app);
+       
+        const userr = createUserWithEmailAndPassword(auth, (username+"@user.gmail.com"), password)
+        .then((userr) => {
+           
+                console.log("thành công")
+                setUsername("")
+                setPassword("")
+                setConfirmPassword("")
+                navigation.navigate("SignIn")
+           
+        
+        })
+        .catch((error) => {
+            console.log("thất bại")
+            return 0
+            // ..
+        });
+    }
+
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container} enabled keyboardVerticalOffset={Platform.select({ ios: 20, android: 200 })}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container} enabled keyboardVerticalOffset={Platform.select({ ios: 20, android: 0 })}>
             <View>
                 <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
                     <Image style={styles.backIcon} source={require("../assets/icons/back.png")}></Image>

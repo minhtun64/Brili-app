@@ -65,6 +65,11 @@ export default function CurriculumVitae({ navigation }) {
           console.warn(err);
         }
       }, []);
+      const pickDocument = async () => {
+	    let result = await DocumentPicker.getDocumentAsync({});
+		  alert(result.uri);
+      console.log(result);
+	}
   
     //     const pickDocument = async () => {
     //       let result = await DocumentPicker.getDocumentAsync({type: "*/*",

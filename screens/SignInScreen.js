@@ -13,6 +13,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSwipe } from "../hooks/useSwipe";
 
+
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {app} from "../components/FirebaseConfig";
+
+
 const DismissKeyboardHOC = (Comp) => {
   return ({ children, ...props }) => (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -48,6 +53,20 @@ export default function SignInScreen({ navigation }) {
 
   const ref_input2 = useRef();
 
+  function signIn(){
+    const auth = getAuth(app);
+    signInWithEmailAndPassword(auth, (username+"@user.gmail.com"), password)
+      .then((userCredential) => {
+      
+        navigation.navigate("FirstInfo");
+      
+      })
+      .catch((error) => {
+        console.log("thất bại")
+      });
+
+  }
+
   formValidation = async () => {
     setLoading(true);
     let errorFlag = false;
@@ -67,7 +86,8 @@ export default function SignInScreen({ navigation }) {
       // console.log("errorFlag");
     } else {
       setLoading(false);
-      navigation.navigate("FirstInfo");
+      signIn();
+     
     }
   };
   return (
@@ -163,8 +183,8 @@ export default function SignInScreen({ navigation }) {
         
         <TouchableOpacity
           style={styles.loginBtn}
-          onPress={() => navigation.navigate("FirstInfo")}
-          //onPress={() => formValidation()}
+          // onPress={() => navigation.navigate("FirstInfo")}
+          onPress={() => formValidation()}
         >
         <Text style={styles.loginText}>Đăng nhập</Text>
         </TouchableOpacity>
@@ -341,9 +361,9 @@ const styles = StyleSheet.create({
   // signUp: {
   //   color: "#1868DF",
   // },
-  // textDanger: {
-  //   color: "#dc3545",
-  //   marginLeft: 100,
-  //   marginRight: 12,
-  // },
+  textDanger: {
+    color: "#dc3545",
+    marginLeft: 80,
+    marginRight: 12,
+  },
 });

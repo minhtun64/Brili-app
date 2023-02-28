@@ -52,7 +52,7 @@ export default function PodcastScreen({ navigation }) {
                 <View style={styles.content}>
                     {loaded1 && loaded2 ? null : <Image source={require("../assets/images/loading1.gif")} style={styles.loading}></Image>}
                     <View>
-                        <TouchableOpacity onPress={() => navigation.navigate("UploadJob")}>
+                        <TouchableOpacity onPress={() => navigation.navigate("ListJobs")}>
                             <ImageBackground
                                 source={require("../assets/images/purposeoflife1.png")}
                                 onLoad={() => setLoaded1(true)}

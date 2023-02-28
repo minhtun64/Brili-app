@@ -1,4 +1,6 @@
 import { StatusBar } from "expo-status-bar";
+import { registerRootComponent } from 'expo';
+
 import {
   Button,
   Image,
@@ -8,8 +10,10 @@ import {
   View,
 } from "react-native";
 import MainNavigator from "./navigation/BriliNav";
+import * as React from 'react';
 // import { Assets } from "@react-navigation/elements";
 import AudioSlider from "./screens/ListenToPodcastScreen";
+
 export default function App() {
   loadResourcesAsync;
   return (

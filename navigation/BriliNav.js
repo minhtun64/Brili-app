@@ -32,7 +32,13 @@ import UploadJob from "../screens/UploadJob";
 import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
+import ListJobs from "../screens/ListJobs";
+
+
+
+import * as React from 'react';
 const Stack = createStackNavigator();
+
 function StackNavigator() {
   return (
     <Stack.Navigator>
@@ -372,6 +378,11 @@ function RecruitmentStackNavigator_V() {
       <RecruitmentStack_V.Screen
         name="RecruitmentScreenV"
         component={RecruitmentScreen_V}
+        options={{ headerShown: false }}
+      />
+      <RecruitmentStack_V.Screen
+        name="ListJobs"
+        component={ListJobs}
         options={{ headerShown: false }}
       />
     </RecruitmentStack_V.Navigator>

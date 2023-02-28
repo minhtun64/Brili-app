@@ -1,6 +1,7 @@
 import { Text, StyleSheet, View, Image, ImageBackground, TouchableOpacity, TextInput, ScrollView, Dimensions, TouchableWithoutFeedback, Keyboard } from "react-native";
 import React, { Component, useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
+import DocumentPicker from 'react-native-document-picker';
 import Modal from "react-native-modal";
 import {
     useFonts,
@@ -65,6 +66,11 @@ export default function UploadJob({ navigation }) {
         }
         prepare();
     }, []);
+    const pickDocument = async () => {
+	    let result = await DocumentPicker.getDocumentAsync({});
+		  alert(result.uri);
+      console.log(result);
+	}
 
     if (!fontsLoaded) {
         return null;
