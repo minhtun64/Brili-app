@@ -199,7 +199,7 @@ export default class MarketingConsulting2 extends PureComponent {
   async componentDidMount() {
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
-      require("../assets/podcasts/podcast-2.mp3")
+      require("../assets/recruitments/recruitment-2.mp3")
     );
 
     const status = await this.soundObject.getStatusAsync();
@@ -333,9 +333,9 @@ export default class MarketingConsulting2 extends PureComponent {
           style={styles.podcastImage}
         >
           <Text style={styles.jobName}>
-            Nhân viên tư vấn gói chăm sóc sức khỏe
+            Nhân viên tư vấn tuyển sinh
           </Text>
-          <Text style={styles.companayName}>ManpowerGroupVietNam</Text>
+          <Text style={styles.companayName}>ApolloEnglish</Text>
         </GestureRecognizer>
 
         <View style={styles.job}>
@@ -479,7 +479,7 @@ export default class MarketingConsulting2 extends PureComponent {
               ></Image>
               <Text style={styles.textIcon}>Số lượng: </Text>
               <Text style={styles.textDes}>
-                3 nhân viên nữ, 1 nhân viên nam
+                5 nhân viên nữ, 5 nhân viên nam
               </Text>
             </View>
             <View style={styles.detailJob}>
@@ -488,7 +488,7 @@ export default class MarketingConsulting2 extends PureComponent {
                 source={require("../assets/icons/dollar-square.png")}
               ></Image>
               <Text style={styles.textIcon}>Mức lương: </Text>
-              <Text style={styles.textDes}>4 - 7 triệu</Text>
+              <Text style={styles.textDes}>6 - 8 triệu</Text>
             </View>
             <View style={styles.detailJob}>
               <Image
@@ -497,8 +497,7 @@ export default class MarketingConsulting2 extends PureComponent {
               ></Image>
               <Text style={styles.textIcon}>Địa chỉ: </Text>
               <Text style={styles.textDes}>
-                26 Đường Hoàng Cầm, Phường Bình An, Thành phố Dĩ An, tỉnh Bình
-                Dương
+              204 Trần Bình Trọng, Quận 5, Thành phố Hồ Chí Minh
               </Text>
             </View>
             <View style={styles.detailJob}>
@@ -507,7 +506,7 @@ export default class MarketingConsulting2 extends PureComponent {
                 source={require("../assets/icons/calendar.png")}
               ></Image>
               <Text style={styles.textIcon}>Ngày đăng: </Text>
-              <Text style={styles.textDes}>2/3/2023</Text>
+              <Text style={styles.textDes}>28/02/2023</Text>
             </View>
             <View style={styles.detailJob}>
               <Image
@@ -517,9 +516,9 @@ export default class MarketingConsulting2 extends PureComponent {
               <Text style={styles.textIcon}>Mô tả công việc: </Text>
             </View>
             <Text style={styles.textDes2}>
-              - Môi trường làm việc quốc tế, chuyên nghiệp, sạch sẽ, lành mạnh,
-              văn minh, nói không với tệ nạn xã hội. Đối tượng khách hàng là
-              khách du lịch quốc tế và Việt Nam có mức thu nhập khá.
+              Tư vấn và giới thiệu khóa học tiếng anh. Tìm hiểu nhu cầu của khách hàng và 
+              đưa ra những giải pháp giáo dục phù hợp. Mời khách hàng đến trung tâm Apollo 
+              để tham dự kiểm tra trình độ, lớp học mẫu.
             </Text>
             <View style={styles.detailJob}>
               <Image
@@ -529,8 +528,8 @@ export default class MarketingConsulting2 extends PureComponent {
               <Text style={styles.textIcon}>Yêu cầu: </Text>
             </View>
             <Text style={styles.textDes2}>
-              - Có tay nghề massage, ưu tiên những bạn có kinh nghiệm và có sẵn
-              chứng chỉ massage. Nếu chưa biết nghề sẽ được đào tạo thêm.
+              Độ tuổi từ 22 đến 35. Bạn là người khéo léo và khả năng đội nhóm tốt. 
+              Bạn yêu thích giáo dục và muốn đóng góp cho thế hệ tương lai.
             </Text>
             <View style={styles.detailJob}>
               <Image
@@ -539,7 +538,7 @@ export default class MarketingConsulting2 extends PureComponent {
               ></Image>
               <Text style={styles.textIcon}>Liên hệ: </Text>
               <Text style={[styles.textDes, { color: "red" }]}>
-                069 797 3232 {"\n"}056 780 6910
+                089 232 3232 {"\n"}013 465 8910
               </Text>
             </View>
             <TouchableOpacity
