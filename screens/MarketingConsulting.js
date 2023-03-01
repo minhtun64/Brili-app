@@ -211,7 +211,7 @@ export default class MarketingConsulting extends PureComponent {
     this.setState({ trackLayout: event.nativeEvent.layout }); // {x, y, width, height}
   };
 
-  async componentDidMount() {
+  async componentDidMount () {
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
       require("../assets/recruitments/recruitment-1.mp3")
