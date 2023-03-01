@@ -26,6 +26,7 @@ import ListenToPodcastScreen from "../screens/ListenToPodcastScreen";
 import ListenToPodcast2Screen from "../screens/ListenToPodcast2Screen";
 import LinktoSpotifyScreen from "../screens/LinktoSpotifyScreen";
 import S_LinktoSpotifyScreen from "../screens/S_LinktoSpotifyScreen";
+import S_RecruitmentScreen from "../screens/S_RecruitmentScreen";
 
 import SignIn_Volunteer from "../screens/SignIn_Volunteer";
 import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
@@ -118,8 +119,8 @@ function RecruitmentStackNavigator() {
   return (
     <RecruitmentStack.Navigator>
       <RecruitmentStack.Screen
-        name="Recruitment"
-        component={RecruitmentScreen}
+        name="S_Recruitment"
+        component={S_RecruitmentScreen}
         options={{ headerShown: false }}
       />
       <RecruitmentStack.Screen
