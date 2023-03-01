@@ -143,6 +143,20 @@ export default function S_RecruitmentScreen({ navigation }) {
           (data.results && data.results[0].alternatives[0].transcript) || "";
         console.log(message);
         var str = message;
+        str = str.replace(/\./g, "");
+        switch (str) {          
+          case 'Podcast':
+            this.navigation.navigate("PodcastTopic");
+            break;
+          case 'Trợ giúp':
+            this.navigation.navigate("Help");
+            break;
+          case 'Cài đặt':
+            break;
+          case 'Tiếp thị':
+            this.navigation.navigate("MarketingConsulting");
+            break;
+        }
         console.log(str);
       } catch (error) {
         console.log("There was an error reading file", error);
@@ -222,9 +236,10 @@ export default function S_RecruitmentScreen({ navigation }) {
             stop();
         }}
       >
-          <View>
+      <View>
         <Text style={styles.title}>Tuyển dụng</Text>
         <View style={styles.line}></View>        
+        <View style={styles.content}>
           <View>
               <ImageBackground
                 source={require("../assets/images/purposeoflife1.png")}
@@ -289,11 +304,12 @@ export default function S_RecruitmentScreen({ navigation }) {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={styles.label}>Công việc khác</Text>
+                  <Text style={styles.label2}>Công việc khác</Text>
                 </View>
               </ImageBackground>
           </View>
         </View>
+      </View>
       </TouchableOpacity>
   )};
 };
@@ -339,7 +355,13 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     letterSpacing: -1.5,
   },
-
+  label: {
+    fontSize: 28,
+    fontFamily: "LexendExa_700Bold",
+    color: "#ffffff",
+    letterSpacing: -1.5,
+    marginBottom: "100%",
+  },
   loading: {
     marginTop: "132%",
     width: 60,
