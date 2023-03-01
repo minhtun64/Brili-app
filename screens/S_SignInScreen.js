@@ -94,7 +94,7 @@ import {
       return sound
         ? () => {
             console.log("Unloading Sound");
-            sound.stopAsync();
+            sound.unloadAsync();
           }
         : undefined;
     }, [sound]);
@@ -131,13 +131,13 @@ import {
             onPress = {() => {
               setBackCount(backCount + 1);  
               if (backCount == 1) {
-                  sound.stopAsync();
+                  sound.unloadAsync();
                   setTimeout(() => {
                     setBackCount(0);
                   }, 500);  
                   console.log("hello")
 
-                  navigation.navigate("TestSTT");
+                  navigation.navigate("SignUp");
             } ;
             // else {
             //     setTimeout(() => {

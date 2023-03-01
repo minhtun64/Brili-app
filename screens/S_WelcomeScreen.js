@@ -55,14 +55,14 @@ export default function S_WelcomeScreen({ navigation }) {
 
   const onSingleTapEvent = (event) => {
     if (event.nativeEvent.state === State.ACTIVE) {
-      sound.stopAsync();
+      sound.unloadAsync();
       navigation.navigate("S_SignIn");      
     }
   };
 
   const onDoubleTapEvent = (event) => {
     if (event.nativeEvent.state === State.ACTIVE) {
-      sound.stopAsync();
+      sound.unloadAsync();
       navigation.navigate("SignInVolunteer");
     }
   };

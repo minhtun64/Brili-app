@@ -61,10 +61,10 @@ export default function PodcastTopicScreen({ navigation }) {
             ></Image>
           )}
 
-          {/* button navigate to  Brili-Live podcasts */}
+          {/* button navigate to  Brili-Life podcasts */}
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate("ListenToPodcast")}
+              onPress={() => navigation.navigate("S_LinktoSpotify")}
             >
               <ImageBackground
                 source={require("../assets/images/brili-life.png")}

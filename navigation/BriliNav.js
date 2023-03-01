@@ -4,7 +4,6 @@ import SignInScreen from "../screens/SignInScreen";
 import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import TEST from "../screens/TEST";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RecruitmentScreen from "../screens/RecruitmentScreen";
@@ -25,6 +24,8 @@ import PodcastTopicScreen from "../screens/PodcastTopicScreen";
 import ListenPodcastScreen from "../screens/ListenPodcastScreen";
 import ListenToPodcastScreen from "../screens/ListenToPodcastScreen";
 import ListenToPodcast2Screen from "../screens/ListenToPodcast2Screen";
+import LinktoSpotifyScreen from "../screens/LinktoSpotifyScreen";
+import S_LinktoSpotifyScreen from "../screens/S_LinktoSpotifyScreen";
 
 import SignIn_Volunteer from "../screens/SignIn_Volunteer";
 import Recruitment_Volunteer from "../screens/Recruitment_Volunteer";
@@ -37,12 +38,7 @@ import MarketingConsulting2 from "../screens/MarketingConsulting2";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Test"
-        component={TEST}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator>          
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
@@ -180,6 +176,11 @@ function PodcastStackNavigator() {
         options={{ headerShown: false }}
       />
       <PodcastStack.Screen
+        name="S_LinktoSpotify"
+        component={S_LinktoSpotifyScreen}
+        options={{ headerShown: false }}
+      /> 
+      <PodcastStack.Screen
         name="ListenPodcast"
         component={ListenPodcastScreen}
         options={{ headerShown: false }}
@@ -193,7 +194,7 @@ function PodcastStackNavigator() {
         name="ListenToPodcast2"
         component={ListenToPodcast2Screen}
         options={{ headerShown: false }}
-      />
+      />       
     </PodcastStack.Navigator>
   );
 }
