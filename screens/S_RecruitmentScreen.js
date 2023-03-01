@@ -309,7 +309,7 @@ export default function S_RecruitmentScreen({ navigation }) {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={styles.label2}>Công việc khác</Text>
+                  <Text style={styles.label}>Công việc khác</Text>
                 </View>
               </ImageBackground>
             </View>
@@ -356,12 +356,6 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   label: {
-    fontSize: 28,
-    fontFamily: "LexendExa_700Bold",
-    color: "#ffffff",
-    letterSpacing: -1.5,
-  },
-  label2: {
     fontSize: 28,
     fontFamily: "LexendExa_700Bold",
     color: "#ffffff",
