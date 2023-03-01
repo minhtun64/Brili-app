@@ -53,7 +53,7 @@ export default class MarketingConsulting extends PureComponent {
       xDotOffsetAtAnimationStart: 0,
       loaded1: false,
       playing2: false,
-         sound:"",
+      sound: "",
     };
 
     this._panResponder = PanResponder.create({
@@ -115,21 +115,20 @@ export default class MarketingConsulting extends PureComponent {
     });
   }
 
-
-  playSound = async () =>{
+  playSound = async () => {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
       require("../assets/recruitments/job_details.mp3")
     );
-    this.setState({sound:sound})
-    this.setState({playing2:true})
-  
+    this.setState({ sound: sound });
+    this.setState({ playing2: true });
+
     console.log("Playing Sound test");
     await sound.playAsync();
     setTimeout(() => {
-         this.play();
-      }, 16000);   
-}
+      this.play();
+    }, 16000);
+  };
 
   loadedImage = async () => {
     this.setState({ loaded1: true });
@@ -211,7 +210,7 @@ export default class MarketingConsulting extends PureComponent {
     this.setState({ trackLayout: event.nativeEvent.layout }); // {x, y, width, height}
   };
 
-  async componentDidMount () {
+  async componentDidMount() {
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
       require("../assets/recruitments/recruitment-1.mp3")
@@ -309,7 +308,7 @@ export default class MarketingConsulting extends PureComponent {
     };
 
     return (
-      <TouchableOpacity>
+      <View>
         <TouchableOpacity
           style={styles.back}
           onPress={() => {
@@ -568,7 +567,7 @@ export default class MarketingConsulting extends PureComponent {
 
           <View style={{ height: 500 }}></View>
         </ScrollView>
-      </TouchableOpacity>
+      </View>
     );
   }
 }
