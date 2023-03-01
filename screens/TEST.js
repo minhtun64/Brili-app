@@ -252,6 +252,11 @@ export default function ChoiceScreen({ navigation }) {
 
           sound.unloadAsync();
           // speakUsername();
+          const thingToSay =
+            "Tên đăng nhập của bạn là" +
+            message +
+            ". Nhấn giữ màn hình để đọc lại tên đăng nhập, chạm 2 chạm để tiếp tục đọc mật khẩu.";
+          Speech.speak(thingToSay, { rate: 1.05 });
           console.log("Xác nhận tên đăng nhập");
         }
       }
@@ -306,6 +311,11 @@ export default function ChoiceScreen({ navigation }) {
 
           sound.unloadAsync();
           // speakPassword();
+          const thingToSay =
+            "Mật khẩu của bạn là" +
+            message +
+            ". Nhấn giữ màn hình để đọc lại mật khẩu, chạm 2 chạm để đăng nhập.";
+          Speech.speak(thingToSay, { rate: 1.05 });
           console.log("Xác nhận mật khẩu");
         }
       }
