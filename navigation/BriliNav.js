@@ -36,7 +36,6 @@ import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
 import MarketingConsulting2 from "../screens/MarketingConsulting2";
-import suportMkt from "../screens/suportMkt";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
@@ -147,11 +146,6 @@ function RecruitmentStackNavigator() {
       <RecruitmentStack.Screen
         name="MarketingConsulting2"
         component={MarketingConsulting2}
-        options={{ headerShown: false }}
-      />
-      <RecruitmentStack.Screen
-        name="suportMkt"
-        component={suportMkt}
         options={{ headerShown: false }}
       />
     </RecruitmentStack.Navigator>
