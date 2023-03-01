@@ -53,28 +53,28 @@ import {
   
     const ref_input2 = useRef();
   
-    formValidation = async () => {
-      setLoading(true);
-      let errorFlag = false;
+    // formValidation = async () => {
+    //   setLoading(true);
+    //   let errorFlag = false;
   
-      // input validation
-      if (username.length == 0) {
-        errorFlag = true;
-        setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
-      }
+    //   // input validation
+    //   if (username.length == 0) {
+    //     errorFlag = true;
+    //     setUsernameErrorMessage("Bắt buộc nhập tên đăng nhập.");
+    //   }
   
-      if (password.length == 0) {
-        errorFlag = true;
-        setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
-      }
+    //   if (password.length == 0) {
+    //     errorFlag = true;
+    //     setPasswordErrorMessage("Bắt buộc nhập mật khẩu.");
+    //   }
   
-      if (errorFlag) {
-        // console.log("errorFlag");
-      } else {
-        setLoading(false);
-        navigation.navigate("FirstInfo");
-      }
-    };
+    //   if (errorFlag) {
+    //     // console.log("errorFlag");
+    //   } else {
+    //     setLoading(false);
+    //     navigation.navigate("FirstInfo");
+    //   }
+    // };
 
     async function playSound() {
       console.log("Loading Sound");
@@ -135,8 +135,10 @@ import {
                   setTimeout(() => {
                     setBackCount(0);
                   }, 500);  
+                  console.log("hello")
+
                   navigation.navigate("SignUp");
-            } 
+            } ;
             // else {
             //     setTimeout(() => {
             //     setBackCount(0);
