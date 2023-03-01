@@ -44,7 +44,6 @@ const recordingOptions = {
   },
 };
 
-
 export default function S_RecruitmentScreen({ navigation }) {
   let [fontsLoaded] = useFonts({
     LexendExa_100Thin,
@@ -64,106 +63,112 @@ export default function S_RecruitmentScreen({ navigation }) {
   //   prepare();
   // }, []);
 
-    const [sound, setSound] = React.useState();
-    const [backCount, setBackCount] = React.useState(0);
-    const [playing, setPlaying] = React.useState(false);    
-    const [isRecording, setIsRecording] = useState(false);
-    const [isFetching, setIsFetching] = useState(false);
-    const [allow, setAllow] = useState(true);
-    const [recording, setRecording] = useState(null);
-    const [repeat, setRepeat] = useState(false);
+  const [sound, setSound] = React.useState();
+  const [backCount, setBackCount] = React.useState(0);
+  const [playing, setPlaying] = React.useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [allow, setAllow] = useState(true);
+  const [recording, setRecording] = useState(null);
+  const [repeat, setRepeat] = useState(false);
 
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/recruitments/navigate-to-modules.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 7000);
+  }
 
-    async function playSound() {
-        console.log("Loading Sound");
-        const { sound } = await Audio.Sound.createAsync(
-        require("../assets/recruitments/navigate-to-modules.mp3")
-        );
-        setSound(sound);
-        setPlaying(true);
-        console.log("Playing Sound");
-        await sound.playAsync();
-        setTimeout(() => {
-        setPlaying(false);
-        }, 7000);
-    }
-
-    React.useEffect(() => {
-        return sound
-        ? () => {
-            console.log("Unloading Sound");
-            sound.unloadAsync();
-            }
-        : undefined;
-    }, [sound]);
-
-    const deleteRecordingFile = async () => {
-      try {
-        const info = await FileSystem.getInfoAsync(recording.getURI());
-        await FileSystem.deleteAsync(info.uri);
-      } catch (error) {
-        console.log("There was an error deleting recording file", error);
-      }
-    };
-  
-    const getTranscription = async () => {
-      setIsFetching(true);
-      try {
-        const info = await FileSystem.getInfoAsync(recording.getURI());
-        console.log(`FILE INFO: ${JSON.stringify(info)}`);
-        const uri = info.uri;
-  
-        const base64content: string = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-  
-        const body = {
-          audio: { content: base64content },
-          config: {
-            enableAutomaticPunctuation: true,
-            encoding: "LINEAR16",
-            languageCode: "vi-VN",
-            model: "default",
-            sampleRateHertz: 44100,
-          },
-        };
-  
-        const transcriptResponse = await fetch(
-          "https://speech.googleapis.com/v1p1beta1/speech:recognize?key=AIzaSyATOBs4KUVhKDnk56MxhgOJtN8_Pw1Z280",
-          {
-            method: "POST",
-            body: JSON.stringify(body),
-          }
-        );
-        const data = await transcriptResponse.json();
-        console.log(data);
-  
-        console.log(data.results);
-        const message =
-          (data.results && data.results[0].alternatives[0].transcript) || "";
-        console.log(message);
-        var str = message;
-        str = str.replace(/\./g, "");
-        switch (str) {          
-          case 'Podcast':
-            this.navigation.navigate("PodcastTopic");
-            break;
-          case 'Trợ giúp':
-            this.navigation.navigate("Help");
-            break;
-          case 'Cài đặt':
-            break;
-          case 'Tiếp thị':
-            this.navigation.navigate("MarketingConsulting");
-            break;
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
         }
-        console.log(str);
-      } catch (error) {
-        console.log("There was an error reading file", error);
-        stopRecording();
-        resetRecording();
+      : undefined;
+  }, [sound]);
+
+  const deleteRecordingFile = async () => {
+    try {
+      const info = await FileSystem.getInfoAsync(recording.getURI());
+      await FileSystem.deleteAsync(info.uri);
+    } catch (error) {
+      console.log("There was an error deleting recording file", error);
+    }
+  };
+
+  const getTranscription = async () => {
+    setIsFetching(true);
+    try {
+      const info = await FileSystem.getInfoAsync(recording.getURI());
+      console.log(`FILE INFO: ${JSON.stringify(info)}`);
+      const uri = info.uri;
+
+      const base64content: string = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const body = {
+        audio: { content: base64content },
+        config: {
+          enableAutomaticPunctuation: true,
+          encoding: "LINEAR16",
+          languageCode: "vi-VN",
+          model: "default",
+          sampleRateHertz: 44100,
+        },
+      };
+
+      const transcriptResponse = await fetch(
+        "https://speech.googleapis.com/v1p1beta1/speech:recognize?key=AIzaSyATOBs4KUVhKDnk56MxhgOJtN8_Pw1Z280",
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+        }
+      );
+      const data = await transcriptResponse.json();
+      console.log(data);
+
+      console.log(data.results);
+      const message =
+        (data.results && data.results[0].alternatives[0].transcript) || "";
+      console.log(message);
+      var str = message;
+      str = str.replace(/\./g, "");
+      console.log(str);
+      switch (str) {
+        case "Podcast": {
+          navigation.navigate("PodcastStack", { screen: "PodcastTopic" });
+          // navigation.navigate("PodcastTopic");
+          break;
+        }
+        case "Trợ giúp": {
+          navigation.navigate("HelpStack", { screen: "Help" });
+          // navigation.navigate("Help");
+          break;
+        }
+        case "Cài đặt": {
+          break;
+        }
+        case "Tiếp thị": {
+          navigation.navigate("MarketingConsulting");
+          break;
+        }
       }
-      setIsFetching(false);
+      console.log(str);
+    } catch (error) {
+      console.log("There was an error reading file", error);
+      stopRecording();
+      resetRecording();
+    }
+    setIsFetching(false);
   };
 
   const startRecording = async () => {
@@ -227,20 +232,20 @@ export default function S_RecruitmentScreen({ navigation }) {
     return (
       <TouchableOpacity
         onPressIn={() => {
-            console.log(allow);
-            sound.unloadAsync();
+          console.log(allow);
+          sound.unloadAsync();
 
-            start();
+          start();
         }}
         onPressOut={() => {
-            stop();
+          stop();
         }}
       >
-      <View>
-        <Text style={styles.title}>Tuyển dụng</Text>
-        <View style={styles.line}></View>        
-        <View style={styles.content}>
-          <View>
+        <View>
+          <Text style={styles.title}>Tuyển dụng</Text>
+          <View style={styles.line}></View>
+          <View style={styles.content}>
+            <View>
               <ImageBackground
                 source={require("../assets/images/purposeoflife1.png")}
                 onLoad={() => {
@@ -263,8 +268,8 @@ export default function S_RecruitmentScreen({ navigation }) {
                   <Text style={styles.label}>Tiếp thị</Text>
                 </View>
               </ImageBackground>
-          </View>
-          <View>
+            </View>
+            <View>
               <ImageBackground
                 source={require("../assets/images/getty_536615329_3428261.png")}
                 style={styles.backgroundImage}
@@ -285,8 +290,8 @@ export default function S_RecruitmentScreen({ navigation }) {
                   <Text style={styles.label}>Lao động phổ thông</Text>
                 </View>
               </ImageBackground>
-          </View>
-          <View>
+            </View>
+            <View>
               <ImageBackground
                 source={require("../assets/images/How-to-Study-featured-image1.png")}
                 style={styles.backgroundImage}
@@ -307,12 +312,13 @@ export default function S_RecruitmentScreen({ navigation }) {
                   <Text style={styles.label2}>Công việc khác</Text>
                 </View>
               </ImageBackground>
+            </View>
           </View>
         </View>
-      </View>
       </TouchableOpacity>
-  )};
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   title: {
