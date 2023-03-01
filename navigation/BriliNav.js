@@ -38,7 +38,7 @@ import MarketingConsulting2 from "../screens/MarketingConsulting2";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
-    <Stack.Navigator>          
+    <Stack.Navigator>
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
@@ -57,6 +57,11 @@ function StackNavigator() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Test"
+        component={TEST}
         options={{ headerShown: false }}
       />
       <Stack.Screen
