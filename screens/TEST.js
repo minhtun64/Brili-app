@@ -12,6 +12,8 @@ import {
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useSwipe } from "../hooks/useSwipe";
+
+import * as Speech from "expo-speech";
 //const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
 
 const recordingOptions = {
@@ -41,6 +43,8 @@ export default function ChoiceScreen({ navigation }) {
   const [isRecording, setIsRecording] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameFull, setUsernameFull] = useState("");
+  const [passwordFull, setPasswordFull] = useState("");
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = React.useState();
@@ -48,9 +52,7 @@ export default function ChoiceScreen({ navigation }) {
   const [backCount, setBackCount] = React.useState(0);
   const [index, setIndex] = useState(1);
   const [userMessage, setUserMessage] = useState("");
-  const [allow, setAllow] = useState(true);
-
-  const [repeat, setRepeat] = useState(false);
+  const [denyStop, setDenyStop] = useState(false);
 
   async function playSound() {
     console.log("Loading Sound");
@@ -79,6 +81,24 @@ export default function ChoiceScreen({ navigation }) {
       setPlaying(false);
     }, 5000);
   }
+
+  const speakUsername = () => {
+    // sound.unloadAsync();
+    const thingToSay =
+      "Tên đăng nhập của bạn là" +
+      usernameFull +
+      ". Nhấn giữ màn hình để đọc lại tên đăng nhập, chạm 2 chạm để tiếp tục đọc mật khẩu.";
+    Speech.speak(thingToSay, { rate: 1.05 });
+  };
+
+  const speakPassword = () => {
+    //  sound.unloadAsync();
+    const thingToSay =
+      "Mật khẩu của bạn là" +
+      passwordFull +
+      ". Nhấn giữ màn hình để đọc lại mật khẩu, chạm 2 chạm để đăng nhập.";
+    Speech.speak(thingToSay, { rate: 1.05 });
+  };
 
   async function playSound3() {
     console.log("Loading Sound 3");
@@ -211,6 +231,7 @@ export default function ChoiceScreen({ navigation }) {
       str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // Huyền sắc hỏi ngã nặng
       str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // Â, Ê, Ă, Ơ, Ư
       str = str.replace(/ /g, "");
+      str = str.replace(/\./g, "");
       console.log(str);
       if (index == 2) {
         if (str == "") {
@@ -218,29 +239,51 @@ export default function ChoiceScreen({ navigation }) {
           playSound2();
           setBackCount(0);
           console.log("Phát lại âm thanh 2");
-          setRepeat(true);
-          //return;
         } else {
           setUsername(str);
+          setUsernameFull(message);
           setIndex(index + 1);
           setIsFetching(false);
-          playSound3();
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            playsInSilentModeIOS: false,
+          });
+          // playSound3();
+
+          sound.unloadAsync();
+          // speakUsername();
           console.log("Xác nhận tên đăng nhập");
-          console.log(index);
         }
       }
       if (index == 3) {
-        if (str == "") {
+        if ((str == "" || str == username) && backCount != 1) {
+          console.log(backCount);
           setIsFetching(false);
-          playSound3();
+          // playSound3();
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            playsInSilentModeIOS: false,
+          });
+
+          sound.unloadAsync();
+          Speech.stop();
+          speakUsername();
           setBackCount(0);
           console.log("Phát lại âm thanh 3");
-          setRepeat(true);
-          //return;
         } else {
           setUsername(str);
+
+          setUsernameFull(message);
           setIsFetching(false);
-          playSound3();
+          // playSound3();
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            playsInSilentModeIOS: false,
+          });
+
+          sound.unloadAsync();
+          // Speech.stop();
+          // speakUsername();
         }
       }
       if (index == 4) {
@@ -249,29 +292,50 @@ export default function ChoiceScreen({ navigation }) {
           playSound4();
           setBackCount(0);
           console.log("Phát lại âm thanh 4");
-          setRepeat(true);
-          //return;
         } else {
           setPassword(str);
+
+          setPasswordFull(message);
           setIndex(index + 1);
           setIsFetching(false);
-          playSound5();
+          // playSound5();
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            playsInSilentModeIOS: false,
+          });
+
+          sound.unloadAsync();
+          // speakPassword();
           console.log("Xác nhận mật khẩu");
-          console.log(index);
         }
       }
       if (index == 5) {
-        if (str == "") {
+        if ((str == "" || str == password) && backCount != 1) {
           setIsFetching(false);
-          playSound5();
+          // playSound5();
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            playsInSilentModeIOS: false,
+          });
+
+          sound.unloadAsync();
+          Speech.stop();
+          speakPassword();
+
+          setPasswordFull(message);
           setBackCount(0);
           console.log("Phát lại âm thanh 5");
-          setRepeat(true);
-          //return;
         } else {
-          setUsername(str);
+          setPassword(str);
           setIsFetching(false);
-          playSound5();
+          // playSound5();
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            playsInSilentModeIOS: false,
+          });
+
+          // sound.unloadAsync();
+          // speakPassword();
         }
       }
     } catch (error) {
@@ -313,7 +377,6 @@ export default function ChoiceScreen({ navigation }) {
       allowsRecordingIOS: false,
       playsInSilentModeIOS: false,
     });
-    setAllow(false);
   };
 
   const resetRecording = () => {
@@ -323,42 +386,34 @@ export default function ChoiceScreen({ navigation }) {
 
   const start = () => {
     console.log("start recording");
-    console.log(index);
-    if (allow || index == 4) {
-      startRecording();
-    }
+    startRecording();
   };
 
-  //   await Audio.setAudioModeAsync({
-  //     allowsRecordingIOS: false,
-  //   });
-
   const stop = () => {
+    //if (!denyStop) {
     console.log("stop recording");
 
     stopRecording();
-    if (allow || index == 4) {
-      // stopRecording();
-      getTranscription();
-    }
+    getTranscription();
+    //}
   };
 
   return (
     <TouchableOpacity
       style={styles.mainForm}
-      onPressIn={() => {
-        if (index != 1) {
-          console.log(allow);
-          sound.unloadAsync();
+      // onPressIn={() => {
+      //   if (index != 1) {
+      //     console.log(allow);
+      //     sound.unloadAsync();
 
-          start();
-        }
-        // setTimeout(() => {
-        //   setBackCount(0);
-        // }, 500);
-      }}
+      //     start();
+      //   }
+      //   // setTimeout(() => {
+      //   //   setBackCount(0);
+      //   // }, 500);
+      // }}
       onPressOut={() => {
-        if (index != 1) {
+        if (index != 1 && backCount == 0) {
           stop();
         }
       }}
@@ -369,45 +424,17 @@ export default function ChoiceScreen({ navigation }) {
             setBackCount(0);
           }, 500);
           // navigation.navigate("S_SignUp");
-        } else if (index == 2 && repeat) {
+        } else {
+          Speech.stop();
+          sound.unloadAsync();
+          setDenyStop(false);
+          Audio.setAudioModeAsync({
+            allowsRecordingIOS: true,
+            playsInSilentModeIOS: true,
+          });
+          start();
           setTimeout(() => {
-            sound.unloadAsync();
-            Audio.setAudioModeAsync({
-              allowsRecordingIOS: true,
-              playsInSilentModeIOS: true,
-            });
-
-            setAllow(true);
             setBackCount(0);
-            sound.unloadAsync();
-            console.log("đọc lại tên đăng nhập");
-            start();
-          }, 500);
-        } else if (index == 3 && repeat) {
-          setTimeout(() => {
-            sound.unloadAsync();
-            Audio.setAudioModeAsync({
-              allowsRecordingIOS: true,
-              playsInSilentModeIOS: true,
-            });
-            setAllow(true);
-            setBackCount(0);
-            sound.unloadAsync();
-            start();
-          }, 500);
-        } else if (index == 4 && repeat) {
-          setTimeout(() => {
-            sound.unloadAsync();
-            Audio.setAudioModeAsync({
-              allowsRecordingIOS: true,
-              playsInSilentModeIOS: true,
-            });
-
-            setAllow(true);
-            setBackCount(0);
-            sound.unloadAsync();
-            console.log("đọc lại mật khẩu");
-            start();
           }, 500);
         }
       }}
@@ -425,74 +452,57 @@ export default function ChoiceScreen({ navigation }) {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              console.log(backCount);
               playSound();
+              setDenyStop(true);
             }
           } else if (index == 2) {
             setBackCount(backCount + 1);
-            if (backCount == 1) {
-              console.log("Ready to sound 3");
-              sound.unloadAsync();
-              //navigation.navigate("Welcome");
-              playSound2();
-            } else {
+            if (backCount != 1) {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              console.log("bk2 " + backCount);
-              playSound2();
             }
           } else if (index == 3) {
             setBackCount(backCount + 1);
-            console.log(backCount);
             if (backCount == 1) {
-              Audio.setAudioModeAsync({
-                allowsRecordingIOS: true,
-                playsInSilentModeIOS: true,
-              });
-              setAllow(true);
-              console.log("Ready to sound 4");
-              sound.unloadAsync();
-              //navigation.navigate("Welcome");
-              playSound4();
+              setTimeout(() => {
+                console.log(backCount);
+                console.log("Ready to sound 4");
+                sound.unloadAsync();
 
-              setIndex(index + 1);
+                Speech.stop();
+                playSound4();
+                setIndex(index + 1);
+              }, 1000);
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              console.log("bk3" + backCount);
-              playSound3();
             }
           } else if (index == 4) {
             setBackCount(backCount + 1);
-            if (backCount == 1) {
-              console.log("Ready to sound 5");
-              sound.unloadAsync();
-              //navigation.navigate("Welcome");
-              playSound4();
-            } else {
+            if (backCount != 1) {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              console.log("bk4 " + backCount);
-              playSound4();
             }
           } else if (index == 5) {
             setBackCount(backCount + 1);
-            console.log(backCount);
             if (backCount == 1) {
-              console.log("Đăng nhập thành công");
-              sound.unloadAsync();
-              //navigation.navigate("Welcome");
-              playSound6();
-              navigation.navigate("HomeTabs");
+              setTimeout(() => {
+                console.log("Đăng nhập thành công");
+                sound.unloadAsync();
+                Speech.stop();
+                playSound6();
+                navigation.navigate("HomeTabs");
+              }, 1000);
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              console.log("bk5" + backCount);
-              playSound5();
+
+              // playSound5();
+              // setDenyStop(true);
             }
           }
         }
