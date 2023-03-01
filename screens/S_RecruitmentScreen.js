@@ -361,12 +361,11 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     letterSpacing: -1.5,
   },
-  label: {
+  label2: {
     fontSize: 28,
     fontFamily: "LexendExa_700Bold",
     color: "#ffffff",
     letterSpacing: -1.5,
-    marginBottom: "100%",
   },
   loading: {
     marginTop: "132%",
