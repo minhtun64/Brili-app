@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { Component } from "react";
 import Modal from "react-native-modal";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 // export default function CurriculumVitae({navigation}){
 //   function onSwipeRight() {
@@ -19,8 +19,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 export default class SettingsScreen extends Component {
   render() {
     return (
-      <View>
-        {/* <TouchableOpacity
+      <ScrollView>
+        <View>
+          {/* <TouchableOpacity
           style={styles.back}
           onPress={() => navigation.goBack()}
         >
@@ -29,12 +30,87 @@ export default class SettingsScreen extends Component {
             source={require("../assets/icons/back.png")}
           ></Image>
         </TouchableOpacity> */}
-        <Text style={styles.title}> Cài đặt</Text>
-        <View style={styles.line}></View>
-        <View style={styles.content}>
-          <Text style={styles.title1}> Ngôn ngữ:</Text>
+          <Text style={styles.title}> Cài đặt</Text>
+          <View style={styles.line}></View>
+
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Ngôn ngữ chính:</Text>
+              <Text style={styles.prop1}> Tiếng Việt</Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+            <View style={styles.line}></View>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Ngôn ngữ khác</Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+          </View>
+
+          <View style={styles.form}>
+            <View></View>
+            <View style={styles.row}>
+              {/* <Image
+                  style={styles.logo}
+                  source={require("../assets/icons/notification.png")}
+                ></Image> */}
+              <Text style={styles.prop}>Thông báo</Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+          </View>
+
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Gửi cho chúng tôi phản hồi </Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+            <View style={styles.line}></View>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Điều khoản&chính sách bảo mật </Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+          </View>
+
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Chia sẻ Brili</Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+            <View style={styles.line}></View>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Đánh giá Brili</Text>
+              <Image
+                style={styles.arrowRightIcon}
+                source={require("../assets/icons/arrow-right.png")}
+              ></Image>
+            </View>
+          </View>
+
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <Text style={styles.prop}> Phiên bản</Text>
+              <Text style={styles.prop1}> 1.0.23</Text>
+            </View>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -46,10 +122,15 @@ const styles = StyleSheet.create({
   backIcon: {
     width: 36,
     height: 36,
-    marginTop: 40,
+    // marginTop: 40,
   },
+  arrowRightIcon: {
+    width: 26,
+    height: 26,
+  },
+
   title: {
-    marginTop: 40,
+    marginTop: 26,
     fontSize: 24,
     //fontWeight: "bold",
     fontFamily: "LexendExa_400Regular",
@@ -57,14 +138,26 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
-  title1: {
-    marginTop: 26,
+  prop: {
+    marginTop: 0,
     fontSize: 18,
-    fontFamily: "LexendExa_400Regular",
-
-    color: "#000000",
-    marginLeft: 18,
-    marginRight: "auto",
+  },
+  prop1: {
+    fontSize: 18,
+    color: "#777D84",
+  },
+  form: {
+    padding: 16,
+    backgroundColor: "#D8D8D8",
+    margin: 26,
+    marginTop: 20,
+    borderRadius: 12,
+  },
+  row: {
+    // flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // backgroundColor: "black",
   },
   line: {
     width: 280,
@@ -84,4 +177,21 @@ const styles = StyleSheet.create({
     marginRight: 14,
     paddingLeft: 14,
   },
+  logo: {
+    width: 60,
+    height: 60,
+    marginTop: 12,
+    marginLeft: 6,
+  },
+  selectIcon: {
+    width: 40,
+    height: 40,
+    marginTop: 48,
+  },
+  // smallBackGround: {
+  //   backgroundColor: "#D9D9D9",
+  //   borderRadius: 12,
+  //   marginLeft: 14,
+  //   marginRight: 14,
+  // },
 });
