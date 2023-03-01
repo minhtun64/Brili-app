@@ -44,7 +44,7 @@ export default class SettingsScreen extends Component {
             </View>
             <View style={styles.line}></View>
             <View style={styles.row}>
-              <Text style={styles.prop}> Ngôn ngữ khác</Text>
+              <Text style={styles.prop2}> Ngôn ngữ khác</Text>
               <Image
                 style={styles.arrowRightIcon}
                 source={require("../assets/icons/arrow-right.png")}
@@ -77,7 +77,7 @@ export default class SettingsScreen extends Component {
             </View>
             <View style={styles.line}></View>
             <View style={styles.row}>
-              <Text style={styles.prop}> Điều khoản&chính sách bảo mật </Text>
+              <Text style={styles.prop2}> Điều khoản&chính sách bảo mật </Text>
               <Image
                 style={styles.arrowRightIcon}
                 source={require("../assets/icons/arrow-right.png")}
@@ -87,7 +87,7 @@ export default class SettingsScreen extends Component {
 
           <View style={styles.form}>
             <View style={styles.row}>
-              <Text style={styles.prop}> Chia sẻ Brili</Text>
+              <Text style={styles.prop}> Chia sẻ Brili </Text>
               <Image
                 style={styles.arrowRightIcon}
                 source={require("../assets/icons/arrow-right.png")}
@@ -95,7 +95,7 @@ export default class SettingsScreen extends Component {
             </View>
             <View style={styles.line}></View>
             <View style={styles.row}>
-              <Text style={styles.prop}> Đánh giá Brili</Text>
+              <Text style={styles.prop2}> Đánh giá Brili</Text>
               <Image
                 style={styles.arrowRightIcon}
                 source={require("../assets/icons/arrow-right.png")}
@@ -125,12 +125,13 @@ const styles = StyleSheet.create({
     // marginTop: 40,
   },
   arrowRightIcon: {
+    marginTop: 0,
     width: 26,
     height: 26,
   },
 
   title: {
-    marginTop: 26,
+    marginTop: 46,
     fontSize: 24,
     //fontWeight: "bold",
     fontFamily: "LexendExa_400Regular",
@@ -146,6 +147,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#777D84",
   },
+  prop2: {
+    marginTop: 10,
+    fontSize: 18,
+  },
   form: {
     padding: 16,
     backgroundColor: "#D8D8D8",
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "black",
   },
   line: {
-    width: 280,
+    width: 290,
     height: 1,
     backgroundColor: "#000000",
     marginLeft: "auto",
