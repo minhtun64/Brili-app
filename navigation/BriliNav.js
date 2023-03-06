@@ -4,8 +4,6 @@ import SignInScreen from "../screens/SignInScreen";
 import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import TEST from "../screens/TEST";
-import TESTTTS from "../screens/TESTTTS";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RecruitmentScreen from "../screens/RecruitmentScreen";
@@ -38,16 +36,10 @@ import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
 import MarketingConsulting2 from "../screens/MarketingConsulting2";
-import suportMkt from "../screens/suportMkt";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
-        name="TestTTS"
-        component={TESTTTS}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
@@ -154,11 +146,6 @@ function RecruitmentStackNavigator() {
       <RecruitmentStack.Screen
         name="MarketingConsulting2"
         component={MarketingConsulting2}
-        options={{ headerShown: false }}
-      />
-      <RecruitmentStack.Screen
-        name="suportMkt"
-        component={suportMkt}
         options={{ headerShown: false }}
       />
     </RecruitmentStack.Navigator>

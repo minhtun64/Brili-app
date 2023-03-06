@@ -52,8 +52,6 @@ export default class MarketingConsulting extends PureComponent {
       dotOffset: new Animated.ValueXY(),
       xDotOffsetAtAnimationStart: 0,
       loaded1: false,
-      playing2: false,
-      sound: "",
     };
 
     this._panResponder = PanResponder.create({
@@ -114,21 +112,6 @@ export default class MarketingConsulting extends PureComponent {
       },
     });
   }
-
-  playSound = async () => {
-    console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync(
-      require("../assets/recruitments/job_details.mp3")
-    );
-    this.setState({ sound: sound });
-    this.setState({ playing2: true });
-
-    console.log("Playing Sound test");
-    await sound.playAsync();
-    setTimeout(() => {
-      this.play();
-    }, 16000);
-  };
 
   loadedImage = async () => {
     this.setState({ loaded1: true });
@@ -221,7 +204,7 @@ export default class MarketingConsulting extends PureComponent {
     const status = await this.soundObject.getStatusAsync();
     this.setState({ duration: status["durationMillis"] });
 
-    // await this.onPressPlayPause();
+    await this.onPressPlayPause();
 
     // This requires measureTrack to have been called.
     this.state.dotOffset.addListener(() => {
@@ -246,7 +229,7 @@ export default class MarketingConsulting extends PureComponent {
         this.setState({ duration: status["durationMillis"] });
 
         console.log("Refresh");
-        // await this.onPressPlayPause();
+        await this.onPressPlayPause();
 
         // This requires measureTrack to have been called.
         this.state.dotOffset.addListener(() => {
@@ -321,7 +304,6 @@ export default class MarketingConsulting extends PureComponent {
         >
           <Image
             style={styles.backIcon}
-            onLoad={this.playSound}
             source={require("../assets/icons/back.png")}
           ></Image>
         </TouchableOpacity>
