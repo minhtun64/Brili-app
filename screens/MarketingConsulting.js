@@ -143,9 +143,7 @@ export default class MarketingConsulting extends PureComponent {
   }
 
   onSwipeRight(gestureState) {
-    this.soundObject.unloadAsync();
-    this.state.dotOffset.removeAllListeners();
-    this.props.navigation.navigate("S_Recruitment");
+    //this.setState({ myText: "You swiped right!" });
   }
 
   onArrowRight() {
