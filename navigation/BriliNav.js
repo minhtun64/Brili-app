@@ -1,20 +1,22 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image, StyleSheet, View } from "react-native";
+
 import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
 import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import TEST from "../screens/TEST";
-import TESTTTS from "../screens/TESTTTS";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import RecruitmentScreen from "../screens/RecruitmentScreen";
 import CurriculumVitae from "../screens/CurriculumVitae";
 import MarketingConsulting from "../screens/MarketingConsulting";
 import PodcastScreen from "../screens/PodcastScreen";
 import HelpScreen from "../screens/HelpScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import { Image, StyleSheet, View } from "react-native";
+
 import MyPodcastScreen from "../screens/MyPodcastScreen";
 import FirstInfoScreen from "../screens/FirstInfoScreen";
 import UploadPodcastScreen from "../screens/UploadPodcastScreen";
@@ -39,11 +41,6 @@ const Stack = createStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
-        name="TestTTS"
-        component={TESTTTS}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
@@ -62,11 +59,6 @@ function StackNavigator() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Test"
-        component={TEST}
         options={{ headerShown: false }}
       />
       <Stack.Screen
