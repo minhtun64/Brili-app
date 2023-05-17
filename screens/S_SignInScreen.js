@@ -14,7 +14,6 @@ import * as FileSystem from "expo-file-system";
 import { useSwipe } from "../hooks/useSwipe";
 
 import * as Speech from "expo-speech";
-//const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
 
 const recordingOptions = {
   android: {
@@ -43,16 +42,12 @@ export default function S_SignInScreen({ navigation }) {
   const [isRecording, setIsRecording] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [usernameFull, setUsernameFull] = useState("");
-  const [passwordFull, setPasswordFull] = useState("");
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = React.useState();
   const [playing, setPlaying] = useState(false);
   const [backCount, setBackCount] = React.useState(0);
   const [index, setIndex] = useState(1);
-  const [userMessage, setUserMessage] = useState("");
-  const [denyStop, setDenyStop] = useState(false);
 
   async function playSound3() {
     console.log("Loading Sound");
@@ -82,29 +77,6 @@ export default function S_SignInScreen({ navigation }) {
     }, 5000);
   }
 
-  // const speakUsername = () => {
-  //   // sound.unloadAsync();
-  //   const thingToSay =
-  //     "Tên đăng nhập của bạn là" +
-  //     usernameFull +
-  //     ". Nhấn giữ màn hình để đọc lại tên đăng nhập, chạm 2 chạm để tiếp tục đọc mật khẩu.";
-  //   Speech.speak(thingToSay, { rate: 1.05 });
-  // };
-
-  // const speakPassword = () => {
-  //   //  sound.unloadAsync();
-  //   const thingToSay =
-  //     "Mật khẩu của bạn là" +
-  //     passwordFull +
-  //     ". Nhấn giữ màn hình để đọc lại mật khẩu, chạm 2 chạm để đăng nhập.";
-  //   Speech.speak(thingToSay, { rate: 1.05 });
-  // };
-
-  // async function playUserNameSounds() {
-  //   await playSound5();
-  //   await playUserNameSpeech();
-  //   await playSound6();
-  // }
   async function playSound5() {
     console.log("Loading Sound 5");
     const { sound } = await Audio.Sound.createAsync(
@@ -117,17 +89,6 @@ export default function S_SignInScreen({ navigation }) {
     setTimeout(() => {
       setPlaying(false);
     }, 2000);
-  }
-
-  function playUserNameSpeech() {
-    return new Promise((resolve) => {
-      const speech = new SpeechSynthesisUtterance(userNameFull);
-      speech.rate = 1.05;
-      speech.onend = () => {
-        resolve();
-      };
-      speechSynthesis.speak(speech);
-    });
   }
 
   async function playSound6() {
@@ -198,6 +159,20 @@ export default function S_SignInScreen({ navigation }) {
     setTimeout(() => {
       setPlaying(false);
     }, 2000);
+  }
+
+  async function playSound(soundFile) {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(soundFile);
+    setSound(sound);
+    setPlaying(true);
+    console.log(`Playing Sound: ${soundFile}`);
+    await sound.playAsync();
+    const soundStatus = await sound.getStatusAsync();
+    const duration = soundStatus.durationMillis; // Lấy độ dài thực tế của tệp âm thanh
+    setTimeout(() => {
+      setPlaying(false);
+    }, duration);
   }
 
   React.useEffect(() => {
@@ -273,31 +248,29 @@ export default function S_SignInScreen({ navigation }) {
       if (index == 2) {
         if (str == "") {
           setIsFetching(false);
-          playSound4();
+          playSound(require("../assets/sounds/sound4.mp3"));
           setBackCount(0);
           console.log("Phát lại âm thanh 4");
         } else {
           setUsername(str);
-          // setUsernameFull(message);
-          // setIndex(index + 1);
           setBackCount(1);
           setIsFetching(false);
           Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             playsInSilentModeIOS: false,
           });
-          await playSound5();
+          await playSound(require("../assets/sounds/sound5.mp3"));
           setTimeout(() => {
             Speech.speak(message, { rate: 1.05 });
             setTimeout(() => {
-              playSound6();
-            }, 1500);
-          }, 2000);
+              playSound(require("../assets/sounds/sound6.mp3"));
+            }, 1800);
+          }, 1800);
         }
       } else if (index == 3) {
         if (str == "") {
           setIsFetching(false);
-          playSound7();
+          playSound(require("../assets/sounds/sound7.mp3"));
           setBackCount(0);
           console.log("Phát lại âm thanh 7");
         } else {
@@ -310,13 +283,24 @@ export default function S_SignInScreen({ navigation }) {
             allowsRecordingIOS: false,
             playsInSilentModeIOS: false,
           });
-          await playSound8();
+          playSound(require("../assets/sounds/sound8.mp3"));
           setTimeout(() => {
             Speech.speak(message, { rate: 1.05 });
             setTimeout(() => {
-              playSound9();
-            }, 1500);
-          }, 2000);
+              playSound(require("../assets/sounds/sound9.mp3"));
+            }, 1800);
+          }, 1800);
+
+          // const playSoundsSequentially = async () => {
+          //   await playSound(require("../assets/sounds/sound8.mp3"));
+          //   await Speech.speak(message, { rate: 1.05 });
+          //   await playSound(require("../assets/sounds/sound9.mp3"));
+          // };
+          // playSoundsSequentially();
+
+          // await playSound(require("../assets/sounds/sound8.mp3"));
+          // await Speech.speak(message, { rate: 1.05 });
+          // await playSound(require("../assets/sounds/sound9.mp3"));
         }
       }
     } catch (error) {
@@ -392,7 +376,6 @@ export default function S_SignInScreen({ navigation }) {
         } else {
           Speech.stop();
           sound.unloadAsync();
-          setDenyStop(false);
           Audio.setAudioModeAsync({
             allowsRecordingIOS: true,
             playsInSilentModeIOS: true,
@@ -410,49 +393,46 @@ export default function S_SignInScreen({ navigation }) {
             if (backCount == 1) {
               console.log("Ready to sound 4");
               sound.unloadAsync();
-              playSound4();
+              playSound(require("../assets/sounds/sound4.mp3"));
               setBackCount(0);
               setIndex(index + 1);
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              playSound3();
-              setDenyStop(true);
+              playSound(require("../assets/sounds/sound3.mp3"));
             }
           } else if (index == 2) {
             setBackCount(backCount + 1);
             if (backCount == 2) {
               console.log("Ready to sound 7");
               sound.unloadAsync();
-              playSound7();
+              playSound(require("../assets/sounds/sound7.mp3"));
               setBackCount(0);
               setIndex(index + 1);
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              setDenyStop(true);
             }
           } else if (index == 3) {
             setBackCount(backCount + 1);
             if (backCount == 2) {
               console.log("Ready to sound 10");
               sound.unloadAsync();
-              playSound10();
+              playSound(require("../assets/sounds/sound10.mp3"));
               setBackCount(0);
               navigation.navigate("HomeTabs");
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              setDenyStop(true);
             }
           }
         }
       }}
     >
-      <ScrollView>
+      <View>
         <Image
           style={styles.logo}
           source={require("../assets/images/logo.png")}
@@ -460,7 +440,7 @@ export default function S_SignInScreen({ navigation }) {
         <Image
           style={styles.image}
           source={require("../assets/images/sign-in.png")}
-          onLoad={playSound3}
+          onLoad={() => playSound(require("../assets/sounds/sound3.mp3"))}
         ></Image>
         <Text style={styles.title}>Đăng nhập</Text>
 
@@ -505,9 +485,9 @@ export default function S_SignInScreen({ navigation }) {
           </View>
         </View>
 
-        <TouchableOpacity disabled style={styles.loginBtn}>
+        {/* <TouchableOpacity disabled style={styles.loginBtn}>
           <Text style={styles.loginText}>Đăng nhập</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {playing ? (
           <Image
             style={styles.sound}
@@ -519,7 +499,7 @@ export default function S_SignInScreen({ navigation }) {
             source={require("../assets/images/voice-stop.png")}
           ></Image>
         )}
-      </ScrollView>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -621,5 +601,3 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
 });
-
-//export default TestSTT;
