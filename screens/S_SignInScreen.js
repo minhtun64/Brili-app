@@ -54,56 +54,10 @@ export default function S_SignInScreen({ navigation }) {
   const [userMessage, setUserMessage] = useState("");
   const [denyStop, setDenyStop] = useState(false);
 
-  async function playSound() {
+  async function playSound3() {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
-      require("../assets/sounds/sound-test-1.mp3")
-    );
-    setSound(sound);
-    setPlaying(true);
-    console.log("Playing Sound");
-    await sound.playAsync();
-    setTimeout(() => {
-      setPlaying(false);
-    }, 10000);
-  }
-
-  async function playSound2() {
-    console.log("Loading Sound 2");
-    const { sound } = await Audio.Sound.createAsync(
-      require("../assets/sounds/sound-test-2.mp3")
-    );
-    setSound(sound);
-    setPlaying(true);
-    console.log("Playing Sound 2");
-    await sound.playAsync();
-    setTimeout(() => {
-      setPlaying(false);
-    }, 5000);
-  }
-
-  const speakUsername = () => {
-    // sound.unloadAsync();
-    const thingToSay =
-      "Tên đăng nhập của bạn là" +
-      usernameFull +
-      ". Nhấn giữ màn hình để đọc lại tên đăng nhập, chạm 2 chạm để tiếp tục đọc mật khẩu.";
-    Speech.speak(thingToSay, { rate: 1.05 });
-  };
-
-  const speakPassword = () => {
-    //  sound.unloadAsync();
-    const thingToSay =
-      "Mật khẩu của bạn là" +
-      passwordFull +
-      ". Nhấn giữ màn hình để đọc lại mật khẩu, chạm 2 chạm để đăng nhập.";
-    Speech.speak(thingToSay, { rate: 1.05 });
-  };
-
-  async function playSound3() {
-    console.log("Loading Sound 3");
-    const { sound } = await Audio.Sound.createAsync(
-      require("../assets/sounds/sound-test-3.mp3")
+      require("../assets/sounds/sound3.mp3")
     );
     setSound(sound);
     setPlaying(true);
@@ -111,13 +65,13 @@ export default function S_SignInScreen({ navigation }) {
     await sound.playAsync();
     setTimeout(() => {
       setPlaying(false);
-    }, 7000);
+    }, 10000);
   }
 
   async function playSound4() {
     console.log("Loading Sound 4");
     const { sound } = await Audio.Sound.createAsync(
-      require("../assets/sounds/sound-test-4.mp3")
+      require("../assets/sounds/sound4.mp3")
     );
     setSound(sound);
     setPlaying(true);
@@ -127,10 +81,34 @@ export default function S_SignInScreen({ navigation }) {
       setPlaying(false);
     }, 5000);
   }
+
+  // const speakUsername = () => {
+  //   // sound.unloadAsync();
+  //   const thingToSay =
+  //     "Tên đăng nhập của bạn là" +
+  //     usernameFull +
+  //     ". Nhấn giữ màn hình để đọc lại tên đăng nhập, chạm 2 chạm để tiếp tục đọc mật khẩu.";
+  //   Speech.speak(thingToSay, { rate: 1.05 });
+  // };
+
+  // const speakPassword = () => {
+  //   //  sound.unloadAsync();
+  //   const thingToSay =
+  //     "Mật khẩu của bạn là" +
+  //     passwordFull +
+  //     ". Nhấn giữ màn hình để đọc lại mật khẩu, chạm 2 chạm để đăng nhập.";
+  //   Speech.speak(thingToSay, { rate: 1.05 });
+  // };
+
+  // async function playUserNameSounds() {
+  //   await playSound5();
+  //   await playUserNameSpeech();
+  //   await playSound6();
+  // }
   async function playSound5() {
     console.log("Loading Sound 5");
     const { sound } = await Audio.Sound.createAsync(
-      require("../assets/sounds/sound-test-5.mp3")
+      require("../assets/sounds/sound5.mp3")
     );
     setSound(sound);
     setPlaying(true);
@@ -138,16 +116,84 @@ export default function S_SignInScreen({ navigation }) {
     await sound.playAsync();
     setTimeout(() => {
       setPlaying(false);
-    }, 7000);
+    }, 2000);
   }
+
+  function playUserNameSpeech() {
+    return new Promise((resolve) => {
+      const speech = new SpeechSynthesisUtterance(userNameFull);
+      speech.rate = 1.05;
+      speech.onend = () => {
+        resolve();
+      };
+      speechSynthesis.speak(speech);
+    });
+  }
+
   async function playSound6() {
     console.log("Loading Sound 6");
     const { sound } = await Audio.Sound.createAsync(
-      require("../assets/sounds/sound-test-6.mp3")
+      require("../assets/sounds/sound6.mp3")
     );
     setSound(sound);
     setPlaying(true);
     console.log("Playing Sound 6");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 5000);
+  }
+
+  async function playSound8() {
+    console.log("Loading Sound 8");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound8.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 8");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 2000);
+  }
+
+  async function playSound9() {
+    console.log("Loading Sound 9");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound9.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 9");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 5000);
+  }
+
+  async function playSound7() {
+    console.log("Loading Sound 7");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound7.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 7");
+    await sound.playAsync();
+    setTimeout(() => {
+      setPlaying(false);
+    }, 5000);
+  }
+
+  async function playSound10() {
+    console.log("Loading Sound 10");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/sounds/sound10.mp3")
+    );
+    setSound(sound);
+    setPlaying(true);
+    console.log("Playing Sound 10");
     await sound.playAsync();
     setTimeout(() => {
       setPlaying(false);
@@ -162,15 +208,6 @@ export default function S_SignInScreen({ navigation }) {
         }
       : undefined;
   }, [sound]);
-
-  //   function onSwipeLeft() {
-  //     //navigation.goBack();
-  //   }
-
-  //   function onSwipeRight() {
-  //     // console.log("SWIPE_RIGHT");
-  //     navigation.goBack();
-  //   }
 
   const deleteRecordingFile = async () => {
     try {
@@ -236,116 +273,50 @@ export default function S_SignInScreen({ navigation }) {
       if (index == 2) {
         if (str == "") {
           setIsFetching(false);
-          playSound2();
-          setBackCount(0);
-          console.log("Phát lại âm thanh 2");
-        } else {
-          setUsername(str);
-          setUsernameFull(message);
-          setIndex(index + 1);
-          setIsFetching(false);
-          Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            playsInSilentModeIOS: false,
-          });
-          // playSound3();
-
-          sound.unloadAsync();
-          // speakUsername();
-          const thingToSay =
-            "Tên đăng nhập của bạn là" +
-            message +
-            ". Nhấn giữ màn hình để đọc lại tên đăng nhập, chạm 2 chạm để tiếp tục đọc mật khẩu.";
-          Speech.speak(thingToSay, { rate: 1.05 });
-          console.log("Xác nhận tên đăng nhập");
-        }
-      }
-      if (index == 3) {
-        if ((str == "" || str == username) && backCount != 1) {
-          console.log(backCount);
-          setIsFetching(false);
-          // playSound3();
-          Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            playsInSilentModeIOS: false,
-          });
-
-          sound.unloadAsync();
-          Speech.stop();
-          speakUsername();
-          setBackCount(0);
-          console.log("Phát lại âm thanh 3");
-        } else {
-          setUsername(str);
-
-          setUsernameFull(message);
-          setIsFetching(false);
-          // playSound3();
-          Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            playsInSilentModeIOS: false,
-          });
-
-          sound.unloadAsync();
-          // Speech.stop();
-          // speakUsername();
-        }
-      }
-      if (index == 4) {
-        if (str == "") {
-          setIsFetching(false);
           playSound4();
           setBackCount(0);
           console.log("Phát lại âm thanh 4");
         } else {
-          setPassword(str);
-
-          setPasswordFull(message);
-          setIndex(index + 1);
+          setUsername(str);
+          // setUsernameFull(message);
+          // setIndex(index + 1);
+          setBackCount(1);
           setIsFetching(false);
-          // playSound5();
           Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             playsInSilentModeIOS: false,
           });
-
-          sound.unloadAsync();
-          // speakPassword();
-          const thingToSay =
-            "Mật khẩu của bạn là" +
-            message +
-            ". Nhấn giữ màn hình để đọc lại mật khẩu, chạm 2 chạm để đăng nhập.";
-          Speech.speak(thingToSay, { rate: 1.05 });
-          console.log("Xác nhận mật khẩu");
+          await playSound5();
+          setTimeout(() => {
+            Speech.speak(message, { rate: 1.05 });
+            setTimeout(() => {
+              playSound6();
+            }, 1500);
+          }, 2000);
         }
-      }
-      if (index == 5) {
-        if ((str == "" || str == password) && backCount != 1) {
+      } else if (index == 3) {
+        if (str == "") {
           setIsFetching(false);
-          // playSound5();
-          Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            playsInSilentModeIOS: false,
-          });
-
-          sound.unloadAsync();
-          Speech.stop();
-          speakPassword();
-
-          setPasswordFull(message);
+          playSound7();
           setBackCount(0);
-          console.log("Phát lại âm thanh 5");
+          console.log("Phát lại âm thanh 7");
         } else {
           setPassword(str);
+          // setPasswordFull(message);
+          // setIndex(index + 1);
+          setBackCount(1);
           setIsFetching(false);
-          // playSound5();
           Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             playsInSilentModeIOS: false,
           });
-
-          // sound.unloadAsync();
-          // speakPassword();
+          await playSound8();
+          setTimeout(() => {
+            Speech.speak(message, { rate: 1.05 });
+            setTimeout(() => {
+              playSound9();
+            }, 1500);
+          }, 2000);
         }
       }
     } catch (error) {
@@ -380,9 +351,7 @@ export default function S_SignInScreen({ navigation }) {
     setIsRecording(false);
     try {
       await recording.stopAndUnloadAsync();
-    } catch (error) {
-      // Do nothing -- we are already unloaded.
-    }
+    } catch (error) {}
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       playsInSilentModeIOS: false,
@@ -400,12 +369,9 @@ export default function S_SignInScreen({ navigation }) {
   };
 
   const stop = () => {
-    //if (!denyStop) {
     console.log("stop recording");
-
     stopRecording();
     getTranscription();
-    //}
   };
 
   return (
@@ -442,73 +408,51 @@ export default function S_SignInScreen({ navigation }) {
           if (index == 1) {
             setBackCount(backCount + 1);
             if (backCount == 1) {
-              console.log("Ready to sound 2");
+              console.log("Ready to sound 4");
               sound.unloadAsync();
-              playSound2();
+              playSound4();
               setBackCount(0);
               setIndex(index + 1);
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-              playSound();
+              playSound3();
               setDenyStop(true);
             }
           } else if (index == 2) {
             setBackCount(backCount + 1);
-            if (backCount != 1) {
+            if (backCount == 2) {
+              console.log("Ready to sound 7");
+              sound.unloadAsync();
+              playSound7();
+              setBackCount(0);
+              setIndex(index + 1);
+            } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
+              setDenyStop(true);
             }
           } else if (index == 3) {
             setBackCount(backCount + 1);
-            if (backCount == 1) {
-              setTimeout(() => {
-                console.log(backCount);
-                console.log("Ready to sound 4");
-                sound.unloadAsync();
-
-                Speech.stop();
-                playSound4();
-                setIndex(index + 1);
-              }, 1000);
+            if (backCount == 2) {
+              console.log("Ready to sound 10");
+              sound.unloadAsync();
+              playSound10();
+              setBackCount(0);
+              navigation.navigate("HomeTabs");
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
-            }
-          } else if (index == 4) {
-            setBackCount(backCount + 1);
-            if (backCount != 1) {
-              setTimeout(() => {
-                setBackCount(0);
-              }, 500);
-            }
-          } else if (index == 5) {
-            setBackCount(backCount + 1);
-            if (backCount == 1) {
-              setTimeout(() => {
-                console.log("Đăng nhập thành công");
-                sound.unloadAsync();
-                Speech.stop();
-                playSound6();
-                navigation.navigate("HomeTabs");
-              }, 1000);
-            } else {
-              setTimeout(() => {
-                setBackCount(0);
-              }, 500);
-
-              // playSound5();
-              // setDenyStop(true);
+              setDenyStop(true);
             }
           }
         }
       }}
     >
-      <ScrollView //onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
-      >
+      <ScrollView>
         <Image
           style={styles.logo}
           source={require("../assets/images/logo.png")}
@@ -516,7 +460,7 @@ export default function S_SignInScreen({ navigation }) {
         <Image
           style={styles.image}
           source={require("../assets/images/sign-in.png")}
-          onLoad={playSound}
+          onLoad={playSound3}
         ></Image>
         <Text style={styles.title}>Đăng nhập</Text>
 

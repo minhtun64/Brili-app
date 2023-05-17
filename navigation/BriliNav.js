@@ -8,7 +8,6 @@ import SignInScreen from "../screens/SignInScreen";
 import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import TEST from "../screens/TEST";
 
 import RecruitmentScreen from "../screens/RecruitmentScreen";
 import CurriculumVitae from "../screens/CurriculumVitae";
@@ -37,10 +36,17 @@ import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
 import MarketingConsulting2 from "../screens/MarketingConsulting2";
+import S_SignIn1Screen from "../screens/S_SignIn1Screen";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
+      {/* <Stack.Screen
+        name="SignIn1"
+        component={S_SignIn1Screen}
+        options={{ headerShown: false }}
+      /> */}
+
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
