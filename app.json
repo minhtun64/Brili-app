@@ -14,11 +14,17 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "usesIcloudStorage": true,
-        "bundleIdentifier": "com.yourname.yourapp"
+      "bundleIdentifier": "com.yourname.yourapp",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Ứng dụng của bạn sử dụng Face ID để xác thực đăng nhập."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -29,8 +35,13 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    
-      "plugins": ["expo-document-picker"]
-    
+    "plugins": [
+      "expo-document-picker"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "631a54ad-fa98-425b-a4ab-6844e38e392a"
+      }
+    }
   }
 }

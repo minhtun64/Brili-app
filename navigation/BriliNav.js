@@ -1,4 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image, StyleSheet, View } from "react-native";
+
 import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
 import S_SignInScreen from "../screens/S_SignInScreen";
@@ -36,6 +40,7 @@ import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
 import MarketingConsulting2 from "../screens/MarketingConsulting2";
+import S_SignIn1Screen from "../screens/S_SignIn1Screen";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
@@ -58,11 +63,6 @@ function StackNavigator() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Test"
-        component={TEST}
         options={{ headerShown: false }}
       />
       <Stack.Screen
