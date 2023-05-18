@@ -56,7 +56,7 @@ export default function S_WelcomeScreen({ navigation }) {
   const onSingleTapEvent = (event) => {
     if (event.nativeEvent.state === State.ACTIVE) {
       sound.unloadAsync();
-      navigation.navigate("S_SignIn");      
+      navigation.navigate("S_SignIn");
     }
   };
 

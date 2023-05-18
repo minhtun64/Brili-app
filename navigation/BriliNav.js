@@ -1,18 +1,19 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image, StyleSheet, View } from "react-native";
+
 import ChoiceScreen from "../screens/ChoiceScreen";
 import SignInScreen from "../screens/SignInScreen";
 import S_SignInScreen from "../screens/S_SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RecruitmentScreen from "../screens/RecruitmentScreen";
 import CurriculumVitae from "../screens/CurriculumVitae";
 import MarketingConsulting from "../screens/MarketingConsulting";
 import PodcastScreen from "../screens/PodcastScreen";
 import HelpScreen from "../screens/HelpScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import { Image, StyleSheet, View } from "react-native";
 import MyPodcastScreen from "../screens/MyPodcastScreen";
 import FirstInfoScreen from "../screens/FirstInfoScreen";
 import UploadPodcastScreen from "../screens/UploadPodcastScreen";
@@ -180,7 +181,7 @@ function PodcastStackNavigator() {
         name="S_LinktoSpotify"
         component={S_LinktoSpotifyScreen}
         options={{ headerShown: false }}
-      /> 
+      />
       <PodcastStack.Screen
         name="ListenPodcast"
         component={ListenPodcastScreen}
@@ -195,7 +196,7 @@ function PodcastStackNavigator() {
         name="ListenToPodcast2"
         component={ListenToPodcast2Screen}
         options={{ headerShown: false }}
-      />       
+      />
     </PodcastStack.Navigator>
   );
 }
