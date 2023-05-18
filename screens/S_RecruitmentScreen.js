@@ -79,9 +79,7 @@ export default function S_RecruitmentScreen({ navigation }) {
     );
     setSound(sound);
     setPlaying(true);
-    setTimeout(() => {
-      console.log("Playing Sound");
-    }, 5000);
+    console.log("Playing Sound");
     await sound.playAsync();
     setTimeout(() => {
       setPlaying(false);
@@ -160,10 +158,6 @@ export default function S_RecruitmentScreen({ navigation }) {
           break;
         }
         case "Tiếp thị": {
-          navigation.navigate("MarketingConsulting");
-          break;
-        }
-        case "Tiếp thì": {
           navigation.navigate("MarketingConsulting");
           break;
         }

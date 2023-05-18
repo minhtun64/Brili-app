@@ -6,22 +6,18 @@ import {
   View,
   Image,
 } from "react-native";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from 'react';
 import { Audio } from "expo-av";
-import {
-  ScrollView,
-  TapGestureHandler,
-  State,
-} from "react-native-gesture-handler";
+import { ScrollView, TapGestureHandler, State } from "react-native-gesture-handler";
 import { useSwipe } from "../hooks/useSwipe";
-import { BackHandler } from "react-native";
+import { BackHandler } from 'react-native';
 
 export default function S_WelcomeScreen({ navigation }) {
   const [sound, setSound] = React.useState();
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
   const [backCount, setBackCount] = React.useState(0);
   const [playing, setPlaying] = React.useState(false);
-  const doubleTapRef = useRef(null);
+  const doubleTapRef = useRef(null);  
 
   function onSwipeLeft() {
     //navigation.goBack();
@@ -31,6 +27,7 @@ export default function S_WelcomeScreen({ navigation }) {
     // console.log("SWIPE_RIGHT");
     // navigation.goBack();
   }
+
 
   async function playSound() {
     console.log("Loading Sound");
@@ -55,11 +52,11 @@ export default function S_WelcomeScreen({ navigation }) {
       : undefined;
   }, [sound]);
 
+
   const onSingleTapEvent = (event) => {
     if (event.nativeEvent.state === State.ACTIVE) {
       sound.unloadAsync();
-      // navigation.navigate("S_SignIn");
-      navigation.navigate("Test");
+      navigation.navigate("S_SignIn");      
     }
   };
 
@@ -76,20 +73,18 @@ export default function S_WelcomeScreen({ navigation }) {
   }
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     return () => {
-      BackHandler.removeEventListener(
-        "hardwareBackPress",
-        handleBackButtonClick
-      );
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     };
   }, []);
+
 
   return (
     <ScrollView onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <TapGestureHandler
         onHandlerStateChange={onSingleTapEvent}
-        waitFor={doubleTapRef}
+        waitFor={doubleTapRef}             
       >
         <TapGestureHandler
           ref={doubleTapRef}
@@ -97,7 +92,7 @@ export default function S_WelcomeScreen({ navigation }) {
           numberOfTaps={2}
         >
           <View>
-            <Image
+              <Image
               style={styles.logo}
               source={require("../assets/images/logo.png")}
             ></Image>
@@ -120,9 +115,7 @@ export default function S_WelcomeScreen({ navigation }) {
                 style={styles.btn}
                 // onPress={() => navigation.navigate("SignInVolunteer")}
               >
-                <Text style={styles.opt}>
-                  Nhà tuyển dụng hoặc Tình nguyện viên
-                </Text>
+                <Text style={styles.opt}>Nhà tuyển dụng hoặc Tình nguyện viên</Text>
               </View>
             </View>
             {playing ? (
@@ -137,8 +130,8 @@ export default function S_WelcomeScreen({ navigation }) {
               ></Image>
             )}
           </View>
-        </TapGestureHandler>
-      </TapGestureHandler>
+        </TapGestureHandler>        
+       </TapGestureHandler>
     </ScrollView>
   );
 }
@@ -183,7 +176,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     marginTop: 8,
-    marginLeft: 40,
+    marginLeft: 40, 
     marginRight: 40,
   },
   view: {
