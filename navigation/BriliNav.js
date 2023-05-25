@@ -37,10 +37,18 @@ import RecruitmentScreen_V from "../screens/RecruitmentScreen_V";
 import PodcastScreen_V from "../screens/PodcastScreen_V";
 import HelpScreenV from "../screens/HelpScreenV";
 import MarketingConsulting2 from "../screens/MarketingConsulting2";
+import S_CurriculumVitae from "../screens/S_CurriculumVitae";
+import S_MarketingConsulting from "../screens/S_MarketingConsulting";
+import S_SignIn2Screen from "../screens/S_SignIn2Screen";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="S_SignIn2"
+        component={S_SignIn2Screen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
@@ -119,6 +127,11 @@ const RecruitmentStack = createStackNavigator();
 function RecruitmentStackNavigator() {
   return (
     <RecruitmentStack.Navigator>
+      {/* <RecruitmentStack.Screen
+        name="S_CurriculumVitae"
+        component={S_CurriculumVitae}
+        options={{ headerShown: false }}
+      /> */}
       <RecruitmentStack.Screen
         name="S_Recruitment"
         component={S_RecruitmentScreen}
@@ -135,6 +148,11 @@ function RecruitmentStackNavigator() {
         options={{ headerShown: false }}
       />
       <RecruitmentStack.Screen
+        name="S_CurriculumVitae"
+        component={S_CurriculumVitae}
+        options={{ headerShown: false }}
+      />
+      <RecruitmentStack.Screen
         name="MarketingConsulting"
         component={MarketingConsulting}
         options={{ headerShown: false }}
@@ -142,6 +160,11 @@ function RecruitmentStackNavigator() {
       <RecruitmentStack.Screen
         name="MarketingConsulting2"
         component={MarketingConsulting2}
+        options={{ headerShown: false }}
+      />
+      <RecruitmentStack.Screen
+        name="S_MarketingConsulting"
+        component={S_MarketingConsulting}
         options={{ headerShown: false }}
       />
     </RecruitmentStack.Navigator>

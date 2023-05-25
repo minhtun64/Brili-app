@@ -160,11 +160,11 @@ export default function S_RecruitmentScreen({ navigation }) {
           break;
         }
         case "Tiếp thị": {
-          navigation.navigate("MarketingConsulting");
+          navigation.navigate("S_MarketingConsulting");
           break;
         }
         case "Tiếp thì": {
-          navigation.navigate("MarketingConsulting");
+          navigation.navigate("S_MarketingConsulting");
           break;
         }
       }
