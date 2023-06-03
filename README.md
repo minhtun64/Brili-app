@@ -26,7 +26,7 @@ The Brili mobile app utilizes the following technologies:
 ## Installation
 To install and run the Brili app locally, please follow these steps:
 
-1. Clone the repository: `git clone https://github.com/minhtun64/AISC-22-app.git`
+1. Clone the repository: `git clone https://github.com/minhtun64/Brili-app.git`
 2. Install the required dependencies by running npm install in the project directory.
-3. Start the development server with npm start or expo start.
+3. Start the development server with `npm start` or `expo start`.
 4. Follow the instructions provided by Expo to run the app on your device or emulator.
