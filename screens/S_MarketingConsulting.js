@@ -52,6 +52,7 @@ export default class S_MarketingConsulting extends PureComponent {
       dotOffset: new Animated.ValueXY(),
       xDotOffsetAtAnimationStart: 0,
       loaded1: false,
+      backCount: 0,
     };
 
     this._panResponder = PanResponder.create({
@@ -293,7 +294,23 @@ export default class S_MarketingConsulting extends PureComponent {
     };
 
     return (
-      <View>
+      <TouchableOpacity
+        onPress={() => {
+          this.setState({ backCount: this.state.backCount + 1 });
+          // setBackCount(backCount + 1);
+          if (this.state.backCount == 1) {
+            this.onPressPlayPause();
+            this.props.navigation.navigate("S_CurriculumVitae");
+            this.setState({ backCount: 0 });
+            // setBackCount(0);
+          } else {
+            setTimeout(() => {
+              this.setState({ backCount: 0 });
+              // setBackCount(0);
+            }, 500);
+          }
+        }}
+      >
         <TouchableOpacity
           style={styles.back}
           onPress={() => {
@@ -554,7 +571,7 @@ export default class S_MarketingConsulting extends PureComponent {
 
           <View style={{ height: 500 }}></View>
         </ScrollView>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

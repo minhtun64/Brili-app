@@ -273,7 +273,7 @@ export default function S_CurriculumVitae({ navigation }) {
             Speech.speak(message, { rate: 1.05 });
             setTimeout(() => {
               playSound(require("../assets/sounds/CV/sound16.mp3"));
-            }, 1800);
+            }, 3000);
           }, 1800);
         }
       }
@@ -334,7 +334,6 @@ export default function S_CurriculumVitae({ navigation }) {
 
   return (
     <TouchableOpacity
-      onLoad={() => playSound(require("../assets/sounds/CV/sound1.mp3"))}
       style={styles.mainForm}
       onPressOut={() => {
         if (index != 1 && index != 7 && backCount == 0) {
@@ -444,27 +443,31 @@ export default function S_CurriculumVitae({ navigation }) {
               sound.unloadAsync();
               playSound(require("../assets/sounds/CV/sound18.mp3"));
               setBackCount(0);
-              setIndex(index + 1);
+              setTimeout(() => {
+                navigation.navigate("S_CurriculumVitae_2");
+              }, 1500);
+              // setIndex(index + 1);
             } else {
               setTimeout(() => {
                 setBackCount(0);
               }, 500);
               playSound(require("../assets/sounds/CV/sound17.mp3"));
             }
-          } else if (index == 8) {
-            setBackCount(backCount + 1);
-            if (backCount == 1) {
-              console.log("Nhap dup");
-              sound.unloadAsync();
-              setBackCount(0);
-              navigation.navigate("MarketingConsulting");
-            } else {
-              setTimeout(() => {
-                setBackCount(0);
-              }, 500);
-              playSound(require("../assets/sounds/CV/sound18.mp3"));
-            }
           }
+          // else if (index == 8) {
+          //   setBackCount(backCount + 1);
+          //   if (backCount == 1) {
+          //     console.log("Nhap dup");
+          //     sound.unloadAsync();
+          //     setBackCount(0);
+          //     navigation.navigate("MarketingConsulting");
+          //   } else {
+          //     setTimeout(() => {
+          //       setBackCount(0);
+          //     }, 500);
+          //     playSound(require("../assets/sounds/CV/sound18.mp3"));
+          //   }
+          // }
         }
       }}
     >
@@ -472,6 +475,7 @@ export default function S_CurriculumVitae({ navigation }) {
         <Image
           style={styles.backIcon}
           source={require("../assets/icons/back.png")}
+          onLoad={() => playSound(require("../assets/sounds/CV/sound1.mp3"))}
         ></Image>
       </View>
       <Text style={styles.title}>Hồ sơ ứng tuyển</Text>

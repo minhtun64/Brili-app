@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import React, { Component, useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
@@ -44,7 +45,7 @@ const recordingOptions = {
   },
 };
 
-export default function S_RecruitmentScreen({ navigation }) {
+export default function S_PreRecruitmentScreen({ navigation }) {
   let [fontsLoaded] = useFonts({
     LexendExa_100Thin,
     LexendExa_200ExtraLight,
@@ -56,12 +57,6 @@ export default function S_RecruitmentScreen({ navigation }) {
     LexendExa_800ExtraBold,
     LexendExa_900Black,
   });
-  // useEffect(() => {
-  //   async function prepare() {
-  //     await SplashScreen.preventAutoHideAsync();
-  //   }
-  //   prepare();
-  // }, []);
 
   const [sound, setSound] = React.useState();
   const [backCount, setBackCount] = React.useState(0);
@@ -75,17 +70,15 @@ export default function S_RecruitmentScreen({ navigation }) {
   async function playSound() {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
-      require("../assets/recruitments/navigate-to-modules.mp3")
+      require("../assets/sounds/JobList/sound1.mp3")
     );
     setSound(sound);
     setPlaying(true);
-    setTimeout(() => {
-      console.log("Playing Sound");
-    }, 5000);
     await sound.playAsync();
     setTimeout(() => {
       setPlaying(false);
-    }, 7000);
+      navigation.navigate("S_MarketingConsulting");
+    }, 10000);
   }
 
   React.useEffect(() => {
@@ -160,11 +153,11 @@ export default function S_RecruitmentScreen({ navigation }) {
           break;
         }
         case "Tiếp thị": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_MarketingConsulting");
           break;
         }
         case "Tiếp thì": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_MarketingConsulting");
           break;
         }
       }
@@ -247,79 +240,36 @@ export default function S_RecruitmentScreen({ navigation }) {
           stop();
         }}
       >
-        <View>
-          <Text style={styles.title}>Tuyển dụng</Text>
-          <View style={styles.line}></View>
-          <View style={styles.content}>
-            <View>
-              <ImageBackground
-                source={require("../assets/images/purposeoflife1.png")}
-                onLoad={() => {
-                  // setLoaded1(true);
-                }}
-                style={styles.backgroundImage}
-                //  style={loaded ? styles.backgroundImage : { display: "none" }}
-              >
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={styles.label}>Tiếp thị</Text>
-                </View>
-              </ImageBackground>
-            </View>
-            <View>
-              <ImageBackground
-                source={require("../assets/images/getty_536615329_3428261.png")}
-                style={styles.backgroundImage}
-                // onLoad={() => setLoaded2(true)}
-                // style={loaded ? styles.backgroundImage : { display: "none" }}
-              >
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={styles.label}>Lao động phổ thông</Text>
-                </View>
-              </ImageBackground>
-            </View>
-            <View>
-              <ImageBackground
-                source={require("../assets/images/How-to-Study-featured-image1.png")}
-                style={styles.backgroundImage}
-                onLoad={playSound}
-                // style={loaded ? styles.backgroundImage : { display: "none" }}
-              >
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={styles.label}>Công việc khác</Text>
-                </View>
-              </ImageBackground>
-            </View>
-          </View>
+        <TouchableOpacity
+          style={styles.back}
+          onPress={() => {
+            navigation.navigate("Recruitment");
+            soundObject.unloadAsync();
+            dotOffset.removeAllListeners();
+          }}
+        >
+          <Image
+            style={styles.backIcon}
+            source={require("../assets/icons/back.png")}
+          ></Image>
+        </TouchableOpacity>
+
+        <Text style={styles.title}>Tiếp thị</Text>
+        <View style={styles.line}></View>
+
+        <View style={styles.searchBox}>
+          <Image
+            style={styles.searchIcon}
+            source={require("../assets/icons/search.png")}
+            onLoad={playSound}
+          ></Image>
+          <TextInput
+            style={styles.input}
+            placeholder="Tìm kiếm"
+            returnKeyType="search"
+            //value={search}
+            //onChangeText={(text) => setSearch(text)}
+          ></TextInput>
         </View>
       </TouchableOpacity>
     );
@@ -327,14 +277,23 @@ export default function S_RecruitmentScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  back: {
+    width: 40,
+  },
+  backIcon: {
+    width: 40,
+    height: 40,
+    marginTop: 48,
+  },
   title: {
-    marginTop: 44,
+    marginTop: -28,
     fontSize: 24,
     //fontWeight: "bold",
     fontFamily: "LexendExa_400Regular",
     color: "#000000",
     marginLeft: "auto",
     marginRight: "auto",
+    letterSpacing: -2,
   },
   line: {
     width: 280,
@@ -344,35 +303,190 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 4,
   },
-  content: {
-    height: "84%",
-    //flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-around",
-    paddingTop: 24,
-    paddingBottom: 24,
-    //backgroundColor: "black",
+
+  line1: {
+    width: 380,
+    height: 1,
+    backgroundColor: "#E7E3E3",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 8,
   },
-  backgroundImage: {
-    width: 344,
-    height: 172,
-    borderRadius: 12,
+
+  searchBox: {
+    margin: 20,
+    height: 40,
+    borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    backgroundColor: "#E7E3E3",
+  },
+  searchIcon: {
+    width: 24,
+    height: 24,
+    marginTop: 8,
+    marginLeft: 8,
+    marginRight: 12,
+  },
+  input: {
+    width: "100%",
+  },
+  label: {
+    marginLeft: 16,
+    marginRight: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  allText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  sort: {
+    padding: 4,
+    width: 60,
+    backgroundColor: "#777D84",
+    borderRadius: 8,
+  },
+  sortText: {
+    color: "#ffffff",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  emptyText: {
+    color: "#777D84",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 120,
+  },
+  add: {
+    position: "absolute",
+    bottom: "30%",
+    right: 20,
+  },
+  addImage: {
+    width: 60,
+    height: 60,
+  },
+  jobName: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  companayName: {
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#777D84",
+  },
+
+  jobImage: {
+    width: 240,
+    height: 160,
+    borderRadius: 8,
     overflow: "hidden",
     marginLeft: "auto",
     marginRight: "auto",
+    //marginTop: 18,
+    //marginBottom: 6,
   },
-  label: {
-    fontSize: 28,
-    fontFamily: "LexendExa_700Bold",
-    color: "#ffffff",
-    letterSpacing: -1.5,
+
+  image: {
+    width: 240,
+    height: 160,
   },
-  loading: {
-    marginTop: "132%",
-    width: 60,
+
+  containerImg: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  job: {
+    padding: 12,
+  },
+  row: {
+    width: "100%",
+    flex: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  row1: {
+    width: "100%",
+    flex: 0,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  arrowLeft: {
+    marginTop: 72,
+    marginBottom: "auto",
+    padding: 18,
+    width: 30,
     height: 30,
-    marginBottom: "280%",
-    marginLeft: "auto",
-    marginRight: "auto",
+  },
+  arrowRight: {
+    marginTop: 72,
+    marginBottom: "auto",
+    padding: 18,
+    width: 30,
+    height: 30,
+  },
+  audioInfo: {
+    width: 320,
+    height: 16,
+  },
+  audioInfoContainer: {
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  detailJob: {
+    flexDirection: "row",
+    //    alignItems: "center",
+    justifyContent: "flex-start",
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 30,
+  },
+  iconDetail: {
+    width: 30,
+    height: 30,
+  },
+  textIcon: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+    width: 150,
+  },
+  textDes: {
+    fontSize: 18,
+    width: 200,
+  },
+  textDes2: {
+    fontSize: 18,
+    marginLeft: 70,
+    marginRight: 15,
+  },
+  confirm: {
+    height: 65,
+    backgroundColor: "#195ABB",
+    marginBottom: 120,
+    marginTop: 40,
+    marginLeft: 40,
+    marginRight: 40,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  TextConfirm: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+  },
+  pauseIcon: {
+    marginTop: 4,
+    width: 40,
+    height: 40,
+    marginLeft: 28,
   },
 });

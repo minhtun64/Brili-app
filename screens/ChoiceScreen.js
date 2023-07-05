@@ -52,15 +52,15 @@ export default function ChoiceScreen({ navigation }) {
         setTimeout(() => {
           setBackCount(0);
         }, 500);
-        navigation.navigate("S_Welcome");
+        // navigation.navigate("S_Welcome");
+        navigation.navigate("HomeTabs");
       }}
       onPress={() => {
         setBackCount(backCount + 1);
         if (backCount == 1) {
           sound.unloadAsync();
           navigation.navigate("Welcome");
-        } 
-        else {
+        } else {
           setTimeout(() => {
             setBackCount(0);
           }, 500);

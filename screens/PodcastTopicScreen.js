@@ -21,6 +21,30 @@ import {
 } from "@expo-google-fonts/lexend-exa";
 
 import * as SplashScreen from "expo-splash-screen";
+import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
+import * as Speech from "expo-speech";
+
+const recordingOptions = {
+  android: {
+    extension: ".m4a",
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+    extension: ".wav",
+    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
+};
 
 export default function PodcastTopicScreen({ navigation }) {
   let [fontsLoaded] = useFonts({
@@ -46,11 +70,206 @@ export default function PodcastTopicScreen({ navigation }) {
   const [loaded2, setLoaded2] = useState(false);
   const [loaded3, setLoaded3] = useState(false);
 
+  const [sound, setSound] = React.useState();
+  const [backCount, setBackCount] = React.useState(0);
+  const [playing, setPlaying] = React.useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [allow, setAllow] = useState(true);
+  const [recording, setRecording] = useState(null);
+  const [repeat, setRepeat] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function playSound(soundFile) {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(soundFile);
+    setSound(sound);
+    setPlaying(true);
+    console.log(`Playing Sound: ${soundFile}`);
+    await sound.playAsync();
+    const soundStatus = await sound.getStatusAsync();
+    const duration = soundStatus.durationMillis; // Lấy độ dài thực tế của tệp âm thanh
+    setTimeout(() => {
+      setPlaying(false);
+    }, duration);
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  const deleteRecordingFile = async () => {
+    try {
+      const info = await FileSystem.getInfoAsync(recording.getURI());
+      await FileSystem.deleteAsync(info.uri);
+    } catch (error) {
+      console.log("There was an error deleting recording file", error);
+    }
+  };
+
+  const getTranscription = async () => {
+    setIsFetching(true);
+    try {
+      const info = await FileSystem.getInfoAsync(recording.getURI());
+      console.log(`FILE INFO: ${JSON.stringify(info)}`);
+      const uri = info.uri;
+
+      const base64content: string = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const body = {
+        audio: { content: base64content },
+        config: {
+          enableAutomaticPunctuation: true,
+          encoding: "LINEAR16",
+          languageCode: "vi-VN",
+          model: "default",
+          sampleRateHertz: 44100,
+        },
+      };
+
+      const transcriptResponse = await fetch(
+        "https://speech.googleapis.com/v1p1beta1/speech:recognize?key=AIzaSyATOBs4KUVhKDnk56MxhgOJtN8_Pw1Z280",
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+        }
+      );
+      const data = await transcriptResponse.json();
+      console.log(data);
+
+      console.log(data.results);
+      const message =
+        (data.results && data.results[0].alternatives[0].transcript) || "";
+      console.log(message);
+      var str = message;
+      str = str.replace(/\./g, "");
+      console.log(str);
+      switch (str) {
+        case "Podcast": {
+          navigation.navigate("PodcastStack", { screen: "PodcastTopic" });
+          // navigation.navigate("PodcastTopic");
+          break;
+        }
+        case "Trợ giúp": {
+          navigation.navigate("HelpStack", { screen: "Help" });
+          // navigation.navigate("Help");
+          break;
+        }
+        case "Cài đặt": {
+          break;
+        }
+        case "Tiếp thị": {
+          navigation.navigate("S_PreRecruitment");
+          break;
+        }
+        case "Tiếp thì": {
+          navigation.navigate("S_PreRecruitment");
+          break;
+        }
+      }
+      console.log(str);
+    } catch (error) {
+      console.log("There was an error reading file", error);
+      stopRecording();
+      resetRecording();
+    }
+    setIsFetching(false);
+  };
+
+  const startRecording = async () => {
+    try {
+      await Audio.requestPermissionsAsync();
+      setIsRecording(true);
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(recordingOptions);
+      await recording.startAsync();
+      console.log("Start !!!");
+      setRecording(recording);
+    } catch (error) {
+      console.log(error);
+      stopRecording();
+    }
+  };
+
+  const stopRecording = async () => {
+    setIsRecording(false);
+    try {
+      await recording.stopAndUnloadAsync();
+    } catch (error) {
+      // Do nothing -- we are already unloaded.
+    }
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: false,
+    });
+    setAllow(false);
+  };
+
+  const resetRecording = () => {
+    deleteRecordingFile();
+    setRecording(null);
+  };
+
+  const start = () => {
+    console.log("start recording");
+    startRecording();
+  };
+
+  //   await Audio.setAudioModeAsync({
+  //     allowsRecordingIOS: false,
+  //   });
+
+  const stop = () => {
+    console.log("stop recording");
+
+    stopRecording();
+    getTranscription();
+  };
+
   if (!fontsLoaded) {
     return null;
   } else {
     return (
-      <View>
+      <TouchableOpacity
+        onPressIn={() => {
+          console.log(allow);
+          // sound.unloadAsync();
+
+          start();
+        }}
+        onPressOut={() => {
+          stop();
+          setTimeout(() => {
+            navigation.navigate("S_LinktoSpotify");
+          }, 2000);
+        }}
+        style={styles.mainForm}
+        onPress={() => {
+          setBackCount(backCount + 1);
+          if (backCount == 1) {
+            sound.unloadAsync();
+            setBackCount(0);
+            navigation.navigate("MarketingConsulting");
+          } else {
+            setTimeout(() => {
+              setBackCount(0);
+            }, 10000);
+            // playSound(require("../assets/sounds/CV/sound18.mp3"));
+          }
+        }}
+      >
         <Text style={styles.title}>Chủ đề</Text>
         <View style={styles.line}></View>
         <View style={styles.content}>
@@ -68,7 +287,10 @@ export default function PodcastTopicScreen({ navigation }) {
             >
               <ImageBackground
                 source={require("../assets/images/brili-life.png")}
-                onLoad={() => setLoaded1(true)}
+                onLoad={() => {
+                  setLoaded1(true);
+                  playSound(require("../assets/sounds/sound12.mp3"));
+                }}
                 style={styles.backgroundImage}
               >
                 <View
@@ -132,7 +354,7 @@ export default function PodcastTopicScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

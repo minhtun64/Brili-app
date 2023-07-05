@@ -40,15 +40,17 @@ import MarketingConsulting2 from "../screens/MarketingConsulting2";
 import S_CurriculumVitae from "../screens/S_CurriculumVitae";
 import S_MarketingConsulting from "../screens/S_MarketingConsulting";
 import S_SignIn2Screen from "../screens/S_SignIn2Screen";
+import S_PreRecruitmentScreen from "../screens/S_PreRecruitmentScreen";
+import S_CurriculumVitae_2 from "../screens/S_CurriculumVitae_2";
 const Stack = createStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="S_SignIn2"
         component={S_SignIn2Screen}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="Choice"
         component={ChoiceScreen}
@@ -72,6 +74,11 @@ function StackNavigator() {
       <Stack.Screen
         name="S_SignIn"
         component={S_SignInScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="S_SignIn2"
+        component={S_SignIn2Screen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -127,14 +134,20 @@ const RecruitmentStack = createStackNavigator();
 function RecruitmentStackNavigator() {
   return (
     <RecruitmentStack.Navigator>
-      {/* <RecruitmentStack.Screen
+      <RecruitmentStack.Screen
         name="S_CurriculumVitae"
         component={S_CurriculumVitae}
         options={{ headerShown: false }}
-      /> */}
+      />
+
       <RecruitmentStack.Screen
         name="S_Recruitment"
         component={S_RecruitmentScreen}
+        options={{ headerShown: false }}
+      />
+      <RecruitmentStack.Screen
+        name="S_PreRecruitment"
+        component={S_PreRecruitmentScreen}
         options={{ headerShown: false }}
       />
       <RecruitmentStack.Screen
@@ -142,14 +155,20 @@ function RecruitmentStackNavigator() {
         component={Recruitment_Volunteer}
         options={{ headerShown: false }}
       />
+
       <RecruitmentStack.Screen
         name="CurriculumVitae"
         component={CurriculumVitae}
         options={{ headerShown: false }}
       />
-      <RecruitmentStack.Screen
+      {/* <RecruitmentStack.Screen
         name="S_CurriculumVitae"
         component={S_CurriculumVitae}
+        options={{ headerShown: false }}
+      /> */}
+      <RecruitmentStack.Screen
+        name="S_CurriculumVitae_2"
+        component={S_CurriculumVitae_2}
         options={{ headerShown: false }}
       />
       <RecruitmentStack.Screen
@@ -275,6 +294,7 @@ function MyTabs() {
             backgroundColor: "#ffffff",
             borderRadius: 0,
             height: 100,
+            // height: 80,
             ...styles.shadow,
           },
           null,
@@ -512,7 +532,8 @@ function MyTabsVolunteer() {
             elevation: 0,
             backgroundColor: "#ffffff",
             borderRadius: 0,
-            height: 100,
+            // height: 100,
+            height: 80,
             ...styles.shadow,
           },
           null,
