@@ -40,7 +40,7 @@ import { LogBox } from "react-native";
 const TRACK_SIZE = 4;
 const THUMB_SIZE = 20;
 
-export default class MarketingConsulting2 extends PureComponent {
+export default class S_MarketingConsulting extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -52,6 +52,7 @@ export default class MarketingConsulting2 extends PureComponent {
       dotOffset: new Animated.ValueXY(),
       xDotOffsetAtAnimationStart: 0,
       loaded1: false,
+      backCount: 0,
     };
 
     this._panResponder = PanResponder.create({
@@ -118,26 +119,25 @@ export default class MarketingConsulting2 extends PureComponent {
   };
 
   onSwipeLeft(gestureState) {
-    this.props.navigation.navigate("S_MarketingConsulting");
-    this.soundObject.unloadAsync();
+    this.state.dotOffset.setValue({ x: 0, y: 0 });
+    this.soundObject.setPositionAsync(0);
+    this.props.navigation.navigate("MarketingConsulting2");
+    this.pause();
     this.state.dotOffset.removeAllListeners();
   }
 
   onSwipeRight(gestureState) {
-    this.props.navigation.navigate("S_MarketingConsulting");
     this.soundObject.unloadAsync();
     this.state.dotOffset.removeAllListeners();
-  }
-
-  onArrowLeft() {
-    this.props.navigation.navigate("S_MarketingConsulting");
-    this.soundObject.unloadAsync();
-    this.state.dotOffset.removeAllListeners();
+    this.props.navigation.navigate("S_Recruitment");
   }
 
   onArrowRight() {
-    this.props.navigation.navigate("S_MarketingConsulting");
-    this.soundObject.unloadAsync();
+    console.log("Next Screen - Using ArrowRight");
+    this.state.dotOffset.setValue({ x: 0, y: 0 });
+    this.soundObject.setPositionAsync(0);
+    this.props.navigation.navigate("MarketingConsulting2");
+    this.pause();
     this.state.dotOffset.removeAllListeners();
   }
 
@@ -187,7 +187,7 @@ export default class MarketingConsulting2 extends PureComponent {
     await this.state.dotOffset.setValue({ x: 0, y: 0 });
     await this.soundObject.setPositionAsync(0);
 
-    //this.props.navigation.navigate("ListenToPodcast2");
+    this.props.navigation.navigate("MarketingConsulting2");
     this.pause();
     this.state.dotOffset.removeAllListeners();
   };
@@ -199,7 +199,7 @@ export default class MarketingConsulting2 extends PureComponent {
   async componentDidMount() {
     this.soundObject = new Audio.Sound();
     await this.soundObject.loadAsync(
-      require("../assets/recruitments/recruitment-2.mp3")
+      require("../assets/recruitments/recruitment-1.mp3")
     );
 
     const status = await this.soundObject.getStatusAsync();
@@ -224,7 +224,7 @@ export default class MarketingConsulting2 extends PureComponent {
       async () => {
         this.soundObject = new Audio.Sound();
         await this.soundObject.loadAsync(
-          require("../assets/podcasts/podcast-2.mp3")
+          require("../assets/recruitments/recruitment-1.mp3")
         );
         const status = await this.soundObject.getStatusAsync();
         this.setState({ duration: status["durationMillis"] });
@@ -294,7 +294,23 @@ export default class MarketingConsulting2 extends PureComponent {
     };
 
     return (
-      <View>
+      <TouchableOpacity
+        onPress={() => {
+          this.setState({ backCount: this.state.backCount + 1 });
+          // setBackCount(backCount + 1);
+          if (this.state.backCount == 1) {
+            this.onPressPlayPause();
+            this.props.navigation.navigate("S_CurriculumVitae");
+            this.setState({ backCount: 0 });
+            // setBackCount(0);
+          } else {
+            setTimeout(() => {
+              this.setState({ backCount: 0 });
+              // setBackCount(0);
+            }, 500);
+          }
+        }}
+      >
         <TouchableOpacity
           style={styles.back}
           onPress={() => {
@@ -332,13 +348,15 @@ export default class MarketingConsulting2 extends PureComponent {
           config={config}
           style={styles.podcastImage}
         >
-          <Text style={styles.jobName}>Nhân viên tư vấn tuyển sinh</Text>
-          <Text style={styles.companayName}>ApolloEnglish</Text>
+          <Text style={styles.jobName}>
+            Nhân viên tư vấn gói chăm sóc sức khỏe
+          </Text>
+          <Text style={styles.companayName}>ManpowerGroupVietNam</Text>
         </GestureRecognizer>
 
         <View style={styles.job}>
           <View style={styles.row}>
-            <TouchableOpacity onPress={() => this.onArrowLeft()}>
+            <TouchableOpacity>
               <Image
                 style={styles.arrowLeft}
                 source={require("../assets/icons/arrow-left.png")}
@@ -363,12 +381,12 @@ export default class MarketingConsulting2 extends PureComponent {
           {this.state.loaded1 ? null : (
             <Image
               style={styles.image}
-              source={require("../assets/images//job2-loading.png")}
+              source={require("../assets/images//job1-loading.png")}
             ></Image>
           )}
           <Image
             style={styles.image}
-            source={require("../assets/images/job2.png")}
+            source={require("../assets/images/job1.png")}
             onLoad={() => this.loadedImage()}
           ></Image>
         </GestureRecognizer>
@@ -477,7 +495,7 @@ export default class MarketingConsulting2 extends PureComponent {
               ></Image>
               <Text style={styles.textIcon}>Số lượng: </Text>
               <Text style={styles.textDes}>
-                5 nhân viên nữ, 5 nhân viên nam
+                3 nhân viên nữ, 1 nhân viên nam
               </Text>
             </View>
             <View style={styles.detailJob}>
@@ -486,7 +504,7 @@ export default class MarketingConsulting2 extends PureComponent {
                 source={require("../assets/icons/dollar-square.png")}
               ></Image>
               <Text style={styles.textIcon}>Mức lương: </Text>
-              <Text style={styles.textDes}>6 - 8 triệu</Text>
+              <Text style={styles.textDes}>4 - 7 triệu</Text>
             </View>
             <View style={styles.detailJob}>
               <Image
@@ -495,7 +513,8 @@ export default class MarketingConsulting2 extends PureComponent {
               ></Image>
               <Text style={styles.textIcon}>Địa chỉ: </Text>
               <Text style={styles.textDes}>
-                204 Trần Bình Trọng, Quận 5, Thành phố Hồ Chí Minh
+                26 Đường Hoàng Cầm, Phường Bình An, Thành phố Dĩ An, tỉnh Bình
+                Dương
               </Text>
             </View>
             <View style={styles.detailJob}>
@@ -504,7 +523,7 @@ export default class MarketingConsulting2 extends PureComponent {
                 source={require("../assets/icons/calendar.png")}
               ></Image>
               <Text style={styles.textIcon}>Ngày đăng: </Text>
-              <Text style={styles.textDes}>28/02/2023</Text>
+              <Text style={styles.textDes}>2/3/2023</Text>
             </View>
             <View style={styles.detailJob}>
               <Image
@@ -514,10 +533,9 @@ export default class MarketingConsulting2 extends PureComponent {
               <Text style={styles.textIcon}>Mô tả công việc: </Text>
             </View>
             <Text style={styles.textDes2}>
-              Tư vấn và giới thiệu khóa học tiếng anh. Tìm hiểu nhu cầu của
-              khách hàng và đưa ra những giải pháp giáo dục phù hợp. Mời khách
-              hàng đến trung tâm Apollo để tham dự kiểm tra trình độ, lớp học
-              mẫu.
+              - Môi trường làm việc quốc tế, chuyên nghiệp, sạch sẽ, lành mạnh,
+              văn minh, nói không với tệ nạn xã hội. Đối tượng khách hàng là
+              khách du lịch quốc tế và Việt Nam có mức thu nhập khá.
             </Text>
             <View style={styles.detailJob}>
               <Image
@@ -527,8 +545,8 @@ export default class MarketingConsulting2 extends PureComponent {
               <Text style={styles.textIcon}>Yêu cầu: </Text>
             </View>
             <Text style={styles.textDes2}>
-              Độ tuổi từ 22 đến 35. Bạn là người khéo léo và khả năng đội nhóm
-              tốt. Bạn yêu thích giáo dục và muốn đóng góp cho thế hệ tương lai.
+              - Có tay nghề massage, ưu tiên những bạn có kinh nghiệm và có sẵn
+              chứng chỉ massage. Nếu chưa biết nghề sẽ được đào tạo thêm.
             </Text>
             <View style={styles.detailJob}>
               <Image
@@ -537,12 +555,15 @@ export default class MarketingConsulting2 extends PureComponent {
               ></Image>
               <Text style={styles.textIcon}>Liên hệ: </Text>
               <Text style={[styles.textDes, { color: "red" }]}>
-                089 232 3232 {"\n"}013 465 8910
+                069 797 3232 {"\n"}056 780 6910
               </Text>
             </View>
             <TouchableOpacity
               style={styles.confirm}
-              onPress={() => navigation.navigate("CurriculumVitae")}
+              onPress={() => {
+                this.onPressPlayPause();
+                this.props.navigation.navigate("S_CurriculumVitae");
+              }}
             >
               <Text style={styles.TextConfirm}>Ứng tuyển công việc</Text>
             </TouchableOpacity>
@@ -550,7 +571,7 @@ export default class MarketingConsulting2 extends PureComponent {
 
           <View style={{ height: 500 }}></View>
         </ScrollView>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
