@@ -369,6 +369,36 @@ export default function S_MarketingConsulting({ navigation }) {
           navigation.navigate("S_MarketingConsulting");
           break;
         }
+        case "Lao động phổ thông": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Lao động phổ thông",
+          });
+          break;
+        }
+        case "Các công việc khác": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Các công việc khác",
+          });
+          break;
+        }
+        case "Cuộc sống": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Life",
+          });
+          break;
+        }
+        case "Tình Yêu": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Love",
+          });
+          break;
+        }
+        case "Học tập": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Study",
+          });
+          break;
+        }
       }
       console.log(str);
     } catch (error) {

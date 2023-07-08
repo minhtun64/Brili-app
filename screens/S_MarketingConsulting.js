@@ -14,9 +14,17 @@ import {
   PanResponder,
   Easing,
 } from "react-native";
+import { database } from "../firebase";
+import { onValue, ref, get } from "firebase/database";
 
 import { Audio } from "expo-av";
-import React, { PureComponent, Component } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  PureComponent,
+  Component,
+} from "react";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -36,544 +44,298 @@ import GestureRecognizer, {
 import sleep from "../components/sleep";
 import DigitalTimeString from "../components/DigitalTimeString";
 import { LogBox } from "react-native";
+import {
+  useNavigation,
+  useScrollToTop,
+  useRoute,
+} from "@react-navigation/native";
+
+const config = {
+  velocityThreshold: 0.3,
+  directionalOffsetThreshold: 80,
+};
 
 const TRACK_SIZE = 4;
 const THUMB_SIZE = 20;
 
-export default class S_MarketingConsulting extends PureComponent {
-  constructor(props) {
-    super(props);
+export default function S_MarketingConsulting({ navigation }) {
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [trackLayout, setTrackLayout] = useState({});
+  const [dotOffset] = useState(new Animated.ValueXY());
+  const [recruitments, setRecruitments] = useState([]);
+  const [currentRecruitmentIndex, setCurrentRecruitmentIndex] = useState(0);
+  const [title, setTitle] = useState("");
+  const [backCount, setBackCount] = useState(0);
+  const [isPause, setIsPause] = useState(false);
 
-    this.state = {
-      playing: false,
-      currentTime: 0, // miliseconds; value interpolated by animation.
-      duration: 0,
-      trackLayout: {},
-      dotOffset: new Animated.ValueXY(),
-      xDotOffsetAtAnimationStart: 0,
-      loaded1: false,
-      backCount: 0,
-    };
+  const soundObject = new Audio.Sound();
 
-    this._panResponder = PanResponder.create({
-      onMoveShouldSetResponderCapture: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: async (e, gestureState) => {
-        if (this.state.playing) {
-          await this.pause();
+  const route = useRoute();
+  const type = route?.params?.type;
+
+  const loadRecruitments = useCallback(async () => {
+    const recruitmentRef = ref(database, "recruitment");
+    const snapshot = await get(recruitmentRef);
+    if (snapshot.exists()) {
+      const recruitmentList = [];
+      snapshot.forEach((childSnapshot) => {
+        const recruitment = childSnapshot.val();
+        if (recruitment.type === type) {
+          recruitmentList.push(recruitment);
         }
-        await this.setState({
-          xDotOffsetAtAnimationStart: this.state.dotOffset.x._value,
-        });
-        await this.state.dotOffset.setOffset({
-          x: this.state.dotOffset.x._value,
-        });
-        await this.state.dotOffset.setValue({ x: 0, y: 0 });
-      },
-      onPanResponderMove: (e, gestureState) => {
-        Animated.event(
-          [null, { dx: this.state.dotOffset.x, dy: this.state.dotOffset.y }],
-          { useNativeDriver: 0 }
-        )(e, gestureState);
-      },
-      onPanResponderTerminationRequest: () => false,
-      onPanResponderTerminate: async (evt, gestureState) => {
-        // Another component has become the responder, so this gesture is cancelled.
-
-        const currentOffsetX =
-          this.state.xDotOffsetAtAnimationStart + this.state.dotOffset.x._value;
-        if (
-          currentOffsetX < 0 ||
-          currentOffsetX > this.state.trackLayout.width
-        ) {
-          await this.state.dotOffset.setValue({
-            x: -this.state.xDotOffsetAtAnimationStart,
-            y: 0,
-          });
-        }
-        await this.state.dotOffset.flattenOffset();
-        await this.mapAudioToCurrentTime();
-      },
-      onPanResponderRelease: async (e, { vx }) => {
-        const currentOffsetX =
-          this.state.xDotOffsetAtAnimationStart + this.state.dotOffset.x._value;
-        if (
-          currentOffsetX < 0 ||
-          currentOffsetX > this.state.trackLayout.width
-        ) {
-          await this.state.dotOffset.setValue({
-            x: -this.state.xDotOffsetAtAnimationStart,
-            y: 0,
-          });
-        }
-        await this.state.dotOffset.flattenOffset();
-        await this.mapAudioToCurrentTime();
-
-        await this.onPressPlayPause();
-      },
-    });
-  }
-
-  loadedImage = async () => {
-    this.setState({ loaded1: true });
-  };
-
-  onSwipeLeft(gestureState) {
-    this.state.dotOffset.setValue({ x: 0, y: 0 });
-    this.soundObject.setPositionAsync(0);
-    this.props.navigation.navigate("MarketingConsulting2");
-    this.pause();
-    this.state.dotOffset.removeAllListeners();
-  }
-
-  onSwipeRight(gestureState) {
-    this.soundObject.unloadAsync();
-    this.state.dotOffset.removeAllListeners();
-    this.props.navigation.navigate("S_Recruitment");
-  }
-
-  onArrowRight() {
-    console.log("Next Screen - Using ArrowRight");
-    this.state.dotOffset.setValue({ x: 0, y: 0 });
-    this.soundObject.setPositionAsync(0);
-    this.props.navigation.navigate("MarketingConsulting2");
-    this.pause();
-    this.state.dotOffset.removeAllListeners();
-  }
-
-  mapAudioToCurrentTime = async () => {
-    await this.soundObject.setPositionAsync(this.state.currentTime);
-  };
-
-  onPressPlayPause = async () => {
-    if (this.state.playing) {
-      await this.pause();
-      return;
-    }
-    await this.play();
-  };
-
-  play = async () => {
-    await this.soundObject.playAsync();
-    this.setState({ playing: true }); // This is for the play-button to go to play
-    this.startMovingDot();
-  };
-
-  pause = async () => {
-    await this.soundObject.pauseAsync();
-    this.setState({ playing: false }); // This is for the play-button to go to pause
-    Animated.timing(this.state.dotOffset).stop(); // Will also call animationPausedOrStopped()
-  };
-
-  startMovingDot = async () => {
-    const status = await this.soundObject.getStatusAsync();
-    const durationLeft = status["durationMillis"] - status["positionMillis"];
-    Animated.timing(this.state.dotOffset, {
-      toValue: { x: this.state.trackLayout.width, y: 0 },
-      duration: durationLeft,
-      easing: Easing.linear,
-      useNativeDriver: 1,
-    }).start(() => {
-      this.animationPausedOrStopped();
-    });
-  };
-
-  animationPausedOrStopped = async () => {
-    if (!this.state.playing) {
-      return;
-    }
-    console.log("Next Screen");
-    await sleep(200);
-    await this.state.dotOffset.setValue({ x: 0, y: 0 });
-    await this.soundObject.setPositionAsync(0);
-
-    this.props.navigation.navigate("MarketingConsulting2");
-    this.pause();
-    this.state.dotOffset.removeAllListeners();
-  };
-
-  measureTrack = (event) => {
-    this.setState({ trackLayout: event.nativeEvent.layout }); // {x, y, width, height}
-  };
-
-  async componentDidMount() {
-    this.soundObject = new Audio.Sound();
-    await this.soundObject.loadAsync(
-      require("../assets/recruitments/recruitment-1.mp3")
-    );
-
-    const status = await this.soundObject.getStatusAsync();
-    this.setState({ duration: status["durationMillis"] });
-
-    await this.onPressPlayPause();
-
-    // This requires measureTrack to have been called.
-    this.state.dotOffset.addListener(() => {
-      let animatedCurrentTime = this.state.dotOffset.x
-        .interpolate({
-          inputRange: [0, this.state.trackLayout.width],
-          outputRange: [0, this.state.duration],
-          extrapolate: "clamp",
-        })
-        .__getValue();
-      this.setState({ currentTime: animatedCurrentTime });
-    });
-
-    this.focusSubscription = this.props.navigation.addListener(
-      "focus",
-      async () => {
-        this.soundObject = new Audio.Sound();
-        await this.soundObject.loadAsync(
-          require("../assets/recruitments/recruitment-1.mp3")
-        );
-        const status = await this.soundObject.getStatusAsync();
-        this.setState({ duration: status["durationMillis"] });
-
-        console.log("Refresh");
-        await this.onPressPlayPause();
-
-        // This requires measureTrack to have been called.
-        this.state.dotOffset.addListener(() => {
-          let animatedCurrentTime = this.state.dotOffset.x
-            .interpolate({
-              inputRange: [0, this.state.trackLayout.width],
-              outputRange: [0, this.state.duration],
-              extrapolate: "clamp",
-            })
-            .__getValue();
-          this.setState({ currentTime: animatedCurrentTime });
-        });
-      }
-    );
-  }
-
-  async componentWillUnmount() {
-    await this.soundObject.playAsync();
-    this.focusSubscription();
-  }
-
-  fastForward = async () => {
-    const status = await this.soundObject.getStatusAsync();
-    this.setState({ playing: false });
-    this.state.dotOffset.setValue({
-      x:
-        (this.state.trackLayout.width / status["durationMillis"]) *
-        (status["positionMillis"] + 15000),
-      y: 0,
-    });
-    await this.soundObject.setPositionAsync(status["positionMillis"] + 15000);
-    this.onPressPlayPause();
-  };
-
-  fastBackward = async () => {
-    const status = await this.soundObject.getStatusAsync();
-    this.setState({ playing: false });
-
-    if (status["positionMillis"] >= 15000) {
-      this.state.dotOffset.setValue({
-        x:
-          (this.state.trackLayout.width / status["durationMillis"]) *
-          (status["positionMillis"] - 15000),
-        y: 0,
       });
+      setRecruitments(recruitmentList);
+    }
+    console.log(recruitmentList);
+  }, []);
+
+  const loadRecruitmentAudio = useCallback(async (recruitment) => {
+    console.log("Hủy tải audio");
+    await soundObject.unloadAsync();
+    if (!isPause) {
+      console.log("Tải audio");
+      await soundObject.loadAsync({ uri: recruitment.audio });
+      await onPressPlayPause();
+    }
+  }, []);
+
+  const onPressPlayPause = async () => {
+    if (playing) {
+      console.log("Dừng audio");
+      await pause();
     } else {
-      this.state.dotOffset.setValue({
-        x: 0,
-        y: 0,
-      });
+      console.log("Phát audio");
+      await play();
     }
-
-    await this.soundObject.setPositionAsync(status["positionMillis"] - 15000);
-    this.onPressPlayPause();
   };
 
-  render() {
-    const config = {
-      velocityThreshold: 0.3,
-      directionalOffsetThreshold: 80,
+  const play = async () => {
+    await soundObject.playAsync();
+    setPlaying(true);
+    // startMovingDot();
+  };
+
+  const pause = async () => {
+    await soundObject.pauseAsync();
+    setPlaying(false);
+    // Animated.timing(dotOffset).stop();
+  };
+
+  const handlePreviousRecruitment = () => {
+    if (currentRecruitmentIndex > 0) {
+      setCurrentRecruitmentIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  const handleNextRecruitment = () => {
+    if (currentRecruitmentIndex < recruitments.length - 1) {
+      setCurrentRecruitmentIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Tải - Effect");
+    loadRecruitments();
+    return () => {
+      console.log("Hủy tải - Effect");
+      soundObject.unloadAsync();
     };
+  }, [loadRecruitments]);
 
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.setState({ backCount: this.state.backCount + 1 });
-          // setBackCount(backCount + 1);
-          if (this.state.backCount == 1) {
-            this.onPressPlayPause();
-            this.props.navigation.navigate("S_CurriculumVitae");
-            this.setState({ backCount: 0 });
-            // setBackCount(0);
-          } else {
-            setTimeout(() => {
-              this.setState({ backCount: 0 });
-              // setBackCount(0);
-            }, 500);
-          }
-        }}
-      >
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => {
-            this.props.navigation.navigate("Recruitment");
-            this.soundObject.unloadAsync();
-            this.state.dotOffset.removeAllListeners();
-          }}
-        >
-          <Image
-            style={styles.backIcon}
-            source={require("../assets/icons/back.png")}
-          ></Image>
-        </TouchableOpacity>
+  useEffect(() => {
+    if (recruitments.length > 0) {
+      loadRecruitmentAudio(recruitments[currentRecruitmentIndex]);
+    }
+  }, [recruitments, isPause, currentRecruitmentIndex, loadRecruitmentAudio]);
 
-        <Text style={styles.title}>Tiếp thị</Text>
-        <View style={styles.line}></View>
+  return (
+    <View>
+      <TouchableOpacity style={styles.back} disabled>
+        <Image
+          style={styles.backIcon}
+          source={require("../assets/icons/back.png")}
+        ></Image>
+      </TouchableOpacity>
 
-        <View style={styles.searchBox}>
-          <Image
-            style={styles.searchIcon}
-            source={require("../assets/icons/search.png")}
-          ></Image>
-          <TextInput
-            style={styles.input}
-            placeholder="Tìm kiếm"
-            returnKeyType="search"
-            //value={search}
-            //onChangeText={(text) => setSearch(text)}
-          ></TextInput>
-        </View>
-        <GestureRecognizer
-          keyboardShouldPersistTaps="handled"
-          onSwipeLeft={(state) => this.onSwipeLeft(state)}
-          onSwipeRight={(state) => this.onSwipeRight(state)}
-          config={config}
-          style={styles.podcastImage}
-        >
-          <Text style={styles.jobName}>
-            Nhân viên tư vấn gói chăm sóc sức khỏe
-          </Text>
-          <Text style={styles.companayName}>ManpowerGroupVietNam</Text>
-        </GestureRecognizer>
-
-        <View style={styles.job}>
-          <View style={styles.row}>
-            <TouchableOpacity>
-              <Image
-                style={styles.arrowLeft}
-                source={require("../assets/icons/arrow-left.png")}
-              ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onArrowRight()}>
-              <Image
-                style={styles.arrowRight}
-                source={require("../assets/icons/arrow-right.png")}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <GestureRecognizer
-          keyboardShouldPersistTaps="handled"
-          onSwipeLeft={(state) => this.onSwipeLeft(state)}
-          onSwipeRight={(state) => this.onSwipeRight(state)}
-          config={config}
-          style={styles.jobImage}
-        >
-          {this.state.loaded1 ? null : (
-            <Image
-              style={styles.image}
-              source={require("../assets/images//job1-loading.png")}
-            ></Image>
-          )}
-          <Image
-            style={styles.image}
-            source={require("../assets/images/job1.png")}
-            onLoad={() => this.loadedImage()}
-          ></Image>
-        </GestureRecognizer>
-        <View style={styles.row1}>
-          <TouchableOpacity onPress={this.onPressPlayPause}>
-            {this.state.playing ? (
-              <Image
-                style={styles.pauseIcon}
-                source={require("../assets/icons/pause-podcast.png")}
-              ></Image>
-            ) : (
-              <Image
-                style={styles.pauseIcon}
-                source={require("../assets/icons/play-podcast.png")}
-              ></Image>
-            )}
-          </TouchableOpacity>
-
-          <Animated.View
-            onLayout={this.measureTrack}
-            style={{
-              alignItems: "center",
-              height: TRACK_SIZE,
-              borderRadius: TRACK_SIZE / 2,
-              backgroundColor: "black",
-              width: "60%",
-              //height: "-200%",
-              marginTop: 24,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <Animated.View
-              style={{
-                // display: "flex",
-                // flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                position: "absolute",
-                left: -((THUMB_SIZE * 4) / 2),
-                width: THUMB_SIZE * 4,
-                height: THUMB_SIZE * 4,
-                transform: [
-                  {
-                    translateX: this.state.dotOffset.x.interpolate({
-                      inputRange: [
-                        0,
-                        this.state.trackLayout.width != undefined
-                          ? this.state.trackLayout.width
-                          : 1,
-                      ],
-                      outputRange: [
-                        0,
-                        this.state.trackLayout.width != undefined
-                          ? this.state.trackLayout.width
-                          : 1,
-                      ],
-                      extrapolate: "clamp",
-                    }),
-                  },
-                ],
-              }}
-              {...this._panResponder.panHandlers}
-            >
-              <View
-                style={{
-                  width: THUMB_SIZE,
-                  height: THUMB_SIZE,
-                  borderRadius: THUMB_SIZE / 2,
-                  backgroundColor: "rgba(0,0,0,0.5)",
-                  marginTop: -76,
-                }}
-              ></View>
-            </Animated.View>
-          </Animated.View>
-
-          <View
-            style={{
-              flex: 0,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 12,
-              marginLeft: -8,
-              marginTop: 16,
-            }}
-          >
-            <Text>-</Text>
-            <DigitalTimeString
-              time={this.state.duration - this.state.currentTime}
-            />
-          </View>
-        </View>
-        <View style={styles.line1}></View>
-        <ScrollView>
+      <Text style={styles.title}>{type}</Text>
+      <View style={styles.line}></View>
+      <View style={styles.searchBox}>
+        <Image
+          style={styles.searchIcon}
+          source={require("../assets/icons/search.png")}
+        ></Image>
+        <TextInput
+          style={styles.input}
+          placeholder="Tìm kiếm"
+          returnKeyType="search"
+        ></TextInput>
+      </View>
+      {recruitments.length > 0 && (
+        <View>
           <GestureRecognizer
-            style={{ height: "100%" }}
             keyboardShouldPersistTaps="handled"
             onSwipeLeft={(state) => this.onSwipeLeft(state)}
             onSwipeRight={(state) => this.onSwipeRight(state)}
             config={config}
+            style={styles.podcastImage}
           >
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/user-square.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Số lượng: </Text>
-              <Text style={styles.textDes}>
-                3 nhân viên nữ, 1 nhân viên nam
-              </Text>
-            </View>
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/dollar-square.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Mức lương: </Text>
-              <Text style={styles.textDes}>4 - 7 triệu</Text>
-            </View>
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/location.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Địa chỉ: </Text>
-              <Text style={styles.textDes}>
-                26 Đường Hoàng Cầm, Phường Bình An, Thành phố Dĩ An, tỉnh Bình
-                Dương
-              </Text>
-            </View>
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/calendar.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Ngày đăng: </Text>
-              <Text style={styles.textDes}>2/3/2023</Text>
-            </View>
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/calendar.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Mô tả công việc: </Text>
-            </View>
-            <Text style={styles.textDes2}>
-              - Môi trường làm việc quốc tế, chuyên nghiệp, sạch sẽ, lành mạnh,
-              văn minh, nói không với tệ nạn xã hội. Đối tượng khách hàng là
-              khách du lịch quốc tế và Việt Nam có mức thu nhập khá.
+            <Text style={styles.jobName}>
+              {recruitments[currentRecruitmentIndex].job_name}
             </Text>
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/calendar.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Yêu cầu: </Text>
-            </View>
-            <Text style={styles.textDes2}>
-              - Có tay nghề massage, ưu tiên những bạn có kinh nghiệm và có sẵn
-              chứng chỉ massage. Nếu chưa biết nghề sẽ được đào tạo thêm.
+            <Text style={styles.companayName}>
+              {recruitments[currentRecruitmentIndex].company_name}
             </Text>
-            <View style={styles.detailJob}>
-              <Image
-                style={styles.iconDetail}
-                source={require("../assets/icons/calendar.png")}
-              ></Image>
-              <Text style={styles.textIcon}>Liên hệ: </Text>
-              <Text style={[styles.textDes, { color: "red" }]}>
-                069 797 3232 {"\n"}056 780 6910
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={styles.confirm}
-              onPress={() => {
-                this.onPressPlayPause();
-                this.props.navigation.navigate("S_CurriculumVitae");
-              }}
-            >
-              <Text style={styles.TextConfirm}>Ứng tuyển công việc</Text>
-            </TouchableOpacity>
           </GestureRecognizer>
 
-          <View style={{ height: 500 }}></View>
-        </ScrollView>
-      </TouchableOpacity>
-    );
-  }
+          <View style={styles.job}>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={handlePreviousRecruitment}>
+                <Image
+                  style={styles.arrowLeft}
+                  source={require("../assets/icons/arrow-left.png")}
+                ></Image>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleNextRecruitment}>
+                <Image
+                  style={styles.arrowRight}
+                  source={require("../assets/icons/arrow-right.png")}
+                ></Image>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <GestureRecognizer
+            keyboardShouldPersistTaps="handled"
+            onSwipeLeft={handleNextRecruitment}
+            onSwipeRight={handlePreviousRecruitment}
+            onSwipeUp={() => {
+              navigation.navigate("S_Recruitment");
+            }}
+            onSwipeDown={() => {
+              navigation.navigate("S_Recruitment");
+              navigation.navigate("S_CurriculumVitae");
+            }}
+            config={config}
+            style={styles.jobImage}
+          >
+            {/* {this.state.loaded1 ? null : (
+            <Image
+              style={styles.image}
+              source={require("../assets/images//job1-loading.png")}
+            ></Image>
+          )} */}
+            <Image
+              style={styles.image}
+              source={{ uri: recruitments[currentRecruitmentIndex].job_image }}
+              // onLoad={() => this.loadedImage()}
+            ></Image>
+          </GestureRecognizer>
+
+          <ScrollView>
+            <GestureRecognizer
+              style={{ height: "100%" }}
+              keyboardShouldPersistTaps="handled"
+              onSwipeLeft={handleNextRecruitment}
+              onSwipeRight={handlePreviousRecruitment}
+              onSwipeUp={() => {
+                navigation.navigate("S_Recruitment");
+              }}
+              onSwipeDown={() => {
+                navigation.navigate("S_Recruitment");
+                navigation.navigate("S_CurriculumVitae");
+              }}
+              config={config}
+            >
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/user-square.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Số lượng: </Text>
+                <Text style={styles.textDes}>
+                  {recruitments[currentRecruitmentIndex].quantity}
+                </Text>
+              </View>
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/dollar-square.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Mức lương: </Text>
+                <Text style={styles.textDes}>
+                  {recruitments[currentRecruitmentIndex].salary}
+                </Text>
+              </View>
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/location.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Địa chỉ: </Text>
+                <Text style={styles.textDes}>
+                  {recruitments[currentRecruitmentIndex].address}
+                </Text>
+              </View>
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/calendar.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Ngày đăng: </Text>
+                <Text style={styles.textDes}>
+                  {recruitments[currentRecruitmentIndex].created_date}
+                </Text>
+              </View>
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/calendar.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Mô tả công việc: </Text>
+              </View>
+              <Text style={styles.textDes2}>
+                {recruitments[currentRecruitmentIndex].description}
+              </Text>
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/calendar.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Yêu cầu: </Text>
+              </View>
+              <Text style={styles.textDes2}>
+                {recruitments[currentRecruitmentIndex].requirement}
+              </Text>
+              <View style={styles.detailJob}>
+                <Image
+                  style={styles.iconDetail}
+                  source={require("../assets/icons/calendar.png")}
+                ></Image>
+                <Text style={styles.textIcon}>Liên hệ: </Text>
+                <Text style={[styles.textDes, { color: "red" }]}>
+                  {recruitments[currentRecruitmentIndex].phone_num}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.confirm}
+                disable
+                // onPress={() => {
+                //   this.onPressPlayPause();
+                //   this.props.navigation.navigate("S_CurriculumVitae");
+                // }}
+              >
+                <Text style={styles.TextConfirm}>Ứng tuyển công việc</Text>
+              </TouchableOpacity>
+            </GestureRecognizer>
+
+            <View style={{ height: 500 }}></View>
+          </ScrollView>
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

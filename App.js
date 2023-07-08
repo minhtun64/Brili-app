@@ -7,11 +7,23 @@ import {
   Text,
   View,
 } from "react-native";
+import React, {
+  Component,
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+} from "react";
 import MainNavigator from "./navigation/BriliNav";
 // import { Assets } from "@react-navigation/elements";
 import AudioSlider from "./screens/ListenToPodcastScreen";
+import { LogBox } from "react-native";
 export default function App() {
   loadResourcesAsync;
+  useEffect(() => {
+    LogBox.ignoreAllLogs(true);
+  }, []);
   return (
     <MainNavigator>
       <AudioSlider audio={"./assets/sounds/sound2.mp3"} />

@@ -160,11 +160,45 @@ export default function S_CurriculumVitae_2({ navigation }) {
           break;
         }
         case "Tiếp thị": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_PreRecruitment", {
+            type: "Tiếp thị",
+          });
           break;
         }
         case "Tiếp thì": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_PreRecruitment", {
+            type: "Tiếp thị",
+          });
+          break;
+        }
+        case "Lao động phổ thông": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Lao động phổ thông",
+          });
+          break;
+        }
+        case "Các công việc khác": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Các công việc khác",
+          });
+          break;
+        }
+        case "Cuộc sống": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Life",
+          });
+          break;
+        }
+        case "Tình Yêu": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Love",
+          });
+          break;
+        }
+        case "Học tập": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Study",
+          });
           break;
         }
       }

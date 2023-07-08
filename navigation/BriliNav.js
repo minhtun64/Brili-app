@@ -134,11 +134,11 @@ const RecruitmentStack = createStackNavigator();
 function RecruitmentStackNavigator() {
   return (
     <RecruitmentStack.Navigator>
-      <RecruitmentStack.Screen
+      {/* <RecruitmentStack.Screen
         name="S_CurriculumVitae"
         component={S_CurriculumVitae}
         options={{ headerShown: false }}
-      />
+      /> */}
 
       <RecruitmentStack.Screen
         name="S_Recruitment"
@@ -161,11 +161,11 @@ function RecruitmentStackNavigator() {
         component={CurriculumVitae}
         options={{ headerShown: false }}
       />
-      {/* <RecruitmentStack.Screen
+      <RecruitmentStack.Screen
         name="S_CurriculumVitae"
         component={S_CurriculumVitae}
         options={{ headerShown: false }}
-      /> */}
+      />
       <RecruitmentStack.Screen
         name="S_CurriculumVitae_2"
         component={S_CurriculumVitae_2}
@@ -195,6 +195,11 @@ function PodcastStackNavigator() {
   return (
     <PodcastStack.Navigator>
       <PodcastStack.Screen
+        name="PodcastTopic"
+        component={PodcastTopicScreen}
+        options={{ headerShown: false }}
+      />
+      <PodcastStack.Screen
         name="Podcast"
         component={PodcastScreen}
         options={{ headerShown: false }}
@@ -214,11 +219,11 @@ function PodcastStackNavigator() {
         component={MyPodcastScreen1}
         options={{ headerShown: false }}
       />
-      <PodcastStack.Screen
+      {/* <PodcastStack.Screen
         name="PodcastTopic"
         component={PodcastTopicScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
       <PodcastStack.Screen
         name="S_LinktoSpotify"
         component={S_LinktoSpotifyScreen}

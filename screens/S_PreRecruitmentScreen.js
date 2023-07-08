@@ -23,6 +23,11 @@ import {
 } from "@expo-google-fonts/lexend-exa";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import {
+  useNavigation,
+  useScrollToTop,
+  useRoute,
+} from "@react-navigation/native";
 
 const recordingOptions = {
   android: {
@@ -67,6 +72,9 @@ export default function S_PreRecruitmentScreen({ navigation }) {
   const [recording, setRecording] = useState(null);
   const [repeat, setRepeat] = useState(false);
 
+  const route = useRoute();
+  const type = route?.params?.type;
+
   async function playSound() {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
@@ -77,8 +85,10 @@ export default function S_PreRecruitmentScreen({ navigation }) {
     await sound.playAsync();
     setTimeout(() => {
       setPlaying(false);
-      navigation.navigate("S_MarketingConsulting");
-    }, 10000);
+      navigation.navigate("S_MarketingConsulting", {
+        type: type,
+      });
+    }, 8000);
   }
 
   React.useEffect(() => {
@@ -158,6 +168,36 @@ export default function S_PreRecruitmentScreen({ navigation }) {
         }
         case "Tiếp thì": {
           navigation.navigate("S_MarketingConsulting");
+          break;
+        }
+        case "Lao động phổ thông": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Lao động phổ thông",
+          });
+          break;
+        }
+        case "Các công việc khác": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Các công việc khác",
+          });
+          break;
+        }
+        case "Cuộc sống": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Life",
+          });
+          break;
+        }
+        case "Tình Yêu": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Love",
+          });
+          break;
+        }
+        case "Học tập": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Study",
+          });
           break;
         }
       }
@@ -254,7 +294,7 @@ export default function S_PreRecruitmentScreen({ navigation }) {
           ></Image>
         </TouchableOpacity>
 
-        <Text style={styles.title}>Tiếp thị</Text>
+        <Text style={styles.title}>{type}</Text>
         <View style={styles.line}></View>
 
         <View style={styles.searchBox}>

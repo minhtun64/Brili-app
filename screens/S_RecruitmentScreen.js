@@ -146,6 +146,11 @@ export default function S_RecruitmentScreen({ navigation }) {
       str = str.replace(/\./g, "");
       console.log(str);
       switch (str) {
+        case "Tuyển dụng": {
+          navigation.navigate("RecruitmentStack", { screen: "Recruitment" });
+          // navigation.navigate("PodcastTopic");
+          break;
+        }
         case "Podcast": {
           navigation.navigate("PodcastStack", { screen: "PodcastTopic" });
           // navigation.navigate("PodcastTopic");
@@ -160,11 +165,45 @@ export default function S_RecruitmentScreen({ navigation }) {
           break;
         }
         case "Tiếp thị": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_PreRecruitment", {
+            type: "Tiếp thị",
+          });
           break;
         }
         case "Tiếp thì": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_PreRecruitment", {
+            type: "Tiếp thị",
+          });
+          break;
+        }
+        case "Lao động phổ thông": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Lao động phổ thông",
+          });
+          break;
+        }
+        case "Các công việc khác": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Các công việc khác",
+          });
+          break;
+        }
+        case "Cuộc sống": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Life",
+          });
+          break;
+        }
+        case "Tình Yêu": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Love",
+          });
+          break;
+        }
+        case "Học tập": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Study",
+          });
           break;
         }
       }
@@ -220,10 +259,6 @@ export default function S_RecruitmentScreen({ navigation }) {
     console.log("start recording");
     startRecording();
   };
-
-  //   await Audio.setAudioModeAsync({
-  //     allowsRecordingIOS: false,
-  //   });
 
   const stop = () => {
     console.log("stop recording");

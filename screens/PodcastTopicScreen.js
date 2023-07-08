@@ -24,6 +24,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import * as Speech from "expo-speech";
+import { useFocusEffect } from "@react-navigation/native";
 
 const recordingOptions = {
   android: {
@@ -58,6 +59,13 @@ export default function PodcastTopicScreen({ navigation }) {
     LexendExa_800ExtraBold,
     LexendExa_900Black,
   });
+  const [reloadImage, setReloadImage] = useState(false);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Tải lại hình ảnh
+      setReloadImage(!reloadImage);
+    }, [navigation])
+  );
 
   useEffect(() => {
     async function prepare() {
@@ -79,6 +87,7 @@ export default function PodcastTopicScreen({ navigation }) {
   const [recording, setRecording] = useState(null);
   const [repeat, setRepeat] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [imageKey, setImageKey] = useState(0);
 
   async function playSound(soundFile) {
     console.log("Loading Sound");
@@ -152,6 +161,11 @@ export default function PodcastTopicScreen({ navigation }) {
       str = str.replace(/\./g, "");
       console.log(str);
       switch (str) {
+        case "Tuyển dụng": {
+          navigation.navigate("RecruitmentStack", { screen: "Recruitment" });
+          // navigation.navigate("PodcastTopic");
+          break;
+        }
         case "Podcast": {
           navigation.navigate("PodcastStack", { screen: "PodcastTopic" });
           // navigation.navigate("PodcastTopic");
@@ -166,11 +180,45 @@ export default function PodcastTopicScreen({ navigation }) {
           break;
         }
         case "Tiếp thị": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_PreRecruitment", {
+            type: "Tiếp thị",
+          });
           break;
         }
         case "Tiếp thì": {
-          navigation.navigate("S_PreRecruitment");
+          navigation.navigate("S_PreRecruitment", {
+            type: "Tiếp thị",
+          });
+          break;
+        }
+        case "Lao động phổ thông": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Lao động phổ thông",
+          });
+          break;
+        }
+        case "Các công việc khác": {
+          navigation.navigate("S_PreRecruitment", {
+            type: "Các công việc khác",
+          });
+          break;
+        }
+        case "Cuộc sống": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Life",
+          });
+          break;
+        }
+        case "Tình Yêu": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Love",
+          });
+          break;
+        }
+        case "Học tập": {
+          navigation.navigate("ListenToPodcast", {
+            topic: "Brili - Study",
+          });
           break;
         }
       }
@@ -245,30 +293,16 @@ export default function PodcastTopicScreen({ navigation }) {
       <TouchableOpacity
         onPressIn={() => {
           console.log(allow);
-          // sound.unloadAsync();
-
+          sound.unloadAsync();
           start();
         }}
         onPressOut={() => {
           stop();
-          setTimeout(() => {
-            navigation.navigate("S_LinktoSpotify");
-          }, 2000);
+          // setTimeout(() => {
+          //   navigation.navigate("S_LinktoSpotify");
+          // }, 2000);
         }}
         style={styles.mainForm}
-        onPress={() => {
-          setBackCount(backCount + 1);
-          if (backCount == 1) {
-            sound.unloadAsync();
-            setBackCount(0);
-            navigation.navigate("MarketingConsulting");
-          } else {
-            setTimeout(() => {
-              setBackCount(0);
-            }, 10000);
-            // playSound(require("../assets/sounds/CV/sound18.mp3"));
-          }
-        }}
       >
         <Text style={styles.title}>Chủ đề</Text>
         <View style={styles.line}></View>
@@ -282,10 +316,11 @@ export default function PodcastTopicScreen({ navigation }) {
 
           {/* button navigate to  Brili-Life podcasts */}
           <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("S_LinktoSpotify")}
+            <View
+            // onPress={() => navigation.navigate("S_LinktoSpotify")}
             >
               <ImageBackground
+                key={reloadImage}
                 source={require("../assets/images/brili-life.png")}
                 onLoad={() => {
                   setLoaded1(true);
@@ -305,12 +340,12 @@ export default function PodcastTopicScreen({ navigation }) {
                   <Text style={styles.label}>Brili - Life</Text>
                 </View>
               </ImageBackground>
-            </TouchableOpacity>
+            </View>
           </View>
 
           {/* button navigate to  Brili-Love podcasts */}
           <View>
-            <TouchableOpacity>
+            <View>
               <ImageBackground
                 source={require("../assets/images/brili-love.png")}
                 style={styles.backgroundImage}
@@ -328,12 +363,12 @@ export default function PodcastTopicScreen({ navigation }) {
                   <Text style={styles.label}>Brili - Love</Text>
                 </View>
               </ImageBackground>
-            </TouchableOpacity>
+            </View>
           </View>
 
           {/* button navigate to  Brili-Study podcasts */}
           <View>
-            <TouchableOpacity>
+            <View>
               <ImageBackground
                 source={require("../assets/images/brili-study.png")}
                 style={styles.backgroundImage}
@@ -351,7 +386,7 @@ export default function PodcastTopicScreen({ navigation }) {
                   <Text style={styles.label}>Brili - Study</Text>
                 </View>
               </ImageBackground>
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
       </TouchableOpacity>

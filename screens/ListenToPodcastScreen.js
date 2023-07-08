@@ -1,19 +1,6 @@
-import React, { PureComponent, useEffect, useCallback } from "react";
-import {
-  useFonts,
-  LexendExa_100Thin,
-  LexendExa_200ExtraLight,
-  LexendExa_300Light,
-  LexendExa_400Regular,
-  LexendExa_500Medium,
-  LexendExa_600SemiBold,
-  LexendExa_700Bold,
-  LexendExa_800ExtraBold,
-  LexendExa_900Black,
-} from "@expo-google-fonts/lexend-exa";
-import GestureRecognizer, {
-  swipeDirections,
-} from "react-native-swipe-gestures";
+import { database } from "../firebase";
+import { onValue, ref, get } from "firebase/database";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   StyleSheet,
@@ -25,494 +12,211 @@ import {
   View,
   Easing,
 } from "react-native";
+import GestureRecognizer, {
+  swipeDirections,
+} from "react-native-swipe-gestures";
 import { Audio } from "expo-av";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import sleep from "../components/sleep";
 import DigitalTimeString from "../components/DigitalTimeString";
 import { LogBox } from "react-native";
+import { StackActions } from "@react-navigation/native";
+import {
+  useNavigation,
+  useScrollToTop,
+  useRoute,
+} from "@react-navigation/native";
 
+const config = {
+  velocityThreshold: 0.3,
+  directionalOffsetThreshold: 80,
+};
 const TRACK_SIZE = 4;
 const THUMB_SIZE = 20;
 
-export default class ListenToPodcastScreen extends PureComponent {
-  constructor(props) {
-    super(props);
+export default function ListenToPodcastScreen({ navigation }) {
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [trackLayout, setTrackLayout] = useState({});
+  const [dotOffset] = useState(new Animated.ValueXY());
+  const [podcasts, setPodcasts] = useState([]);
+  const [currentPodcastIndex, setCurrentPodcastIndex] = useState(0);
+  const [title, setTitle] = useState("");
+  const [backCount, setBackCount] = useState(0);
 
-    this.state = {
-      playing: false,
-      currentTime: 0, // miliseconds; value interpolated by animation.
-      duration: 0,
-      trackLayout: {},
-      dotOffset: new Animated.ValueXY(),
-      xDotOffsetAtAnimationStart: 0,
-      loaded1: false,
-    };
+  const soundObject = new Audio.Sound();
 
-    this._panResponder = PanResponder.create({
-      onMoveShouldSetResponderCapture: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: async (e, gestureState) => {
-        if (this.state.playing) {
-          await this.pause();
+  const route = useRoute();
+  const topic = route?.params?.topic;
+
+  const loadPodcasts = useCallback(async () => {
+    const podcastRef = ref(database, "podcast");
+    const snapshot = await get(podcastRef);
+    if (snapshot.exists()) {
+      const podcastList = [];
+      snapshot.forEach((childSnapshot) => {
+        const podcast = childSnapshot.val();
+        if (podcast.topic === topic) {
+          podcastList.push(podcast);
         }
-        await this.setState({
-          xDotOffsetAtAnimationStart: this.state.dotOffset.x._value,
-        });
-        await this.state.dotOffset.setOffset({
-          x: this.state.dotOffset.x._value,
-        });
-        await this.state.dotOffset.setValue({ x: 0, y: 0 });
-      },
-      onPanResponderMove: (e, gestureState) => {
-        Animated.event(
-          [null, { dx: this.state.dotOffset.x, dy: this.state.dotOffset.y }],
-          { useNativeDriver: 0 }
-        )(e, gestureState);
-      },
-      onPanResponderTerminationRequest: () => false,
-      onPanResponderTerminate: async (evt, gestureState) => {
-        // Another component has become the responder, so this gesture is cancelled.
-
-        const currentOffsetX =
-          this.state.xDotOffsetAtAnimationStart + this.state.dotOffset.x._value;
-        if (
-          currentOffsetX < 0 ||
-          currentOffsetX > this.state.trackLayout.width
-        ) {
-          await this.state.dotOffset.setValue({
-            x: -this.state.xDotOffsetAtAnimationStart,
-            y: 0,
-          });
-        }
-        await this.state.dotOffset.flattenOffset();
-        await this.mapAudioToCurrentTime();
-      },
-      onPanResponderRelease: async (e, { vx }) => {
-        const currentOffsetX =
-          this.state.xDotOffsetAtAnimationStart + this.state.dotOffset.x._value;
-        if (
-          currentOffsetX < 0 ||
-          currentOffsetX > this.state.trackLayout.width
-        ) {
-          await this.state.dotOffset.setValue({
-            x: -this.state.xDotOffsetAtAnimationStart,
-            y: 0,
-          });
-        }
-        await this.state.dotOffset.flattenOffset();
-        await this.mapAudioToCurrentTime();
-
-        await this.onPressPlayPause();
-      },
-    });
-  }
-
-  loadedImage = async () => {
-    this.setState({ loaded1: true });
-  };
-
-  onSwipeLeft(gestureState) {
-    this.state.dotOffset.setValue({ x: 0, y: 0 });
-    this.soundObject.setPositionAsync(0);
-    this.props.navigation.navigate("ListenToPodcast2");
-    this.pause();
-    this.state.dotOffset.removeAllListeners();
-  }
-
-  onSwipeRight(gestureState) {
-    //this.setState({ myText: "You swiped right!" });
-  }
-
-  onArrowRight() {
-    console.log("Next Screen - Using ArrowRight");
-    this.state.dotOffset.setValue({ x: 0, y: 0 });
-    this.soundObject.setPositionAsync(0);
-    this.props.navigation.navigate("ListenToPodcast2");
-    this.pause();
-    this.state.dotOffset.removeAllListeners();
-  }
-
-  mapAudioToCurrentTime = async () => {
-    await this.soundObject.setPositionAsync(this.state.currentTime);
-  };
-
-  onPressPlayPause = async () => {
-    if (this.state.playing) {
-      await this.pause();
-      return;
-    }
-    await this.play();
-  };
-
-  play = async () => {
-    await this.soundObject.playAsync();
-    this.setState({ playing: true }); // This is for the play-button to go to play
-    this.startMovingDot();
-  };
-
-  pause = async () => {
-    await this.soundObject.pauseAsync();
-    this.setState({ playing: false }); // This is for the play-button to go to pause
-    Animated.timing(this.state.dotOffset).stop(); // Will also call animationPausedOrStopped()
-  };
-
-  startMovingDot = async () => {
-    const status = await this.soundObject.getStatusAsync();
-    const durationLeft = status["durationMillis"] - status["positionMillis"];
-    Animated.timing(this.state.dotOffset, {
-      toValue: { x: this.state.trackLayout.width, y: 0 },
-      duration: durationLeft,
-      easing: Easing.linear,
-      useNativeDriver: 1,
-    }).start(() => {
-      this.animationPausedOrStopped();
-    });
-  };
-
-  animationPausedOrStopped = async () => {
-    if (!this.state.playing) {
-      return;
-    }
-    console.log("Next Screen");
-    await sleep(200);
-    await this.state.dotOffset.setValue({ x: 0, y: 0 });
-    await this.soundObject.setPositionAsync(0);
-
-    this.props.navigation.navigate("ListenToPodcast2");
-    this.pause();
-    this.state.dotOffset.removeAllListeners();
-  };
-
-  measureTrack = (event) => {
-    this.setState({ trackLayout: event.nativeEvent.layout }); // {x, y, width, height}
-  };
-
-  async componentDidMount() {
-    console.log("Start");
-    this.soundObject = new Audio.Sound();
-    await this.soundObject.loadAsync(
-      require("../assets/podcasts/podcast-1.mp3")
-    );
-
-    const status = await this.soundObject.getStatusAsync();
-    this.setState({ duration: status["durationMillis"] });
-    await this.onPressPlayPause();
-
-    // This requires measureTrack to have been called.
-    this.state.dotOffset.addListener(() => {
-      let animatedCurrentTime = this.state.dotOffset.x
-        .interpolate({
-          inputRange: [0, this.state.trackLayout.width],
-          outputRange: [0, this.state.duration],
-          extrapolate: "clamp",
-        })
-        .__getValue();
-      this.setState({ currentTime: animatedCurrentTime });
-    });
-
-    this.focusSubscription = this.props.navigation.addListener(
-      "focus",
-      async () => {
-        this.soundObject = new Audio.Sound();
-        await this.soundObject.loadAsync(
-          require("../assets/podcasts/podcast-1.mp3")
-        );
-        const status = await this.soundObject.getStatusAsync();
-        this.setState({ duration: status["durationMillis"] });
-
-        console.log("Refresh");
-        await this.onPressPlayPause();
-
-        // This requires measureTrack to have been called.
-        this.state.dotOffset.addListener(() => {
-          let animatedCurrentTime = this.state.dotOffset.x
-            .interpolate({
-              inputRange: [0, this.state.trackLayout.width],
-              outputRange: [0, this.state.duration],
-              extrapolate: "clamp",
-            })
-            .__getValue();
-          this.setState({ currentTime: animatedCurrentTime });
-        });
-      }
-    );
-  }
-
-  async componentWillUnmount() {
-    await this.soundObject.playAsync();
-    this.focusSubscription();
-  }
-
-  fastForward = async () => {
-    const status = await this.soundObject.getStatusAsync();
-    this.setState({ playing: false });
-    this.state.dotOffset.setValue({
-      x:
-        (this.state.trackLayout.width / status["durationMillis"]) *
-        (status["positionMillis"] + 15000),
-      y: 0,
-    });
-    await this.soundObject.setPositionAsync(status["positionMillis"] + 15000);
-    this.onPressPlayPause();
-  };
-
-  fastBackward = async () => {
-    const status = await this.soundObject.getStatusAsync();
-    this.setState({ playing: false });
-
-    if (status["positionMillis"] >= 15000) {
-      this.state.dotOffset.setValue({
-        x:
-          (this.state.trackLayout.width / status["durationMillis"]) *
-          (status["positionMillis"] - 15000),
-        y: 0,
       });
+      setPodcasts(podcastList);
+    }
+  }, []);
+
+  const loadPodcastAudio = useCallback(async (podcast) => {
+    console.log("Hủy tải audio");
+    await soundObject.unloadAsync();
+
+    console.log("Tải audio");
+    await soundObject.loadAsync({ uri: podcast.audio });
+    // const status = await soundObject.getStatusAsync();
+    // setDuration(status.durationMillis);
+    // setCurrentTime(0);
+    // setPlaying(true);
+    // setPlaying(false);
+
+    await onPressPlayPause();
+  }, []);
+
+  const onPressPlayPause = async () => {
+    if (playing) {
+      console.log("Dừng audio");
+      await pause();
     } else {
-      this.state.dotOffset.setValue({
-        x: 0,
-        y: 0,
-      });
+      console.log("Phát audio");
+      await play();
     }
-
-    await this.soundObject.setPositionAsync(status["positionMillis"] - 15000);
-    this.onPressPlayPause();
   };
 
-  render() {
-    const config = {
-      velocityThreshold: 0.3,
-      directionalOffsetThreshold: 80,
+  const play = async () => {
+    await soundObject.playAsync();
+    setPlaying(true);
+    // startMovingDot();
+  };
+
+  const pause = async () => {
+    await soundObject.pauseAsync();
+    setPlaying(false);
+    // Animated.timing(dotOffset).stop();
+  };
+
+  const handlePreviousPodcast = () => {
+    if (currentPodcastIndex > 0) {
+      setCurrentPodcastIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  const handleNextPodcast = () => {
+    if (currentPodcastIndex < podcasts.length - 1) {
+      setCurrentPodcastIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Tải - Effect");
+    loadPodcasts();
+    return () => {
+      console.log("Hủy tải - Effect");
+      soundObject.unloadAsync();
     };
+  }, [loadPodcasts]);
 
-    return (
-      <View>
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => {
-            this.props.navigation.navigate("PodcastTopic");
-            this.soundObject.unloadAsync();
+  useEffect(() => {
+    if (podcasts.length > 0) {
+      loadPodcastAudio(podcasts[currentPodcastIndex]);
+    }
+  }, [podcasts, currentPodcastIndex, loadPodcastAudio]);
 
-            //this.soundObject.stopAsync();
-            this.state.dotOffset.removeAllListeners();
-          }}
-        >
-          <Image
-            style={styles.backIcon}
-            source={require("../assets/icons/back.png")}
-          ></Image>
-        </TouchableOpacity>
+  return (
+    <View>
+      <TouchableOpacity
+        style={styles.back}
+        onPress={() => navigation.navigate("PodcastTopic")}
+      >
+        <Image
+          style={styles.backIcon}
+          source={require("../assets/icons/back.png")}
+        ></Image>
+      </TouchableOpacity>
 
-        <Text style={styles.title}>Brili - Life</Text>
-        <View style={styles.line}></View>
-
-        <View style={styles.podcast}>
-          <View style={styles.row}>
-            <TouchableOpacity>
-              <Image
-                style={styles.arrowLeft}
-                source={require("../assets/icons/arrow-left.png")}
-              ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onArrowRight()}>
-              <Image
-                style={styles.arrowRight}
-                source={require("../assets/icons/arrow-right.png")}
-              ></Image>
-            </TouchableOpacity>
+      <Text style={styles.title}>{topic}</Text>
+      <View style={styles.line}></View>
+      {podcasts.length > 0 && (
+        <View>
+          <View style={styles.podcast}>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={handlePreviousPodcast}>
+                <Image
+                  style={styles.arrowLeft}
+                  source={require("../assets/icons/arrow-left.png")}
+                ></Image>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleNextPodcast}>
+                <Image
+                  style={styles.arrowRight}
+                  source={require("../assets/icons/arrow-right.png")}
+                ></Image>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        <GestureRecognizer
-          keyboardShouldPersistTaps="handled"
-          onSwipeLeft={(state) => this.onSwipeLeft(state)}
-          onSwipeRight={(state) => this.onSwipeRight(state)}
-          config={config}
-          style={styles.podcastImage}
-        >
-          {this.state.loaded1 ? null : (
+          <GestureRecognizer
+            keyboardShouldPersistTaps="handled"
+            onSwipeLeft={handleNextPodcast}
+            onSwipeRight={handlePreviousPodcast}
+            onSwipeUp={() => {
+              console.log("Vuốt lên");
+              navigation.navigate("PodcastTopic");
+            }}
+            config={config}
+            style={styles.podcastImage}
+          >
+            {/* {this.state.loaded1 ? null : (
             <Image
               style={styles.image}
               source={require("../assets/images/podcast-image-1-loading.png")}
             ></Image>
-          )}
+          )} */}
 
-          <Image
-            style={styles.image}
-            source={require("../assets/images/podcast-image-1.png")}
-            onLoad={() => this.loadedImage()}
-          ></Image>
-        </GestureRecognizer>
+            <Image
+              style={styles.image}
+              source={{ uri: podcasts[currentPodcastIndex].image }}
+              // onLoad={() => this.loadedImage()}
+            ></Image>
+          </GestureRecognizer>
 
-        {/* <View style={styles.podcast}>
-          <View style={styles.row}>
-            <TouchableOpacity>
-              <Image
-                style={styles.arrowLeft}
-                source={require("../assets/icons/arrow-left.png")}
-              ></Image>
-            </TouchableOpacity>
-            <GestureRecognizer
-              keyboardShouldPersistTaps="handled"
-              onSwipeLeft={(state) => this.onSwipeLeft(state)}
-              onSwipeRight={(state) => this.onSwipeRight(state)}
-              config={config}
-            >
-              <Image
-                style={styles.podcastImage}
-                source={require("../assets/images/podcast-image-1.png")}
-              ></Image>
-            </GestureRecognizer>
-            <TouchableOpacity onPress={() => this.onArrowRight()}>
-              <Image
-                style={styles.arrowRight}
-                source={require("../assets/icons/arrow-right.png")}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-        </View> */}
-
-        {/* <View style={styles.line}></View>
-          <View style={styles.label}>
-            <Text style={styles.allText}>0:01</Text>
-            <Text style={styles.sortText}>-24:36</Text>
-          </View> */}
-
-        {/* <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={1}
-            minimumTrackTintColor="#000000"
-            maximunTrackTintColor="#000000"
-          /> */}
-
-        <Animated.View
-          onLayout={this.measureTrack}
-          style={{
-            //   flex: 8,
-            //   flexDirection: "row",
-            //   justifyContent: "flex-start",
-            alignItems: "center",
-            height: TRACK_SIZE,
-            borderRadius: TRACK_SIZE / 2,
-            backgroundColor: "black",
-            width: "70%",
-            //height: "-200%",
-            marginTop: 24,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          <Animated.View
-            style={{
-              // display: "flex",
-              // flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
-              left: -((THUMB_SIZE * 4) / 2),
-              width: THUMB_SIZE * 4,
-              height: THUMB_SIZE * 4,
-              transform: [
-                {
-                  translateX: this.state.dotOffset.x.interpolate({
-                    inputRange: [
-                      0,
-                      this.state.trackLayout.width != undefined
-                        ? this.state.trackLayout.width
-                        : 1,
-                    ],
-                    outputRange: [
-                      0,
-                      this.state.trackLayout.width != undefined
-                        ? this.state.trackLayout.width
-                        : 1,
-                    ],
-                    extrapolate: "clamp",
-                  }),
-                },
-              ],
+          <GestureRecognizer
+            style={{ height: "100%" }}
+            keyboardShouldPersistTaps="handled"
+            onSwipeLeft={handleNextPodcast}
+            onSwipeRight={handlePreviousPodcast}
+            onSwipeUp={() => {
+              console.log("Vuốt lên");
+              navigation.navigate("PodcastTopic");
             }}
-            {...this._panResponder.panHandlers}
+            // onSwipeDown={onPressPlayPause}
+            config={config}
           >
-            <View
-              style={{
-                width: THUMB_SIZE,
-                height: THUMB_SIZE,
-                borderRadius: THUMB_SIZE / 2,
-                backgroundColor: "rgba(0,0,0,0.5)",
-                marginTop: -76,
-              }}
-            ></View>
-          </Animated.View>
-        </Animated.View>
-        <GestureRecognizer
-          style={{ height: "100%" }}
-          keyboardShouldPersistTaps="handled"
-          onSwipeLeft={(state) => this.onSwipeLeft(state)}
-          onSwipeRight={(state) => this.onSwipeRight(state)}
-          config={config}
-        >
-          <View
-            style={{
-              flex: 0,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "75%",
-              marginTop: 12,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <DigitalTimeString time={this.state.currentTime} />
-            <DigitalTimeString time={this.state.duration} />
-          </View>
+            <Text style={styles.podcastTitle}>
+              {podcasts[currentPodcastIndex].title}
+            </Text>
+            <Text style={styles.podcastDes}>
+              {podcasts[currentPodcastIndex].description}
+            </Text>
 
-          <View style={styles.controlSpeed}>
-            <TouchableOpacity onPress={this.fastBackward}>
-              <Image
-                style={styles.backwardIcon}
-                source={require("../assets/icons/backward-15-seconds.png")}
-              ></Image>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={this.onPressPlayPause}>
-              {this.state.playing ? (
-                <Image
-                  style={styles.pauseIcon}
-                  source={require("../assets/icons/pause-podcast.png")}
-                ></Image>
-              ) : (
-                <Image
-                  style={styles.pauseIcon}
-                  source={require("../assets/icons/play-podcast.png")}
-                ></Image>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={this.fastForward}>
-              <Image
-                style={styles.forwardIcon}
-                source={require("../assets/icons/forward-15-seconds.png")}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.podcastTitle}>#4. Lời xin lỗi muộn màng</Text>
-          <Text style={styles.podcastDes}>
-            Trên hình trình trưởng thành, chúng ta đã trải qua bao nhiêu lần xin
-            lỗi? Có lời xin lỗi nào mà chúng ta mang nặng đến tận bây giờ dành
-            cho quá khứ chúng ta từng bỏ quên hay không? Hãy cùng theo dõi lá
-            thư ngày hôm nay và chia sẻ câu chuyện của ... Xem thêm{" "}
-          </Text>
-
-          <View style={styles.containerAuthor}>
-            <Text style={styles.podcastAuthor}>Đặng Minh Tuấn</Text>
-            <View style={styles.lineEnd}></View>
-          </View>
-        </GestureRecognizer>
-      </View>
-    );
-  }
+            <View style={styles.containerAuthor}>
+              <Text style={styles.podcastAuthor}>
+                {podcasts[currentPodcastIndex].author}
+              </Text>
+              <View style={styles.lineEnd}></View>
+            </View>
+          </GestureRecognizer>
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -631,6 +335,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginLeft: "auto",
     marginRight: "auto",
+    marginTop: 100,
   },
   podcastDes: {
     fontSize: 14,
